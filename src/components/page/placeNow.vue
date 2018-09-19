@@ -1,62 +1,62 @@
 <template>
-	<div id="placeNow">
-		<mt-header fixed title="提现" style="font-size:1.2rem;height: 3rem;"></mt-header>
-		<input type="text" v-model="withdraw" placeholder="输入提现金额" class="money">
-		<p class="withdrawNum">可提现余额
-			<span> ￥{{balance}}</span>
-		</p>
+  <div id="placeNow">
+    <mt-header fixed title="提现" style="font-size:1.2rem;height: 3rem;"></mt-header>
+    <input type="text" v-model="withdraw" placeholder="输入提现金额" class="money">
+    <p class="withdrawNum">可提现余额
+      <span> ￥{{balance}}</span>
+    </p>
 
-		<div class="apply_for" @click="hideToggle">确认提现</div>
+    <div class="apply_for" @click="hideToggle">确认提现</div>
 
-		<!--蒙版-->
-		<div class="box" id="box" v-show="isShow" @click="hideToggle"></div>
+    <!--蒙版-->
+    <div class="box" id="box" v-show="isShow" @click="hideToggle"></div>
 
-		<div class="hintBox" v-show="hintShow">
-			<div class="attention">
+    <div class="hintBox" v-show="hintShow">
+      <div class="attention">
 
-				<!--       <input type="text" placeholder="选择入账方式" class="atten">-->
-				<select class="attens" v-model="slects" @change="switcher(slects)">
-					<option value="" style="display: none">选择入账方式</option>
-					<!--<option value="1">微信</option>
+        <!--       <input type="text" placeholder="选择入账方式" class="atten">-->
+        <select class="attens" v-model="slects" @change="switcher(slects)">
+          <option value="" style="display: none">选择入账方式</option>
+          <!--<option value="1">微信</option>
             <option value="0">支付宝</option>-->
-					<option value="2">银行</option>
-				</select>
+          <option value="2">银行</option>
+        </select>
 
-				<div v-show="wxShow">
-					<input type="text" v-model="accounts" placeholder="输入微信号" class="atten">
-					<input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
-				</div>
+        <div v-show="wxShow">
+          <input type="text" v-model="accounts" placeholder="输入微信号" class="atten">
+          <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
+        </div>
 
-				<div v-show="AlipayShow">
-					<input type="text" v-model="accounts" placeholder="输入支付号" class="atten">
-					<input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
-				</div>
+        <div v-show="AlipayShow">
+          <input type="text" v-model="accounts" placeholder="输入支付号" class="atten">
+          <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
+        </div>
 
-				<div v-show="bankShow">
-					<select class="attens">
-						<option value="" style="display: none" readonly>工商银行</option>
-						<!--<option value="1">农业银行</option>-->
-						<!--<option value="0">建设银行</option>-->
-					</select>
-					<input type="text" v-model="bankName" placeholder="输入您的开户名称" class="atten">
-					<input type="text" v-model="accounts" placeholder="输入银行开户卡号" class="atten">
-					<input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
-					<input type="text" v-model="phone" placeholder="输入您的手机号" class="atten">
-				</div>
+        <div v-show="bankShow">
+          <select class="attens">
+            <option value="" style="display: none" readonly>工商银行</option>
+            <!--<option value="1">农业银行</option>-->
+            <!--<option value="0">建设银行</option>-->
+          </select>
+          <input type="text" v-model="bankName" placeholder="输入您的开户名称" class="atten">
+          <input type="text" v-model="accounts" placeholder="输入银行开户卡号" class="atten">
+          <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
+          <input type="text" v-model="phone" placeholder="输入您的手机号" class="atten">
+        </div>
 
-				<!--<p class="remind">为确保您的账户安全，请获取您的账户000***00验证码</p>-->
-				<div class="phoneCode">
-					<input type="text" v-model="codes" placeholder="输入验证码" class="codeInput">
-					<button class="getCode" @click="getCode" :disabled="dis">获取验证码({{prompt}}s)</button>
-					<!--<div class="getCode">重新获取(60s)</div>-->
-				</div>
-			</div>
-			<div class="btns">
-				<div class="cancel" @click="hideToggle">取消</div>
-				<div class="true" @click="goPlace">确认无误，立即提现</div>
-			</div>
-		</div>
-	</div>
+        <!--<p class="remind">为确保您的账户安全，请获取您的账户000***00验证码</p>-->
+        <div class="phoneCode">
+          <input type="text" v-model="codes" placeholder="输入验证码" class="codeInput">
+          <button class="getCode" @click="getCode" :disabled="dis">获取验证码({{prompt}}s)</button>
+          <!--<div class="getCode">重新获取(60s)</div>-->
+        </div>
+      </div>
+      <div class="btns">
+        <div class="cancel" @click="hideToggle">取消</div>
+        <div class="true" @click="goPlace">确认无误，立即提现</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -100,15 +100,9 @@ export default {
           duration: 1500
         });
         return false;
-      } else if (this.withdraw <= 0) {
+      } else if (this.withdraw < 100) {
         Toast({
-          message: "提现金额必须大于0",
-          duration: 1500
-        });
-        return false;
-      } else if (this.withdraw > 100) {
-        Toast({
-          message: "提现金额必须大于100",
+          message: "可提现金额必须大于或等于100",
           duration: 1500
         });
         return false;
@@ -160,24 +154,17 @@ export default {
         url: baseUrl,
         type: "json",
         data: datas
-      })
-        .then(function(data) {
-          console.log(data);
-          let datas = data.data.data;
-          if ((data.data.status = 1)) {
-            console.log(data.data);
-            Toast({
-              message: "发送成功",
-              duration: 1500
-            });
-            //              $this.balance=datas.balance;
-            //              $this.freezeMoney=datas.freezeMoney
-          } else {
-          }
-        })
-        .catch(function() {
-          //alert("程序异常，联系技术人员")
-        });
+      }).then(function(data) {
+        console.log(data);
+        let datas = data.data.data;
+        if ((data.data.status = 1)) {
+          console.log(data.data);
+          Toast({
+            message: "发送成功",
+            duration: 1500
+          });
+        }
+      });
     },
 
     goPlace() {

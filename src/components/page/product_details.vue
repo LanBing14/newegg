@@ -35,7 +35,7 @@
       <div class="userEvaluate" v-for="(item,index) in clist" :key="index">
         <div class="evaluateBox">
           <img :src=item.img class="touxiang">
-          <div>{{item.userName}}</div>
+          <div class="userName">{{item.userName}}</div>
           <div class="userPhone">{{item.phone}}</div>
           <div class="zan">
             <img src="../../img/zan-weixuanzhong.png" alt="" class="xin" @click="goZan" v-show="isZan">
@@ -640,12 +640,13 @@ export default {
         .touxiang {
           width: 2.5rem;
           height: 2.5rem;
-          //   border: 1px solid #ccc;
           border-radius: 50%;
         }
+
         .userPhone {
           color: #c1c5c8;
           font-size: 1rem;
+          width: 15%;
           margin-left: 1rem;
         }
         .zan {

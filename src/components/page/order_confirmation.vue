@@ -195,34 +195,6 @@ export default {
     },
     goPays() {
       this.isPaying = false;
-
-      // this.$router.push({path:'/pay_success'});
-      //      var $this = this;
-      //      var baseUrl=BaseUrl+"api/payOrder";
-      //      var data=qs.stringify({
-      //        openid:"oX6js0WrM2E-Pbz0tg3ltsDdPByY",
-      //        id:$this.orderId,
-      //        payType:1
-      //
-      //      });
-      //      axios({
-      //        method: "post",
-      //        url: baseUrl,
-      //        type: 'json',
-      //        data:data
-      //      }).then(function (data) {
-      //      	console.log(data)
-      //        let datas=data.data.data;
-      //        if(data.data.status==1){
-      //          $this.onBridgeReady(datas)
-      //
-      //        }else{
-      //          alert(datas.msg);
-      //
-      //        }
-      //      }).catch(function () {
-      //        //alert("程序异常，联系技术人员")
-      //      });
       var $this = this;
       axios
         .get(
