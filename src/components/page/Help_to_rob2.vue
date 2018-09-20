@@ -1,39 +1,45 @@
 <template>
   <div id="Help_to_rob2">
-    <div class="bgImg">
-      <div class="helpSuccess">恭喜您！
-        <br/> 成功帮助好友抢得无抗绿壳乌鸡蛋
-        <span>一</span> 枚</div>
-      <img src="../../img/bghehu.png" alt="">
+    <div class="addBg">
+      <div class="addbgCen">
+        <div class="bgImg">
+          <div class="helpSuccess">恭喜您！
+            <br/> 成功帮助好友抢得无抗绿壳乌鸡蛋
+            <span>一</span> 枚</div>
+        </div>
+        <div class="userInfo">
+          <!-- <img src="../../img/addEgg.png" alt="" class="touxiang"> -->
+          <img :src="img" alt="" class="touxiang">
+          <p class="userName">{{name}}</p>
+          <p class="alrealy">已经抢到
+            <span>{{residueEggNum}}枚</span>鸡蛋</p>
+        </div>
+        <div class="addEgg">
+          <img src="../../img/addEgg.png" alt="">
+        </div>
+        <div class="joinMy">
+          <p class="alJoin">已有
+            <span>{{robNumber}}
+            </span>个小伙伴加入抢蛋小分队</p>
+          <p class="tit">如此好蛋，不容错过，快召唤你的抢蛋小分队吧，将健康安全，营养美味的翡翠蛋，带回家！</p>
+        </div>
+      </div>
+      <div class="btns">
+        <!-- <div class="help1" @click="goQiang">喊好友帮ta抢</div> -->
+        <div class="help2" @click="goFriendQiang">喊好友帮我抢</div>
+      </div>
     </div>
-    <div class="userInfo">
-      <img :src="img" alt="" class="touxiang">
-      <p class="userName">{{name}}</p>
-      <p class="alrealy">已经抢到
-        <span>{{residueEggNum}}枚</span>鸡蛋</p>
-    </div>
-    <div class="addEgg">
-      <img src="../../img/addEgg.png" alt="">
-    </div>
-    <div class="joinMy">
-      <p class="alJoin">已有
-        <span>{{robNumber}}
-        </span>个小伙伴加入抢蛋小分队</p>
-      <p class="tit">如此好蛋，不容错过，快召唤你的抢蛋小分队吧，将健康安全，营养美味的翡翠蛋，带回家！</p>
-    </div>
-    <div class="btns">
-      <!-- <div class="help1" @click="goQiang">喊好友帮ta抢</div> -->
-      <div class="help2" @click="goFriendQiang">喊好友帮我抢</div>
-    </div>
+
     <!--蒙版关注公众号-->
     <div @click="hideToggle">
       <div class="box" id="box" v-show="isShow"></div>
       <div class="attention" v-show="isShow">
-        <img src="../../img/guanzhu.png" alt="">
         <div class="titles">
-          <p class="tit1">关注公众号,快去邀请好友抢蛋</p>
+          <p class="tit1">关注公众号,邀请好友抢蛋</p>
           <!-- <p class="tit2">FOCUS US</p> -->
         </div>
+        <img src="../../img/guanzhu.png" alt="">
+
         <img src="../../img/code.jpg" alt="" class="Rcode">
       </div>
     </div>
@@ -217,116 +223,124 @@ export default {
 #Help_to_rob2 {
   background: #77e5d9;
   min-height: 41.6rem;
-
-  .bgImg {
-    width: 90%;
-    margin: 0 auto;
-    .helpSuccess {
-      width: 85%;
-      height: 5rem;
-      line-height: 2rem;
-      position: absolute;
-      left: 6%;
-      background-color: #eee326;
-      top: 3%;
-      span {
-        font-size: 18px;
-      }
-    }
-    img {
-      width: 100%;
-      margin-top: 1rem;
-      margin-bottom: 4rem;
-    }
-  }
-  .userInfo {
-    color: #3e3209;
-    position: absolute;
-    top: 3.5rem;
-    margin-bottom: 1rem;
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 2rem;
-    width: 100%;
-    .touxiang {
-      width: 3rem;
-      height: 2.5rem;
-      border-radius: 50%;
-    }
-    .userName {
-      font-size: 1rem;
-      // margin-top: 1rem;
-      line-height: 1.2rem;
-    }
-    .alrealy {
-      font-size: 0.9rem;
-      span {
-        font-size: 1rem;
-        color: #820303;
-        font-weight: bold;
-      }
-    }
-  }
-  .addEgg {
-    position: absolute;
-    top: 12rem;
-    left: 50%;
-    transform: translate(-50%);
-    width: 8rem;
-    margin: 0 auto;
-    height: 5rem;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .joinMy {
-    position: absolute;
-    top: 14rem;
-    transform: translate(-50%);
-    background-color: #fff;
-    width: 89%;
-    left: 50%;
-    text-align: center;
-    // border: 1px solid #ccc;
-    .alJoin {
-      color: #2e2c09;
-      font-size: 0.9rem;
-      span {
-        font-size: 1.5rem;
-        color: #8b0205;
-      }
-    }
-    .tit {
-      color: #941e08;
-      font-size: 1.1rem;
-      line-height: 2rem;
+  padding-top: 12%;
+  .addBg {
+    background: #77e5d9;
+    min-height: 41.6rem;
+    .addbgCen {
+      height: 25rem;
+      margin: 0 auto;
       width: 90%;
-      display: inline-block;
+      border: 1px solid #000;
+      position: relative;
+      background-color: #ffe326;
+      border-radius: 0.4rem;
+
+      .bgImg {
+        margin: 0 auto;
+        .helpSuccess {
+          height: 5rem;
+          line-height: 2rem;
+          text-align: center;
+
+          span {
+            font-size: 18px;
+          }
+        }
+        img {
+          width: 100%;
+          margin-top: 1rem;
+          margin-bottom: 4rem;
+        }
+      }
+      .userInfo {
+        color: #3e3209;
+        margin: 0 auto;
+        text-align: center;
+        width: 100%;
+        height: 5.5rem;
+        .touxiang {
+          width: 3rem;
+          height: 2.5rem;
+          border-radius: 50%;
+        }
+        .userName {
+          font-size: 1rem;
+          line-height: 1.2rem;
+        }
+        .alrealy {
+          font-size: 0.9rem;
+          span {
+            font-size: 1rem;
+            color: #820303;
+            font-weight: bold;
+          }
+        }
+      }
+      .addEgg {
+        width: 8rem;
+        margin: 0 auto;
+        height: 5rem;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .joinMy {
+        background-color: #fff;
+        width: 75%;
+        margin: 0 auto;
+        text-align: center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%);
+        border-radius: 0.4rem;
+
+        .alJoin {
+          color: #2e2c09;
+          font-size: 0.8rem;
+          margin-bottom: 0.5rem;
+          span {
+            font-size: 1.5rem;
+            color: #8b0205;
+          }
+        }
+        .tit {
+          color: #941e08;
+          font-size: 1rem;
+          line-height: 1.7rem;
+          padding-bottom: 1rem;
+          width: 90%;
+          display: inline-block;
+        }
+      }
+    }
+    .btns {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin: 5%;
+      .help1 {
+        width: 9rem;
+        line-height: 3rem;
+        color: #2e0406;
+        border-radius: 2rem;
+        border: 1px solid #2e0406;
+        margin-right: 1rem;
+      }
+      .help2 {
+        width: 10rem;
+        line-height: 4rem;
+        color: #2e0406;
+        border-radius: 2rem;
+        background: #ffb011;
+        margin-left: 1rem;
+      }
     }
   }
-  .btns {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    .help1 {
-      width: 9rem;
-      line-height: 3rem;
-      color: #2e0406;
-      border-radius: 2rem;
-      border: 1px solid #2e0406;
-      margin-right: 1rem;
-    }
-    .help2 {
-      width: 10rem;
-      line-height: 4rem;
-      color: #2e0406;
-      border-radius: 2rem;
-      background: #ffb011;
-      margin-left: 1rem;
-    }
-  }
+
   /*蒙版*/
   .box {
     opacity: 0.56;
@@ -354,15 +368,16 @@ export default {
     overflow-y: auto;
     overflow-x: hidden;
     img {
-      width: 80%;
+      width: 65%;
       display: block;
       margin: 0 auto;
       height: 13rem;
     }
     .titles {
       position: absolute;
-      top: 0.8rem;
-      width: 100%;
+      left: 50%;
+      transform: translate(-50%);
+      top: 0.6rem;
       margin: 0 auto;
       text-align: center;
       font-size: 0.9rem;
@@ -375,11 +390,12 @@ export default {
     }
     .Rcode {
       display: block;
-      width: 35%;
-      height: 60%;
+      width: 40%;
+      height: 62%;
       position: absolute;
-      top: 2.1rem;
-      margin: 0 32.5%;
+      top: 2rem;
+      left: 50%;
+      transform: translate(-50%);
     }
   }
 }

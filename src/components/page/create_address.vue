@@ -309,6 +309,18 @@ export default {
     /* 下拉框消失 */
     showOut() {
       this.isShow = false;
+      // if (
+      //   this.address.substring(0, 3) == "青海省" ||
+      //   this.address.substring(0, 2) == "西藏" ||
+      //   this.address.substring(0, 3) == "海南省" ||
+      //   this.address.substring(0, 2) == "新疆" ||
+      //   this.address.substring(0, 2) == "香港" ||
+      //   this.address.substring(0, 2) == "澳门"
+      // ) {
+      //   // this.goCancel();
+      //   this.hintShow = true;
+      //   this.isMark = true;
+      // }
     },
     clickBody() {
       this.isShow = false;

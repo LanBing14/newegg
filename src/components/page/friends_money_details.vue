@@ -42,7 +42,7 @@ export default {
       allSumNumber: "",
       img: "",
       Num: 0,
-      sendOpenid:'',
+      sendOpenid: "",
       marqueeList: [
         {
           name: "1军",
@@ -109,10 +109,9 @@ export default {
           //alert("程序异常，联系技术人员")
         });
     },
-          getQueryString(name, url) {
-
+    getQueryString(name, url) {
       url = url || window.location.search.substr(1);
-      console.log(url)
+      console.log(url);
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
       var r = url.match(reg);
       if (r != null) return decodeURI(r[2]);
@@ -156,10 +155,10 @@ export default {
 
   created() {
     document.title = "好友赚钱详情";
-       if(this.getQueryString('makeMoney')==100){
-      this.sendOpenid=this.getQueryString('openid')
-    }else{
-      this.sendOpenid=localStorage.getItem('openid')
+    if (this.getQueryString("makeMoney") == 100) {
+      this.sendOpenid = this.getQueryString("openid");
+    } else {
+      this.sendOpenid = localStorage.getItem("openid");
     }
     this.getNoticeList();
     this.showMarquee(this.Num);

@@ -71,7 +71,7 @@
     <div class="attention" v-show="isPub">
       <img src="../../img/guanzhu.png" alt="">
       <div class="titles">
-        <p class="tit1"> 关注公众号，快去邀请好友抢蛋</p>
+        <p class="tit1"> 关注公众号，邀请好友抢蛋</p>
         <!-- <p class="tit2">FOCUS US</p> -->
       </div>
       <img src="../../img/code.jpg" alt="" class="Rcode">
@@ -120,7 +120,8 @@ export default {
       activityIdOther: "",
       activityIdMine: "",
       isbnt: "",
-      openid: ""
+      openid: "",
+      isbntMe: true
     };
   },
   methods: {
@@ -235,10 +236,6 @@ export default {
     goGetNow() {
       this.$router.push({ path: "/" });
     },
-    //删除
-    // helpRobOn() {
-    //   this.$router.push({ path: "/Help_to_rob2" });
-    // },
     //判断是否是自己
     isMyselfClick() {
       // alert(localStorage.getItem('openid'))
@@ -248,7 +245,6 @@ export default {
         activityId: that.activityIdOther,
         openid: localStorage.getItem("openid")
       });
-      // alert(data)
       axios({
         method: "post",
         url: baseUrl,
@@ -257,7 +253,8 @@ export default {
       }).then(info => {
         console.log(info);
         var data = info.data.data;
-
+        that.eggNumber = data.eggNumber;
+        that.progWid = data.eggNumber / 30 * 100 + "%";
         if (data.isMyself == 1 && data.eggNumber == 30) {
           that.isMyself = true;
           that.isbnt = "3";
@@ -271,17 +268,19 @@ export default {
           that.isMyself = false;
           that.isbnt = "2";
         }
-
+        if (data.isMyself == 0 && data.eggNumber >= 30) {
+          //自动变为29枚
+          that.eggNumber = 29;
+          that.progWid = 29 / 30 * 100 + "%";
+        }
         that.isOrder = data.isOrder;
         that.isSubscribe = data.isSubscribe;
         that.isClick = data.isClick;
-        that.eggNumber = data.eggNumber;
-        that.progWid = data.eggNumber / 30 * 100 + "%";
+
         that.showQp = true;
         that.joinArr = data.joinArr;
         that.activityIdOther = data.otherActivityId;
         that.activityIdMine = data.selfActivityId;
-
         that.WxZd();
       });
     },
@@ -296,19 +295,31 @@ export default {
           openid: localStorage.getItem("openid")
         }
       });
-      // this.$router.push({ path: "/Help_to_rob2" });
     },
     //点击‘去购买’
     goBuy() {
+      this.bindRelat();
       this.$router.push({ path: "/product_details" });
     },
-    //进度条进度
-    test() {
-      this.$router.push({
-        path: "/Help_to_rob2",
-        query: { activtyId: activityIdOther }
+
+    //绑定关系
+    bindRelat() {
+      var $this = this;
+      var data = qs.stringify({
+        activtyId: $this.activityIdOther,
+        openid: localStorage.getItem("openid")
+      });
+      var baseUrl = BaseUrl + "index/bindRelation";
+      axios({
+        method: "POST",
+        url: baseUrl,
+        type: "json",
+        data: data
+      }).then(function(data) {
+        console.log(data);
       });
     },
+
     //首页相关信息+openid存
     login: function() {
       var $this = this;
@@ -684,15 +695,16 @@ export default {
     overflow-y: auto;
     overflow-x: hidden;
     img {
-      width: 80%;
+      width: 65%;
       display: block;
       margin: 0 auto;
       height: 13rem;
     }
     .titles {
       position: absolute;
-      top: 0.8rem;
-      width: 100%;
+      left: 50%;
+      transform: translate(-50%);
+      top: 0.6rem;
       margin: 0 auto;
       text-align: center;
       font-size: 0.9rem;
@@ -705,12 +717,21 @@ export default {
     }
     .Rcode {
       display: block;
-      width: 35%;
-      height: 60%;
+      width: 40%;
+      height: 62%;
       position: absolute;
-      top: 2.1rem;
-      margin: 0 33.5%;
+      top: 2rem;
+      left: 50%;
+      transform: translate(-50%);
     }
+    // .Rcode {
+    //   display: block;
+    //   width: 35%;
+    //   height: 60%;
+    //   position: absolute;
+    //   top: 2.1rem;
+    //   margin: 0 33.5%;
+    // }
   }
 
   // 弹出框价格

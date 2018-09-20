@@ -564,7 +564,7 @@ export default {
         text-overflow: ellipsis;
       }
       .moneyReward {
-        width: 30%;
+        width: 34%;
         height: 2.5rem;
         background: #e5e5e4;
         border-radius: 2rem 0 0 2rem;
@@ -604,6 +604,7 @@ export default {
         text-align: right;
       }
     }
+    margin-bottom: 0.5rem;
   }
   /*选择套餐*/
   .chooseSpecial {
@@ -625,7 +626,7 @@ export default {
   /*全部评价*/
   .all_evaluate {
     .titleBox {
-      background-color: #f0f0f2;
+      background-color: #f1f1f1;
       font-size: 1rem;
       color: #000;
       padding-left: 1rem;
@@ -633,6 +634,7 @@ export default {
       margin-top: 1rem;
     }
     .userEvaluate {
+      background-color: #fff;
       .evaluateBox {
         display: flex;
         align-items: center;
