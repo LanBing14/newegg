@@ -177,21 +177,15 @@ export default {
         url: baseUrl,
         type: "json",
         data: data
-      })
-        .then(function(data) {
-          let datas = data.data.data;
+      }).then(function(data) {
+        let datas = data.data.data;
 
-          $this.orderSn = data.data.data.orderSn;
-          if (data.data.status == 1) {
-            $this.orderId = datas.orderId;
-            $this.goPays();
-          } else {
-            //						alert(datas.msg);
-          }
-        })
-        .catch(function() {
-          //alert("程序异常，联系技术人员")
-        });
+        $this.orderSn = data.data.data.orderSn;
+        if (data.data.status == 1) {
+          $this.orderId = datas.orderId;
+          $this.goPays();
+        }
+      });
     },
     goPays() {
       this.isPaying = false;
@@ -212,46 +206,10 @@ export default {
 
           if (data.data.status == 1) {
             $this.onBridgeReady(datas);
-          } else {
-            //						alert(datas.msg);
           }
-        })
-        .catch(function() {
-          //alert("程序异常，联系技术人员")
         });
     },
     //获取订单
-    getpreOrder() {
-      var $this = this;
-      var baseUrl = BaseUrl + "api/preOrder";
-      var data = qs.stringify({
-        //       	goodsId:17  产品id
-        //			packageId:14  套餐id
-        //			number   int  购买数量
-        //			openid  string 微信用户openid
-        //			aid   int   用户地址id（可空，填完地址再调此接口传入aid）
-      });
-      axios({
-        method: "post",
-        url: baseUrl,
-        type: "json",
-        data: data
-      })
-        .then(function(data) {
-          //      	console.log("aaa")
-          //      	console.log(data)
-          let datas = data.data.data;
-
-          if (data.data.status == 1) {
-            $this.onBridgeReady(datas);
-          } else {
-            //						alert(datas.msg);
-          }
-        })
-        .catch(function() {
-          //alert("程序异常，联系技术人员")
-        });
-    },
 
     onBridgeReady(data) {
       var $this = this;
@@ -306,28 +264,22 @@ export default {
         url: baseUrl,
         type: "json",
         data: data
-      })
-        .then(function(data) {
-          console.log(data);
-          let datas = data.data.data;
-          if (data.data.status == 1) {
-            $this.address = datas.address;
-            $this.packageInfo = datas.packageInfo;
-            $this.freight = datas.freight;
-            $this.totalPrice = datas.totalPrice;
+      }).then(function(data) {
+        console.log(data);
+        let datas = data.data.data;
+        if (data.data.status == 1) {
+          $this.address = datas.address;
+          $this.packageInfo = datas.packageInfo;
+          $this.freight = datas.freight;
+          $this.totalPrice = datas.totalPrice;
 
-            $this.number = datas.number;
-            $this.packageId = datas.packageId;
-            $this.goodsId = datas.goodsId;
-            $this.imposeProvince = datas.imposeProvince[0];
-            $this.winterLateProvince = datas.winterLateProvince[0];
-          } else {
-            //						alert(datas.msg);
-          }
-        })
-        .catch(function() {
-          //alert("程序异常，联系技术人员")
-        });
+          $this.number = datas.number;
+          $this.packageId = datas.packageId;
+          $this.goodsId = datas.goodsId;
+          $this.imposeProvince = datas.imposeProvince[0];
+          $this.winterLateProvince = datas.winterLateProvince[0];
+        }
+      });
     },
     Address() {
       var $this = this;
@@ -341,28 +293,22 @@ export default {
         url: baseUrl,
         type: "json",
         data: data
-      })
-        .then(function(data) {
-          let datas = data.data.data;
+      }).then(function(data) {
+        let datas = data.data.data;
 
-          if (data.data.status == 1) {
-            for (var i in datas) {
-              if ((datas[i].isDefault = 1)) {
-                ($this.receiver = datas[i].receiver), //收货人
-                  ($this.phone = datas[i].phone); //手机号
-                $this.province = datas[i].province; //省份
-                $this.city = datas[i].city; //城市
-                $this.county = datas[i].county; //区
-                $this.detail = datas[i].detail; //详细地址
-              }
+        if (data.data.status == 1) {
+          for (var i in datas) {
+            if (datas[i].isDefault == 1) {
+              $this.receiver = datas[i].receiver; //收货人
+              $this.phone = datas[i].phone; //手机号
+              $this.province = datas[i].province; //省份
+              $this.city = datas[i].city; //城市
+              $this.county = datas[i].county; //区
+              $this.detail = datas[i].detail; //详细地址
             }
-          } else {
-            //						alert(datas.msg);
           }
-        })
-        .catch(function() {
-          //alert("程序异常，联系技术人员")
-        });
+        }
+      });
     }
   },
   mounted() {

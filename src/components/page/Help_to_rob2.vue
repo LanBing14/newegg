@@ -235,7 +235,7 @@ export default {
       position: relative;
       background-color: #ffe326;
       border-radius: 0.4rem;
-
+      margin-bottom: 3.5rem;
       .bgImg {
         margin: 0 auto;
         .helpSuccess {
@@ -336,7 +336,6 @@ export default {
         color: #2e0406;
         border-radius: 2rem;
         background: #ffb011;
-        margin-left: 1rem;
       }
     }
   }

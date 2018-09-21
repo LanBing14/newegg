@@ -7,9 +7,9 @@
     </div>
     <!--滚轮公告-->
     <div class="marquee_box">
-      <ul class="marquee_list" :style="{ top: -Num + 'px'}" :class="{marquee_top:Num}">
+      <ul class="marquee_list" ref='myul'>
         <!-- 当显示最后一条的时候（Num=0转换布尔类型为false）去掉过渡效果-->
-        <li v-for="(lists,i) in list">
+        <li v-for="(lists,i) in list" :key="i">
           <p>{{lists.phone}}成功推荐了{{lists.num}}人赚取赏金{{lists.sumNum}}元</p>
         </li>
       </ul>
@@ -43,42 +43,25 @@ export default {
       img: "",
       Num: 0,
       sendOpenid: "",
-      marqueeList: [
-        {
-          name: "1军",
-          city: "北京",
-          amount: "10"
-        },
-        {
-          name: "2军",
-          city: "上海",
-          amount: "20"
-        },
-        {
-          name: "3军",
-          city: "广州",
-          amount: "30"
-        },
-        {
-          name: "4军",
-          city: "重庆",
-          amount: "40"
-        }
-      ]
+      marqueeList: [],
+      topPx: 0
     };
   },
   methods: {
     showMarquee: function(Num) {
-      this.marqueeList.push(this.marqueeList[0]);
-      var max = this.marqueeList.length;
-      var that = this;
-      var marqueetimer = setInterval(function() {
-        Num++;
-        if (Num >= max) {
-          Num = 0;
-        }
-        that.Num = Num * 30;
-      }, 1000);
+      setTimeout(() => {
+        setInterval(
+          function() {
+            this.$refs.myul.style.transform =
+              "translateY(-" + this.topPx + "px)";
+            this.topPx = this.topPx + 1;
+            if (this.topPx >= this.list.length * 30 - 90) {
+              this.topPx = 0;
+            }
+          }.bind(this),
+          34
+        );
+      }, 3000);
     },
     //获取公告信息
     getNoticeList() {
@@ -98,6 +81,9 @@ export default {
           let datas = data.data.data;
           if (data.data.status == 1) {
             $this.list = datas;
+            $this.$nextTick(() => {
+              $this.showMarquee();
+            });
           } else {
             Toast({
               message: datas.msg,
@@ -161,7 +147,7 @@ export default {
       this.sendOpenid = localStorage.getItem("openid");
     }
     this.getNoticeList();
-    this.showMarquee(this.Num);
+
     this.getTotalMoney();
   },
   mounted() {},
@@ -213,16 +199,48 @@ export default {
     position: relative;
     color: #662908;
     width: 90%;
-    margin: 1rem auto;
-    height: 4rem; /*关键样式*/
+    margin: 0rem auto;
+    height: 90px; /*关键样式*/
     overflow: hidden;
+    // transition: all 1s;
   }
   .marquee_list {
+    margin-top: 0px;
     display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0;
+    padding-left: 0;
+    -webkit-backface-visibility: hidden;
+
+    -moz-backface-visibility: hidden;
+
+    -ms-backface-visibility: hidden;
+
+    backface-visibility: hidden;
+
+    -webkit-perspective: 1000;
+
+    -moz-perspective: 1000;
+
+    -ms-perspective: 1000;
+
+    perspective: 1000;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transform: translateZ(0);
+
+    -moz-transform: translateZ(0);
+
+    -ms-transform: translateZ(0);
+
+    -o-transform: translateZ(0);
+
+    transform: translateZ(0);
+  }
+  .marquee_list li {
+    -webkit-transform: translate3d(0, 0, 0);
+    height: 30px;
+    line-height: 30px;
+    -webkit-backface-visibility: hidden;
+    // transition: all 1s;
   }
 
   /*头像等信息*/

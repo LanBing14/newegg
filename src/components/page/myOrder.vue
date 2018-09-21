@@ -2,15 +2,15 @@
   <div id="myOrder">
     <mt-header class="bg" fixed title="我的订单" style="font-size:1.2rem;height:3rem;"></mt-header>
     <mt-navbar v-model="selected">
-      <mt-tab-item @click="getMyOrder" id="">全部</mt-tab-item>
-      <mt-tab-item @click="getMyOrder" id="0">待付款</mt-tab-item>
-      <mt-tab-item @click="getMyOrder" id="1">待收货</mt-tab-item>
+      <mt-tab-item @click="getMyOrder" id="0">全部</mt-tab-item>
+      <mt-tab-item @click="getMyOrder" id="1">待付款</mt-tab-item>
+      <mt-tab-item @click="getMyOrder" id="2">待收货</mt-tab-item>
       <mt-tab-item @click="getMyOrder" id="3">待评价</mt-tab-item>
     </mt-navbar>
 
     <!-- tab-container -->
     <mt-tab-container v-model="selected">
-      <mt-tab-container-item id="1">
+      <mt-tab-container-item id="0">
 
         <div class="orderBox" v-for="(item,index) in obligationList" :key="index">
           <div class="goodsInfo">
@@ -86,7 +86,7 @@
         </div>
 
       </mt-tab-container-item>
-      <mt-tab-container-item id="2">
+      <mt-tab-container-item id="1">
         <div class="orderBox" v-for="(item,index) in obligationList" :key="index">
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
@@ -112,7 +112,7 @@
         </div>
 
       </mt-tab-container-item>
-      <mt-tab-container-item id="3">
+      <mt-tab-container-item id="2">
         <div class="orderBox" v-for="(item,index) in receivingList" :key="index">
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
@@ -138,7 +138,7 @@
         </div>
 
       </mt-tab-container-item>
-      <mt-tab-container-item id="4">
+      <mt-tab-container-item id="3">
         <div class="orderBox" v-for="(item,index) in evaluateList" :key="index">
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
@@ -178,7 +178,7 @@ export default {
   name: "myOrder",
   data() {
     return {
-      selected: "1",
+      selected: "0",
       packageInfo: [],
       allList: [],
       obligationList: [],
@@ -208,34 +208,30 @@ export default {
         url: baseUrl,
         type: "json",
         data: data
-      })
-        .then(function(data) {
-          console.log(data);
-          let datas = data.data.data;
-          if (data.data.status == 1) {
-            $this.allList = datas;
-            for (var i in datas) {
-              if (datas[i].status == "未支付") {
-                datas[i].status = "待付款";
-                $this.obligationList.push(datas[i]);
-              } else if (datas[i].status == "待发货") {
-                datas[i].status = "待收货";
-                $this.receivingList.push(datas[i]);
-              } else {
-                datas[i].status = "待评价";
-                $this.evaluateList.push(datas[i]);
-              }
+      }).then(function(data) {
+        console.log(data);
+        let datas = data.data.data;
+        if (data.data.status == 1) {
+          $this.allList = datas;
+          for (var i in datas) {
+            if (datas[i].status == "未支付") {
+              datas[i].status = "待付款";
+              $this.obligationList.push(datas[i]);
+            } else if (datas[i].status == "待发货") {
+              datas[i].status = "待收货";
+              $this.receivingList.push(datas[i]);
+            } else {
+              datas[i].status = "待评价";
+              $this.evaluateList.push(datas[i]);
             }
-          } else {
-            Toast({
-              message: datas.msg,
-              duration: 1500
-            });
           }
-        })
-        .catch(function() {
-          //alert("程序异常，联系技术人员")
-        });
+        } else {
+          Toast({
+            message: datas.msg,
+            duration: 1500
+          });
+        }
+      });
     },
     reqAddress() {
       this.$router.push({

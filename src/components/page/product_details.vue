@@ -35,6 +35,7 @@
       <div class="userEvaluate" v-for="(item,index) in clist" :key="index">
         <div class="evaluateBox">
           <img :src=item.img class="touxiang">
+          <!-- {{username.length >5?username.splice(0,5):username}} -->
           <div class="userName">{{item.userName}}</div>
           <div class="userPhone">{{item.phone}}</div>
           <div class="zan">
@@ -550,12 +551,15 @@ export default {
   }
   /*商品名称*/
   .productInfo {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
     .infoOne {
       display: flex;
       align-items: center;
       .eggName {
         width: 65%;
         height: 3rem;
+        line-height: 3rem;
         font-size: 1.2rem;
         color: #2a1011;
         margin: 0.5rem 1rem;
@@ -604,14 +608,15 @@ export default {
         text-align: right;
       }
     }
-    margin-bottom: 0.5rem;
+    // margin-bottom: 0.5rem;
   }
   /*选择套餐*/
   .chooseSpecial {
     width: 95%;
     margin: 0 auto;
     font-size: 1rem;
-    line-height: 3rem;
+    height: 4rem;
+    line-height: 4rem;
     display: flex;
     align-items: center;
     .choose {
@@ -625,41 +630,53 @@ export default {
   }
   /*全部评价*/
   .all_evaluate {
+    margin-bottom: 1.5rem;
     .titleBox {
       background-color: #f1f1f1;
       font-size: 1rem;
       color: #000;
       padding-left: 1rem;
       line-height: 3rem;
-      margin-top: 1rem;
     }
     .userEvaluate {
       background-color: #fff;
       .evaluateBox {
         display: flex;
         align-items: center;
-        padding: 0.6rem 1rem;
+        padding-left: 0.8rem;
+        padding-top: 0.8rem;
         .touxiang {
           width: 2.5rem;
           height: 2.5rem;
           border-radius: 50%;
+          margin-right: 0.3rem;
         }
-
+        .userName {
+          width: 4rem;
+          height: 2.5rem;
+          line-height: 2.5rem;
+          overflow: hidden;
+        }
         .userPhone {
           color: #c1c5c8;
           font-size: 1rem;
-          width: 15%;
-          margin-left: 1rem;
+          margin-left: 0.5rem;
+          width: 5rem;
+          margin-right: 5%;
         }
         .zan {
+          width: 30%;
+          margin: 0 auto;
+          margin-left: 10%;
           display: flex;
+          text-align: left;
           align-items: center;
           position: relative;
-          right: -8rem;
           float: right;
           .xin {
             width: 1.8em;
             height: 2rem;
+            margin-right: 0.3rem;
           }
           .praise {
             color: #c1c5c8;
@@ -706,18 +723,19 @@ export default {
     align-items: center;
     bottom: 0;
     position: fixed;
-    height: 3.5rem;
+    height: 4.5rem;
     background: #ffffff;
     .rob {
       width: 50%;
-      height: 2.5rem;
+      height: 2.8rem;
+      padding-top: 0.4rem;
       text-align: center;
       border: 1px solid #cc3e36;
       color: #cc3e36;
       border-radius: 5rem;
       .free {
         font-size: 1rem;
-        line-height: 1.4rem;
+        line-height: 1.5rem;
       }
       .waitRob {
         font-size: 0.8rem;
@@ -727,9 +745,9 @@ export default {
     }
     .buy {
       width: 50%;
-      height: 3rem;
+      height: 3.6rem;
+      line-height: 3.6rem;
       font-size: 1.2rem;
-      line-height: 3rem;
       text-align: center;
       background: #cc3e36;
       color: #ffffff;

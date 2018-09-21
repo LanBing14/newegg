@@ -253,8 +253,7 @@ export default {
       }).then(info => {
         console.log(info);
         var data = info.data.data;
-        that.eggNumber = data.eggNumber;
-        that.progWid = data.eggNumber / 30 * 100 + "%";
+
         if (data.isMyself == 1 && data.eggNumber == 30) {
           that.isMyself = true;
           that.isbnt = "3";
@@ -267,12 +266,12 @@ export default {
         } else if (data.isMyself == 0) {
           that.isMyself = false;
           that.isbnt = "2";
+          data.eggNumber = data.eggNumber >= 30 ? 29 : data.eggNumber;
         }
-        if (data.isMyself == 0 && data.eggNumber >= 30) {
-          //自动变为29枚
-          that.eggNumber = 29;
-          that.progWid = 29 / 30 * 100 + "%";
-        }
+
+        that.eggNumber = data.eggNumber;
+        that.progWid = data.eggNumber / 30 * 100 + "%";
+
         that.isOrder = data.isOrder;
         that.isSubscribe = data.isSubscribe;
         that.isClick = data.isClick;
@@ -400,21 +399,6 @@ export default {
     } else {
       this.isMyselfClick();
     }
-
-    // var data = qs.stringify({
-    //   activityId: this.activityId,
-    //   openid: localStorage.getItem("openid")
-    // });
-
-    // var baseUrl = BaseUrl + "index/joinActivity";
-    // axios({
-    //   method: "POST",
-    //   url: baseUrl,
-    //   type: "json",
-    //   data: data
-    // }).then(res => {
-    //   console.log(res);
-    // });
   },
   components: {}
 };
