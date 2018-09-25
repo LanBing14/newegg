@@ -1,92 +1,160 @@
 <template>
   <div id="Free_egg_robbing">
-    <div class="top">
-      <div class="launch fx">
-        <div class=""></div>
-        <p class="fx-f1 c1">我正在发起抢蛋活动</p>
+    <div class="wholeYe">
+      <!-- 头部轮播 -->
+      <div class="top" v-if="topSwiper">
+        <div class="launch fx">
+          <div class="">
+            <img :src="activityImg" />
+          </div>
+          <!--activityImg-->
+          <p class="fx-f1 c1">{{activityUsername}}</p>
+          <!--我正在发起抢蛋活动-->
+        </div>
+        <div class="bgt"></div>
+        <div class="link fx">
+          <p class="fx-f1" style="padding-right:1.5rem;"> 翡翠蛋 乌鸡蛋 无抗生素的新鲜绿壳蛋</p>
+          <p class="fx fx-jf-c fx-ai-c" @click="goBuy">去购买</p>
+        </div>
       </div>
-      <div class="bgt"></div>
-      <div class="link fx">
-        <p class="fx-f1" style="padding-right:1.5rem;"> 翡翠蛋 乌鸡蛋 无抗生素的新鲜绿壳蛋</p>
-        <p class="fx fx-jf-c fx-ai-c" @click="goBuy">去购买</p>
-      </div>
-    </div>
-    <div class="progress bg1 fx fx-y">
-      <div class="fx-f1 fx fx-ai-c">
-        <div class="eggprog" style="width:3.5rem;height:4rem;"></div>
-        <div class="currprog fx-f1">
-          <div :style="{width:progWid}">
-            <div style="position:relative;">
-              <div class="qp c1" v-show="showQp">{{eggNumber}}枚</div>
+      <div class="top1" v-if="topHelpRob">
+        <div class="otherTop">
+          <p class="successRob">您已成功帮微信好友XX抢到翡翠蛋一枚</p>
+          <p class="canBuy">您可以:</p>
+          <div class="fxThree">
+            <div class="leftBuy colf">
+              <p>绿色健康,无抗绿壳翡翠鸡蛋</p>
+              <div class="btnYellow ">去购买</div>
+            </div>
+            <div class="centerRob colf">
+              <p>30枚鸡蛋免费领</p>
+              <div class="btnYellow Bgred">去抢蛋</div>
+
+            </div>
+            <div class="rightBuy colf">
+              <p> 累计已发放赏金7888888.99 </p>
+              <div class="btnYellow">转赏金</div>
+
             </div>
           </div>
         </div>
       </div>
-      <div class="fx" style="position:relative;">
-        <p class="c2" style="position:absolute;left:2rem;top:-1.5rem;font-size:.85rem;">1枚</p>
-        <p class="c2" style="position:absolute;right:1.8rem;top:-1.5rem;font-size:.85rem;">{{totalNum}}枚</p>
+
+      <div class="topTwo" v-if="topGuan">
+        <div class="otherTop">
+          <p class="successRob">您已成功帮微信好友
+            <span>xx</span> 抢到翡翠蛋一枚</p>
+          <p class="canBuy">Ta已抢到25枚</p>
+
+          <div class="fx recodeBuy">
+            <img src="../../img/code.jpg" alt="" class="Rcode">
+            <img src="../../img/code.jpg" alt="" class="Rcode">
+          </div>
+          <p class="guanZhu">长按关注公众号</p>
+          <p class="guanZhu">您可以向好友发起抢蛋活动</p>
+        </div>
+      </div>
+      <!-- 中间部分 -->
+      <!-- 进度条框框 -->
+      <div class="progress bg1 fx fx-y" v-if="manNum">
+        <div class="fx-f1 fx fx-ai-c searchProgress" v-if="proDel">
+          <div class="eggprog" style="width:3.5rem;height:4rem;"></div>
+          <div class="currprog fx-f1">
+            <div :style="{width:progWid}">
+              <div style="position:relative;">
+                <div class="qp c1" v-show="showQp">{{eggNumber}}枚</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx" style="position:relative;" v-if="proDel">
+          <p class="c2" style="position:absolute;left:2rem;top:-1.5rem;font-size:.85rem;">1枚</p>
+          <p class="c2" style="position:absolute;right:1.8rem;top:-1.5rem;font-size:.85rem;">{{totalNum}}枚</p>
+        </div>
+
+        <div class="butt" @click="helpRobMy" v-if="isbnt == '1'">喊好友帮我抢</div>
+        <div class="butt" @click="helpRobTa" v-if="isbnt == '2'">帮TA抢</div>
+
       </div>
 
-      <div class="butt" @click="helpRobMy" v-if="isbnt == '1'">喊好友帮我抢</div>
-      <div class="butt" @click="helpRobTa" v-if="isbnt == '2'">帮TA抢</div>
-      <div class="butt" @click="helpRobOn" v-if="isbnt == '3'">立即领取</div>
-
-    </div>
-    <div class="bottom" v-if="isMyself">
-      <p class="f1 c3">我的抢蛋分队</p>
-      <ul>
-        <li class="fx fx-ai-c" v-for="(item,index) in joinArr" :key="index">
-          <div><img :src="item.img" alt=""></div>
-          <p class="f1">{{item.username}}成功帮我抢到{{item.eggNum}}枚</p>
-        </li>
-      </ul>
-    </div>
-    <div class="bottom" v-if="!isMyself">
-      <p class="f1 c3">ta的抢蛋小分队</p>
-      <ul>
-        <li class="fx fx-ai-c" v-for="(item,index) in joinArr" :key="index">
-          <div><img :src="item.img" alt=""></div>
-          <p class="f1">{{item.username}}成功帮ta抢到{{item.eggNum}}枚</p>
-        </li>
-      </ul>
-    </div>
-
-    <!-- 蒙版 -->
-    <div class="box" id="box" @click="isShow=false" v-if="isShow"></div>
-    <img src="../../img/shareHint.png" @click="isShow=false" alt="" class="shareHint" v-if="isShow">
-
-    <div class="TabRob" @click="isTaRob=false" v-if="isTaRob"></div>
-    <div class="hintBox" v-if="isTaRob">
-      <img src="../../img/remaind.png" alt="" class="mbicon">
-      <div class="attention1">
-        <p>市面上的鸡蛋99%都是激素蛋，如今您可帮好友抢得一枚无抗生素、无重金属、无兽药残留、的绿皮乌鸡蛋<br>
-        </p>
+      <!-- 已经满了30没已经关注的内容 -->
+      <div class="progressOne bg2 fx fx-y" v-if="isbntMan">
+        <p class="text-Ali">您已经成功抢满30枚绿壳无抗翡翠蛋</p>
+        <p class="text-Ali font12">您还可以:</p>
+        <div class="fx splitY">
+          <div @click="helpRobMy" class="buttOne whiteCol">了解赚赏金</div>
+          <div @click="helpRobOn" class="buttOne redCol">立即领取</div>
+        </div>
       </div>
-      <div class="btns">
-        <div class="cancel" @click="targetTiao">帮Ta抢蛋</div>
-      </div>
-    </div>
-    <!--蒙版关注公众号-->
-    <div class="box1" id="box1" @click="isPub=false" v-show="isPub"></div>
-    <div class="attention" v-show="isPub">
-      <img src="../../img/guanzhu.png" alt="">
-      <div class="titles">
-        <p class="tit1"> 关注公众号，邀请好友抢蛋</p>
-        <!-- <p class="tit2">FOCUS US</p> -->
-      </div>
-      <img src="../../img/code.jpg" alt="" class="Rcode">
-    </div>
 
-    <!--价钱蒙版-->
-    <!--领取提醒-->
-    <!--蒙版-->
-    <div class="box" id="box" @click="isGEtEgg=false" v-show="isGetEgg"></div>
-    <div class="getRemind" v-show="isGetEgg">
-      <p class="remindTop">领取提醒</p>
-      <p class="remindCenter">您需下单购买任一套餐，免费领取30枚绿皮无抗翡翠蛋</p>
-      <div class="btns">
-        <div class="cancel" @click="hideToggle">下次领取</div>
-        <div class="true" @click="goGetNow">立即下单</div>
+      <div class="bottom" v-if="isMyself == '3'">
+        <p class="f1 c3">我的抢蛋分队</p>
+        <ul>
+          <li class="fx fx-ai-c" v-for="(item,index) in joinArr" :key="index">
+            <div><img :src="item.img" alt=""></div>
+            <p class="f1">{{item.username}}成功帮我抢到{{item.eggNum}}枚</p>
+          </li>
+        </ul>
+      </div>
+      <div class="bottom" v-if="isMyself == '4'">
+        <p class="f1 c3">Ta的抢蛋小分队</p>
+        <ul>
+          <li class="fx fx-ai-c" v-for="(item,index) in joinArr" :key="index">
+            <div><img :src="item.img" alt=""></div>
+            <p class="f1">{{item.username}}成功帮Ta抢到{{item.eggNum}}枚</p>
+          </li>
+        </ul>
+      </div>
+      <div class="bottomEWM" v-if="isMyself == '5'">
+        <p class="MyTeam">我的抢蛋小分队</p>
+        <p class="MyGuan">关注后可查看小分队成员</p>
+        <div class="fx">
+          <img src="../../img/code.jpg" alt="">
+          <img src="../../img/code.jpg" alt="">
+        </div>
+      </div>
+
+      <div class="bottom" v-if="isMyself == '6'">
+        <p class="f1 c3">Ta的抢蛋小分队</p>
+        <div class="text-align-font">关注后可查看Ta的抢蛋小分队</div>
+      </div>
+      <!-- 蒙版 -->
+      <div class="box" id="box" @click="isShow=false" v-if="isShow"></div>
+      <img src="../../img/shareHint.png" @click="isShow=false" alt="" class="shareHint" v-if="isShow">
+
+      <div class="TabRob" @click="isTaRob=false" v-if="isTaRob"></div>
+      <div class="hintBox" v-if="isTaRob">
+        <img src="../../img/remaind.png" alt="" class="mbicon">
+        <div class="attention1">
+          <p>市面上的鸡蛋99%都是激素蛋，如今您可帮好友抢得一枚无抗生素、无重金属、无兽药残留、的绿皮乌鸡蛋<br>
+          </p>
+        </div>
+        <div class="btns">
+          <div class="cancel" @click="targetTiao">帮Ta抢蛋</div>
+        </div>
+      </div>
+      <!--蒙版关注公众号-->
+      <div class="box1" id="box1" @click="isPub=false" v-show="isPub"></div>
+      <div class="attention" v-show="isPub">
+        <img src="../../img/guanzhu.png" alt="">
+        <div class="titles">
+          <p class="tit1"> 关注公众号，邀请好友抢蛋</p>
+        </div>
+        <img src="../../img/code.jpg" alt="" class="Rcode">
+      </div>
+
+      <!--价钱蒙版-->
+      <!--领取提醒-->
+      <!--蒙版-->
+      <div class="box" id="box" @click="isGEtEgg=false" v-show="isGetEgg"></div>
+      <div class="getRemind" v-show="isGetEgg">
+        <p class="remindTop">领取提醒</p>
+        <p class="remindCenter">您需下单购买任一套餐，免费领取30枚绿皮无抗翡翠蛋</p>
+        <div class="btns">
+          <div class="cancel" @click="hideToggle">下次领取</div>
+          <div class="true" @click="goGetNow">立即下单</div>
+        </div>
       </div>
     </div>
   </div>
@@ -105,8 +173,14 @@ export default {
     return {
       progWid: "0%",
       showQp: false,
-      isMyself: false,
+      topGuan: false,
+      topSwiper: false,
+      proDel: false,
+      manNum: false,
+      isMyself: "",
+      isbntMan: false,
       joinArr: [],
+      topHelpRob: false,
       eggNumber: 2,
       totalNum: 30,
       isClick: 0,
@@ -121,7 +195,9 @@ export default {
       activityIdMine: "",
       isbnt: "",
       openid: "",
-      isbntMe: true
+      isbntMe: true,
+      activityUsername: "",
+      activityImg: ""
     };
   },
   methods: {
@@ -157,12 +233,14 @@ export default {
           this.nonceStr = info.nonceStr;
           this.timestamp = info.timestamp;
           this.signature = info.signature;
+
           wx.config({
             debug: false,
             appId: this.appId, // 和获取Ticke的必须一样------必填，公众号的唯一标识
             timestamp: this.timestamp, // 必填，生成签名的时间戳
             nonceStr: this.nonceStr, // 必填，生成签名的随机串
             signature: this.signature, // 必填，签名，见附录1
+
             //需要分享的列表项:发送给朋友，分享到朋友圈，
             jsApiList: ["onMenuShareAppMessage", "onMenuShareTimeline"]
           });
@@ -178,7 +256,7 @@ export default {
             //分享到朋友圈
             wx.onMenuShareTimeline({
               title:
-                "仅30枚！绿壳无抗乌鸡蛋免费抢啦，数量有限，先抢先得、好吃好玩好赚钱", // 分享标题
+                "每人30枚、翡翠蛋免费抢，购买更便宜,手速，手速! 我只能帮你到这里了", // 分享标题
               link:
                 "http://egg.wufuapp.com?openid=" +
                 $this.openid +
@@ -201,9 +279,10 @@ export default {
             });
             //分享给朋友
             wx.onMenuShareAppMessage({
-              title: "仅仅30枚! 鸡蛋免费抢啦~我只能帮你到这了", // 分享标题
+              title:
+                "每人30枚、翡翠蛋免费抢，购买更便宜,手速，手速! 我只能帮你到这里了", // 分享标题
               desc:
-                "绿壳无抗乌鸡蛋，30枚免费抢，数量有限，先抢先得、好吃好玩好赚钱", // 分享描述
+                "绿壳乌鸡蛋、高科技生态养殖、无抗生素，无兽药残留，无重金属，无添加，数量有限，先抢先得，好吃好玩好赚钱！", // 分享描述
               link:
                 "http://egg.wufuapp.com?openid=" +
                 $this.openid +
@@ -238,7 +317,6 @@ export default {
     },
     //判断是否是自己
     isMyselfClick() {
-      // alert(localStorage.getItem('openid'))
       var that = this;
       var baseUrl = BaseUrl + "index/joinActivity";
       var data = qs.stringify({
@@ -251,23 +329,83 @@ export default {
         type: "json",
         data: data
       }).then(info => {
-        console.log(info);
         var data = info.data.data;
+        console.log(data);
 
+        // 已经满30 已经关注
         if (data.isMyself == 1 && data.eggNumber == 30) {
-          that.isMyself = true;
-          that.isbnt = "3";
+          //我的抢蛋小分队显示
+          that.isMyself = "3";
+          if (data.isSubscribe == 1) {
+            //轮播图显示
+            that.topSwiper = true;
+            //满30盒子 显示
+            that.isbntMan = true;
+            //抢盒子消失
+            that.topHelpRob = false;
+
+            //有进度条外面的盒子消失
+            that.manNum = false;
+          }
+        } else if (data.isMyself == 1 && data.isSubscribe == 0) {
+          //轮播图显示
+          that.topSwiper = true;
+          //有进度条外面的盒子显示
+          that.manNum = true;
+          that.proDel = true;
+          //带图片的二维码显示
+          that.isMyself = "5";
         } else if (
-          (data.isMyself == 1 && data.eggNumber != 30) ||
-          (data.isClick == 1 && data.isSubscribe == 1)
+          data.isMyself == 1 &&
+          data.eggNumber < 30 &&
+          data.isSubscribe == 1
         ) {
-          that.isMyself = true;
+          //轮播图显示
+          that.topSwiper = true;
+          //进度条外面的盒子显示
+          that.manNum = true;
+          //进度条显示
+          that.proDel = true;
+          //帮我抢小分队显示
+          that.isMyself = "3";
+          //好友帮我抢按钮显示
           that.isbnt = "1";
-        } else if (data.isMyself == 0) {
-          that.isMyself = false;
-          that.isbnt = "2";
+        }
+        if (data.isMyself == 0) {
+          //好友未抢蛋
+          if (data.isClick == 0) {
+            that.topSwiper = true;
+            //帮抢隐藏
+            that.topHelpRob = false;
+            //ta的小分队显示
+            that.isMyself = "4";
+            //进度条大框显示
+            that.manNum = true;
+            //进度条隐藏
+            that.proDel = false;
+            //帮ta抢显示
+            that.isbnt = "2";
+          } else if (data.isClick == 1 && data.isSubscribe == 1) {
+            //顶部轮播隐藏
+            that.topSwiper = false;
+            //帮抢显示
+            that.topHelpRob = true;
+            //ta的小分队显示
+            that.isMyself = "4";
+          } else if (data.isClick == 1 && data.isSubscribe == 0) {
+            that.topGuan = true;
+            //ta的小分队显示
+            that.isMyself = "6";
+          }
+
+          //进度条外面的盒子不显示
+          that.manNum = false;
+
           data.eggNumber = data.eggNumber >= 30 ? 29 : data.eggNumber;
         }
+
+        that.activityImg = data.activityImg;
+        that.activityUsername = data.activityUsername;
 
         that.eggNumber = data.eggNumber;
         that.progWid = data.eggNumber / 30 * 100 + "%";
@@ -287,13 +425,15 @@ export default {
       this.$router.push({ path: "/" });
     },
     targetTiao() {
-      this.$router.push({
-        path: "/Help_to_rob2",
-        query: {
-          activityId: this.activityIdOther,
-          openid: localStorage.getItem("openid")
-        }
-      });
+      if (this.isSubscribe == 1) {
+        this.$router.push({
+          path: "/Help_to_rob2",
+          query: {
+            activityId: this.activityIdOther,
+            openid: localStorage.getItem("openid")
+          }
+        });
+      }
     },
     //点击‘去购买’
     goBuy() {
@@ -406,8 +546,19 @@ export default {
 
 <style lang="scss" scoped>
 #Free_egg_robbing {
+  background-color: #f1f1f2;
+  width: 100%;
+  height: 41rem;
+  .text-align-font {
+    text-align: center;
+    font-size: 14px;
+    line-height: 50px;
+  }
   .c1 {
     color: #2b0405;
+  }
+  .wholeYe {
+    background-color: #f1f1f1;
   }
   .c2 {
     color: #ffb011;
@@ -435,8 +586,69 @@ export default {
   }
   .top {
     height: 18rem;
-    background: white;
+    // background: white;
     position: relative;
+  }
+  .top1 {
+    height: 23rem;
+    background-color: #fff;
+    position: relative;
+    .otherTop {
+      text-align: center;
+
+      .successRob {
+        line-height: 3rem;
+        font-size: 20px;
+      }
+      .canBuy {
+        line-height: 2.5rem;
+        font-size: 14px;
+      }
+      .fxThree {
+        display: flex;
+        height: 12rem;
+        align-content: center;
+        justify-content: center;
+        text-align: center;
+
+        .colf {
+          width: 35%;
+          margin: 1%;
+          padding-top: 3rem;
+          align-content: center;
+          justify-content: center;
+          background-color: #f1f1f1;
+        }
+        p {
+          height: 3rem;
+        }
+        .leftBuy {
+        }
+        .rightBuy {
+        }
+        .centerRob {
+        }
+        .centerRob p {
+          line-height: 2rem;
+          //   padding-top: 1rem;
+        }
+        .btnYellow {
+          width: 50%;
+          height: 2rem;
+          line-height: 2rem;
+          border: 1px solid red;
+          color: red;
+          border-radius: 1.2rem;
+          font-size: 0.8rem;
+          text-align: center;
+          margin: 2rem auto;
+        }
+        .Bgred {
+          background-color: red;
+          color: #fff;
+        }
+      }
+    }
   }
   .bgt {
     width: 18rem;
@@ -488,33 +700,108 @@ export default {
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
-    background: url("../../img/touxiang.png") no-repeat center;
+    /*background: url("../../img/touxiang.png") no-repeat center;*/
     background-size: 100%;
   }
   /*进度条部分样式*/
   .progress {
-    height: 12rem;
+    height: 13rem;
   }
+
   .eggprog {
     background: url("../../img/egg.png") no-repeat center;
     background-size: 100% 100%;
     position: relative;
     left: 0.5rem;
   }
-  .progress > div:first-child {
+
+  .progress .searchProgress {
     padding: 0.85rem 2rem 0 2rem;
   }
-  .progress > div:last-child {
+  .topTwo {
+    background: #fff;
+    height: 15rem;
+    position: relative;
+    .otherTop {
+      text-align: center;
+
+      .successRob {
+        line-height: 2rem;
+        font-size: 16px;
+      }
+      .canBuy {
+        line-height: 2rem;
+        font-size: 16px;
+      }
+      .guanZhu {
+        line-height: 1.5rem;
+        font-size: 14px;
+      }
+      .recodeBuy {
+        margin: 0 auto;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: 6rem;
+          height: 6rem;
+          margin: 0 1rem 0.5rem 1rem;
+        }
+      }
+    }
+  }
+  .progress .butt {
     width: 8rem;
     height: 2.5rem;
     background-color: #ffb011;
-    margin: 0.6rem auto;
+    margin: 1.5rem auto;
     color: #2e0406;
     font-size: 0.9rem;
     text-align: center;
     line-height: 2.5rem;
     border-radius: 1.2rem;
   }
+
+  .progressOne {
+    height: 10rem;
+    margin-top: 1rem;
+    .text-Ali {
+      line-height: 2.5rem;
+      font-size: 16px;
+      text-align: center;
+    }
+    .font12 {
+      font-size: 14px;
+      line-height: 1rem;
+    }
+    .splitY {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-left: 1rem;
+
+      .buttOne {
+        width: 35%;
+        height: 2.5rem;
+        line-height: 2.5rem;
+        font-size: 0.9rem;
+        margin-top: 2rem;
+        margin-right: 1rem;
+        background-color: #ffb011;
+        border-radius: 1.2rem;
+      }
+      .whiteCol {
+        background-color: #fff;
+        border: 1px solid #000;
+      }
+      .redCol {
+        background-color: red;
+        border: 1px solid red;
+        color: #fff;
+      }
+    }
+  }
+
   .currprog {
     height: 2.5rem;
     box-sizing: border-box;
@@ -545,6 +832,33 @@ export default {
     box-sizing: border-box;
     background-color: rgb(240, 240, 242);
     padding: 1rem;
+  }
+  .bottomEWM {
+    min-height: 3rem;
+    box-sizing: border-box;
+    margin-top: 2rem;
+    background-color: #fff;
+    text-align: center;
+    padding-top: 1rem;
+    .MyTeam {
+      line-height: 2rem;
+      font-size: 20px;
+    }
+    .MyGuan {
+      line-height: 2rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    div {
+      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+      img {
+        width: 6rem;
+        height: 6rem;
+        margin: 0 1rem 0.5rem 1rem;
+      }
+    }
   }
   ul > li {
     margin: 0.6rem 0;

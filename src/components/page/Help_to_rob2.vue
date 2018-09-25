@@ -1,6 +1,6 @@
 <template>
-  <div id="Help_to_rob2">
-    <div class="addBg">
+  <div id="Help_to_rob2" >
+    <div class="addBg" >
       <div class="addbgCen">
         <div class="bgImg">
           <div class="helpSuccess">恭喜您！
@@ -8,7 +8,7 @@
             <span>一</span> 枚</div>
         </div>
         <div class="userInfo">
-          <!-- <img src="../../img/addEgg.png" alt="" class="touxiang"> -->
+           <!--<img src="../../img/addEgg.png" alt="" class="touxiang">--> 
           <img :src="img" alt="" class="touxiang">
           <p class="userName">{{name}}</p>
           <p class="alrealy">已经抢到
@@ -17,23 +17,23 @@
         <div class="addEgg">
           <img src="../../img/addEgg.png" alt="">
         </div>
-        <div class="joinMy">
+        <!--<div class="joinMy">
           <p class="alJoin">已有
             <span>{{robNumber}}
             </span>个小伙伴加入抢蛋小分队</p>
           <p class="tit">如此好蛋，不容错过，快召唤你的抢蛋小分队吧，将健康安全，营养美味的翡翠蛋，带回家！</p>
-        </div>
+        </div>-->
       </div>
       <div class="btns">
         <!-- <div class="help1" @click="goQiang">喊好友帮ta抢</div> -->
-        <div class="help2" @click="goFriendQiang">喊好友帮我抢</div>
+        <div class="help2" >喊好友帮我抢</div>     <!--加在help2身上的点击函数         @click="goFriendQiang"-->
       </div>
     </div>
 
     <!--蒙版关注公众号-->
-    <div @click="hideToggle">
-      <div class="box" id="box" v-show="isShow"></div>
-      <div class="attention" v-show="isShow">
+    <!--<div @click="hideToggle"></div>-->    <!--这个标签原本是一个父元素-->
+      <div class="box" id="box" ></div>     <!--v-show="isShow" 是box的一个属性-->
+      <div class="attention" >   <!--v-show="isShow" 是attention的一个属性-->
         <div class="titles">
           <p class="tit1">关注公众号,邀请好友抢蛋</p>
           <!-- <p class="tit2">FOCUS US</p> -->
@@ -42,11 +42,11 @@
 
         <img src="../../img/code.jpg" alt="" class="Rcode">
       </div>
-    </div>
-    <div @cick="handleClick">
+    
+    <!--<div @cick="handleClick"> </div>-->   <!--这个标签原本是一个父元素-->
       <div class="box" id="box" v-show="isFalse"></div>
       <img src="../../img/shareHint.png" alt="" class="shareHint" v-if="isFalse">
-    </div>
+   
 
   </div>
 </template>
@@ -73,12 +73,12 @@ export default {
   },
   methods: {
     //点击蒙版，关注公众号的弹框隐藏
-    hideToggle() {
-      this.isShow = false;
-    },
-    handleClick() {
-      this.isFalse = false;
-    },
+//  hideToggle() {
+//    this.isShow = false;
+//  },
+//  handleClick() {
+//    this.isFalse = false;
+//  },
     //喊好友帮ta抢
     goQiang(desc) {
       this.isFalse = true;
@@ -89,11 +89,11 @@ export default {
       //      this.$router.push({path:'/Free_egg_robbing',query:{}});
     },
     //喊好友帮我抢
-    goFriendQiang() {
-      // this.wxShare();
-      this.isShow = true;
-      this.WxZd();
-    },
+//  goFriendQiang() {
+//    // this.wxShare();
+//    this.isShow = true;
+//    this.WxZd();
+//  },
     WxZd() {
       var $this = this;
       //获取微信请求的字段
@@ -223,10 +223,10 @@ export default {
 #Help_to_rob2 {
   background: #77e5d9;
   min-height: 41.6rem;
-  padding-top: 12%;
   .addBg {
     background: #77e5d9;
-    min-height: 41.6rem;
+    min-height: 38.2rem;
+    padding-top: 12%;
     .addbgCen {
       height: 25rem;
       margin: 0 auto;
@@ -235,7 +235,7 @@ export default {
       position: relative;
       background-color: #ffe326;
       border-radius: 0.4rem;
-      margin-bottom: 3.5rem;
+      margin-bottom: 1.5rem;
       .bgImg {
         margin: 0 auto;
         .helpSuccess {
@@ -296,7 +296,7 @@ export default {
         top: 50%;
         transform: translate(-50%);
         border-radius: 0.4rem;
-
+        padding: 0.5rem;
         .alJoin {
           color: #2e2c09;
           font-size: 0.8rem;
@@ -342,12 +342,13 @@ export default {
 
   /*蒙版*/
   .box {
+  	/*display: none;*/
     opacity: 0.56;
     background: #000;
     z-index: 9;
     width: 100%;
     height: 100%;
-    position: fixed;
+    position: absolute;
     top: 0;
   }
   .shareHint {

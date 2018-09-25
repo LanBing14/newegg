@@ -102,7 +102,9 @@
         <div class="goods-details">
           <img src="../../img/swiper.png" alt="#" class="good-picture">
           <div class="money">
-            <p class="price">￥{{sellPrice}}</p>
+            <p class="price">￥{{sellPrice}}
+              <span class="greyIcon">原价￥{{marketPrice}}</span>
+            </p>
             <p class="style">库存{{stock}}件</p>
           </div>
           <!--<img src="../../img/close@2x.png" alt="#" class="close"  @click="hideToggle">-->
@@ -145,6 +147,7 @@ export default {
       isShow: false, //蒙版
       isShowAt: false, //规格
       clist: [],
+      marketPrice: "",
       isFalse: false, //领蛋提醒
       isGetEgg: false, //领取提醒
       isXiadan: false, //领取提醒-下单
@@ -234,7 +237,7 @@ export default {
             //分享到朋友圈
             wx.onMenuShareTimeline({
               title:
-                "仅30枚！绿壳无抗乌鸡蛋免费抢啦，数量有限，先抢先得、好吃好玩好赚钱", // 分享标题
+                "每人30枚、翡翠蛋免费抢，购买更便宜，手速！ 我只能帮你到这里了", // 分享标题
               //            link: "http://egg.wufuapp.com/#/Free_egg_robbing", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               link:
                 "http://egg.wufuapp.com?openid=" +
@@ -255,9 +258,10 @@ export default {
             });
             //分享给朋友
             wx.onMenuShareAppMessage({
-              title: "仅仅30枚! 鸡蛋免费抢啦~我只能帮你到这了", // 分享标题
+              title:
+                "每人30枚、翡翠蛋免费抢，购买更便宜，手速！ 我只能帮你到这里了", // 分享标题
               desc:
-                "绿壳无抗乌鸡蛋，30枚免费抢，数量有限，先抢先得、好吃好玩好赚钱", // 分享描述
+                "绿壳乌鸡蛋、高科技生态养殖、无抗生素，无兽药残留，无重金属，先抢先得，好吃好玩好赚钱！", // 分享描述
               link:
                 "http://egg.wufuapp.com?openid=" +
                 openid +
@@ -383,6 +387,7 @@ export default {
       this.avgPrice = this.packageList[i].avgPrice;
       this.price = this.sellPrice / this.stock;
       this.packageId = this.packageList[i].id;
+      this.marketPrice = this.packageList[i].marketPrice;
     },
     //input数量
     sums: function() {
@@ -459,6 +464,7 @@ export default {
         $this.dateTime = info.data.data.packageList.dateTime;
         $this.avgPrice = info.data.data.packageList[0].avgPrice;
         $this.sellPrice = info.data.data.packageList[0].sellPrice;
+        $this.marketPrice = info.data.data.packageList[0].marketPrice;
         $this.stock = info.data.data.packageList[0].stock;
         //    this.amount = info.data.data.packageList.number;
         $this.eggNum = info.data.data.eggNum;
@@ -552,7 +558,8 @@ export default {
   /*商品名称*/
   .productInfo {
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    border-bottom: 2px solid #f1f1f1;
     .infoOne {
       display: flex;
       align-items: center;
@@ -612,16 +619,17 @@ export default {
   }
   /*选择套餐*/
   .chooseSpecial {
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
     font-size: 1rem;
     height: 4rem;
     line-height: 4rem;
     display: flex;
+    background-color: #fff;
     align-items: center;
     .choose {
       width: 92%;
-      padding-left: 0.4rem;
+      padding-left: 0.7rem;
     }
     img {
       width: 1.5rem;
@@ -630,9 +638,11 @@ export default {
   }
   /*全部评价*/
   .all_evaluate {
-    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    background-color: #fff;
+
     .titleBox {
-      background-color: #f1f1f1;
+      background-color: #f1f1f1 !important;
       font-size: 1rem;
       color: #000;
       padding-left: 1rem;
@@ -699,7 +709,7 @@ export default {
       font-size: 1.2rem;
       width: 11rem;
       line-height: 2.5rem;
-      background-color: #fff;
+      background-color: #fff !important;
       margin: 0 auto;
       margin-top: 2rem;
       margin-bottom: 1rem;
@@ -973,6 +983,13 @@ export default {
             color: #c01a20;
             padding-top: 0.5555555556rem;
             margin-bottom: 0.5555555556rem;
+
+            .greyIcon {
+              margin-left: 0.5rem;
+              color: rgb(95, 92, 92);
+              text-decoration: line-through;
+              font-size: 1rem;
+            }
           }
           .style {
             font-family: PingFangSC-Regular;

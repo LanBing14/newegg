@@ -319,9 +319,7 @@ export default {
     this.login();
     this.Address();
   },
-  created() {
-    //  		 this.goPays();
-  },
+  created() {},
   components: {}
 };
 </script>
