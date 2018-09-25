@@ -425,15 +425,13 @@ export default {
       this.$router.push({ path: "/" });
     },
     targetTiao() {
-      if (this.isSubscribe == 1) {
-        this.$router.push({
-          path: "/Help_to_rob2",
-          query: {
-            activityId: this.activityIdOther,
-            openid: localStorage.getItem("openid")
-          }
-        });
-      }
+      this.$router.push({
+        path: "/Help_to_rob2",
+        query: {
+          activityId: this.activityIdOther,
+          openid: localStorage.getItem("openid")
+        }
+      });
     },
     //点击‘去购买’
     goBuy() {
