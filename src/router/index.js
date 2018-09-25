@@ -29,7 +29,6 @@ import Brought_egg_error from '@/components/page/Brought_egg_error'
 import blank from '@/components/page/blank'
 // import Fullcreate_Address from '@/components/page/Fullcreate_Address'
 import place_success from '@/components/page/place_success'
-import successTaRob from '@/components/page/successTaRob'
 
 Vue.use(Router)
 
@@ -44,11 +43,6 @@ export default new Router({
       path: '/product_details',
       name: 'product_details',
       component: product_details
-    },
-    {
-      path: '/successTaRob',
-      name: 'successTaRob',
-      component: successTaRob
     },
     {
       path: '/',

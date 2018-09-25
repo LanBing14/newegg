@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       isShow: false,
-      isFalse: true,
+      isFalse: false,
       robNumber: "xx",
       residueEggNum: "xx",
       hasRobEggNum: "xx",
