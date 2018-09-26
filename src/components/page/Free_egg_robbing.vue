@@ -331,48 +331,59 @@ export default {
         var data = info.data.data;
         console.log(data);
 
-        // 已经满30 已经关注
-        if (data.isMyself == 1 && data.eggNumber == 30) {
-          //我的抢蛋小分队显示
-          that.isMyself = "3";
+        //判断是自己
+        if (data.isMyself == 1) {
           if (data.isSubscribe == 1) {
+            if (data.eggNumber == 30) {
+              //轮播图显示
+              that.topSwiper = true;
+              //满30盒子 显示
+              that.isbntMan = true;
+              //我的抢蛋小分队显示
+              that.isMyself = "3";
+            } else {
+              // 未满30
+              //轮播图显示
+              that.topSwiper = true;
+              //进度条外面的盒子显示
+              that.manNum = true;
+              //进度条显示
+              that.proDel = true;
+              //帮我抢小分队显示
+              that.isMyself = "3";
+              //好友帮我抢按钮显示
+              that.isbnt = "1";
+            }
+          } else {
+            // 未关注
             //轮播图显示
             that.topSwiper = true;
-            //满30盒子 显示
-            that.isbntMan = true;
-            //抢盒子消失
-            // that.topHelpRob = false;
-
-            //有进度条外面的盒子消失
-            // that.manNum = false;
+            //有进度条外面的盒子显示
+            that.manNum = true;
+            that.proDel = true;
+            //带图片的二维码显示
+            that.isMyself = "5";
           }
-        } else if (data.isMyself == 1 && data.isSubscribe == 0) {
-          //轮播图显示
-          that.topSwiper = true;
-          //有进度条外面的盒子显示
-          that.manNum = true;
-          that.proDel = true;
-          //带图片的二维码显示
-          that.isMyself = "5";
-        } else if (
-          data.isMyself == 1 &&
-          data.eggNumber < 30 &&
-          data.isSubscribe == 1
-        ) {
-          //轮播图显示
-          that.topSwiper = true;
-          //进度条外面的盒子显示
-          that.manNum = true;
-          //进度条显示
-          that.proDel = true;
-          //帮我抢小分队显示
-          that.isMyself = "3";
-          //好友帮我抢按钮显示
-          that.isbnt = "1";
-        }
-        if (data.isMyself == 0) {
-          //好友未抢蛋
-          if (data.isClick == 0) {
+        } else {
+          // 不是自己 判断有没有抢过
+          if (data.isClick == 1) {
+            //判断有没有关注过
+            if (data.isSubscribe == 1) {
+              //关注过
+              //顶部轮播隐藏
+              // that.topSwiper = false;
+              //帮抢显示
+              that.topHelpRob = true;
+              //ta的小分队显示
+              that.isMyself = "4";
+            } else {
+              //未关注
+              that.topGuan = true;
+              //ta的小分队显示
+              that.isMyself = "6";
+            }
+          } else {
+            // 没有抢过
             that.topSwiper = true;
             //帮抢隐藏
             // that.topHelpRob = false;
@@ -384,24 +395,9 @@ export default {
             // that.proDel = false;
             //帮ta抢显示
             that.isbnt = "2";
-          } else if (data.isClick == 1 && data.isSubscribe == 1) {
-            //顶部轮播隐藏
-            // that.topSwiper = false;
-            //帮抢显示
-            that.topHelpRob = true;
-            //ta的小分队显示
-            that.isMyself = "4";
-          } else if (data.isClick == 1 && data.isSubscribe == 0) {
-            that.topGuan = true;
-            //ta的小分队显示
-            that.isMyself = "6";
           }
-
-          //进度条外面的盒子不显示
-          // that.manNum = false;
-
-          data.eggNumber = data.eggNumber >= 30 ? 29 : data.eggNumber;
         }
+        // ---------------------------------------------------------------
 
         that.activityImg = data.activityImg;
         that.activityUsername = data.activityUsername;
