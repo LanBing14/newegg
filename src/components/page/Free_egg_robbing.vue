@@ -68,9 +68,9 @@
           </div>
         </div>
 
-        <div class="fx" style="position:relative;" v-if="proDel">
-          <p class="c2" style="position:absolute;left:2rem;top:-1.5rem;font-size:.85rem;">1枚</p>
-          <p class="c2" style="position:absolute;right:1.8rem;top:-1.5rem;font-size:.85rem;">{{totalNum}}枚</p>
+        <div class="fx" style="position:relative;height: 1rem" v-if="proDel">
+          <p class="c2" style="position:absolute;left:2rem;top:-.5rem;font-size:.85rem;">1枚</p>
+          <p class="c2" style="position:absolute;right:1.8rem;top:-0.5rem;font-size:.85rem;">{{totalNum}}枚</p>
         </div>
 
         <div class="butt" @click="helpRobMy" v-if="isbnt == '1'">喊好友帮我抢</div>
@@ -195,7 +195,6 @@ export default {
       activityIdMine: "",
       isbnt: "",
       openid: "",
-      isbntMe: true,
       activityUsername: "",
       activityImg: ""
     };
@@ -342,10 +341,10 @@ export default {
             //满30盒子 显示
             that.isbntMan = true;
             //抢盒子消失
-            that.topHelpRob = false;
+            // that.topHelpRob = false;
 
             //有进度条外面的盒子消失
-            that.manNum = false;
+            // that.manNum = false;
           }
         } else if (data.isMyself == 1 && data.isSubscribe == 0) {
           //轮播图显示
@@ -376,18 +375,18 @@ export default {
           if (data.isClick == 0) {
             that.topSwiper = true;
             //帮抢隐藏
-            that.topHelpRob = false;
+            // that.topHelpRob = false;
             //ta的小分队显示
             that.isMyself = "4";
             //进度条大框显示
             that.manNum = true;
             //进度条隐藏
-            that.proDel = false;
+            // that.proDel = false;
             //帮ta抢显示
             that.isbnt = "2";
           } else if (data.isClick == 1 && data.isSubscribe == 1) {
             //顶部轮播隐藏
-            that.topSwiper = false;
+            // that.topSwiper = false;
             //帮抢显示
             that.topHelpRob = true;
             //ta的小分队显示
@@ -399,7 +398,7 @@ export default {
           }
 
           //进度条外面的盒子不显示
-          that.manNum = false;
+          // that.manNum = false;
 
           data.eggNumber = data.eggNumber >= 30 ? 29 : data.eggNumber;
         }
@@ -689,21 +688,25 @@ export default {
     font-size: 0.8rem;
     background-color: rgba(0, 0, 0, 0.1);
     position: absolute;
-    left: 2.5rem;
+    left: 3.5rem;
     top: 0.25rem;
     padding: 0.1rem 0.5rem;
     border-radius: 1rem;
   }
   .launch > div {
-    width: 2rem;
-    height: 2rem;
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
-    /*background: url("../../img/touxiang.png") no-repeat center;*/
     background-size: 100%;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
   /*进度条部分样式*/
   .progress {
-    height: 13rem;
+    min-height: 6rem;
   }
 
   .eggprog {
@@ -762,6 +765,7 @@ export default {
   .progressOne {
     height: 10rem;
     margin-top: 1rem;
+    background-color: #fff;
     .text-Ali {
       line-height: 2.5rem;
       font-size: 16px;
@@ -832,12 +836,13 @@ export default {
     padding: 1rem;
   }
   .bottomEWM {
-    min-height: 3rem;
+    min-height: 4rem;
     box-sizing: border-box;
     margin-top: 2rem;
     background-color: #fff;
     text-align: center;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.8rem;
     .MyTeam {
       line-height: 2rem;
       font-size: 20px;

@@ -26,7 +26,7 @@
       </div>
       <div class="btns">
         <!-- <div class="help1" @click="goQiang">喊好友帮ta抢</div> -->
-        <div class="help2">喊好友帮我抢</div>
+        <div class="help2" @click="goFriendQiang">喊好友帮我抢</div>
         <!--加在help2身上的点击函数         @click="goFriendQiang"-->
       </div>
     </div>
@@ -71,6 +71,7 @@ export default {
       hasRobEggNum: "xx",
       name: "xx",
       activityId: "",
+      isSubscribe: "",
       openid: localStorage.getItem("openid"),
       img: ""
     };
@@ -93,11 +94,11 @@ export default {
       //      this.$router.push({path:'/Free_egg_robbing',query:{}});
     },
     //喊好友帮我抢
-    //  goFriendQiang() {
-    //    // this.wxShare();
-    //    this.isShow = true;
-    //    this.WxZd();
-    //  },
+    goFriendQiang() {
+      // this.wxShare();
+      this.isShow = true;
+      this.WxZd();
+    },
     WxZd() {
       var $this = this;
       //获取微信请求的字段

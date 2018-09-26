@@ -1,190 +1,201 @@
 <template>
-    <div id="invite_details" :style="{backgroundImage:'url('+img+')'}">
-      <img src="../../img/bg1.png" alt="" class="caizhi">
-      <!--邀请-->
-      <div class="inviteBg">
-        <div class="invite inviteTop" v-for="(lists,i) in list">
-          <ul>
-            <li style="text-align: center;">
-              <div class="circle"></div>
-              <p class="name">微信昵称：{{lists.username}}</p></li>
-            <li>
-              <div class="circle"></div>
-              <div class="phoneInfo">
-                <!--<p class="phone">131*******1111</p>-->
-                <p class="phone">{{lists.phone}}</p>
-                <p class="money">下单金额 <span>￥{{lists.orderNumber}}</span></p>
-              </div>
-            </li>
-            <li>
-              <div class="circle"></div>
-              <div class="phoneInfo">
-                <p class="phone">TA推荐<span>{{lists.invitedNumber}}</span>人</p>
-                <p class="money">获得赏金 <span>￥{{lists.sumNumber}}</span></p>
-              </div>
-            </li>
-          </ul>
-        </div>
+  <div id="invite_details" :style="{backgroundImage:'url('+img+')'}">
+    <img src="../../img/bg1.png" alt="" class="caizhi">
+    <!--邀请-->
+    <div class="inviteBg">
+      <div class="invite inviteTop" v-for="(lists,i) in list">
+        <ul>
+          <li style="text-align: center;">
+            <div class="circle"></div>
+            <p class="name">微信昵称：{{lists.username}}</p>
+          </li>
+          <li>
+            <div class="circle"></div>
+            <div class="phoneInfo">
+              <!--<p class="phone">131*******1111</p>-->
+              <p class="phone">{{lists.phone}}</p>
+              <p class="money">下单金额
+                <span>￥{{lists.orderNumber}}</span>
+              </p>
+            </div>
+          </li>
+          <li>
+            <div class="circle"></div>
+            <div class="phoneInfo">
+              <p class="phone">TA推荐
+                <span>{{lists.invitedNumber}}</span>人</p>
+              <p class="money">获得赏金
+                <span>￥{{lists.sumNumber}}</span>
+              </p>
+            </div>
+          </li>
+        </ul>
       </div>
-      <!--分享按钮-->
-      <div class="share">分享好友赚赏金</div>
     </div>
+    <!--分享按钮-->
+    <div class="share">分享好友赚赏金</div>
+  </div>
 </template>
 
 <script>
-  import { Toast } from "mint-ui";
-  import axios from 'axios'
-  import qs from 'qs'
-  import wx from "weixin-js-sdk";
-    export default {
-        name:'invite_details',
-        data(){
-          return{
-            list:[],
-            sumNumber:"",
-            orderNumber:"",
-            username:"",
-            phone:"",
-            invitedNumber:"",
-            img:require('../../img/bg1-1.png'), 
-            sendOpenid:''
-          }
-        },
-        methods:{
-            //返回上一界面“邀请明细”
-          goBack(){
-            this.$router.push({path:'/'});
-          },
-          getInviteDetails(){
-            var $this = this;
-            var baseUrl=BaseUrl+"/api/invitedInfo";
-            var data=qs.stringify({
-              openid:localStorage.getItem('openid'),
-              several:this.$route.query.several,
-            });
-            console.log(data)
-            axios({
-              method: "post",
-              url: baseUrl,
-              type: 'json',
-              data:data
-            }).then(function (data) {
-              console.log(data);
-             
-              let datas=data.data.data;
-              if(data.data.status==1){
-//                  alert(data.data.msg)
-                $this.list=datas;
-            
-              }else{
-                Toast({
-                  message: datas.msg,
-                  duration: 1500
-                });
-              }
-            }).catch(function () {
-              //alert("程序异常，联系技术人员")
-            });
-          },
-          //微信自定义分享
-         WxZd() {
-        //获取微信请求的字段
-        const openid = localStorage.getItem('openid');
-        
-        var data = qs.stringify({
-          originUrl: window.location.href
-        });
-        console.log(data)
-        var baseUrl = BaseUrl + "index/getSignPackage";
-        axios({
-          method: "POST",
-          url: baseUrl,
-          type: "json",
-          data: data
-        }).then(
-          function(res) {
-            var $this=this
-            var info = res.data.data.signPackage;
-            this.appId = info.appId;
-            this.nonceStr = info.nonceStr;
-            this.timestamp = info.timestamp;
-            this.signature = info.signature;
-            wx.config({
-              debug: false,
-              appId: this.appId, // 和获取Ticke的必须一样------必填，公众号的唯一标识
-              timestamp: this.timestamp, // 必填，生成签名的时间戳
-              nonceStr: this.nonceStr, // 必填，生成签名的随机串
-              signature: this.signature, // 必填，签名，见附录1
-              //需要分享的列表项:发送给朋友，分享到朋友圈，
-              jsApiList: ["onMenuShareAppMessage", "onMenuShareTimeline"]
-            });
-
-            //处理验证失败的信息
-            wx.error(function(res) {
-              // logUtil.printLog("验证失败返回的信息:", res);
-              console.log(res);
-            });
-             wx.ready(function() {
-        // 分享给朋友
-        wx.onMenuShareAppMessage({
-          title: "大家请看我今天赚了多少钱", // 分享标题
-          desc: "我就分享了一下伍福世嘉的绿色无抗鸡蛋就狠赚了一笔", // 分享描述
-                link: "http://egg.wufuapp.com?openid=" + $this.sendOpenid + "&makeMoney=100&onlyMine=100",
-          imgUrl:
-            "http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180912/1536745700851746.png", // 分享图标
-          type: "", // 分享类型,music、video或link，不填默认为link
-          dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
-          success: function() {
-            console.log("已分享给朋友");
-          },
-          cancel: function() {
-            console.log("取消分享朋友");
-            // 用户取消分享后执行的回调函数
-          },
-          fail: function(res) {
-            window.alert(JSON.stringify(res));
-          }
-        });
-        // 分享到朋友圈
-        wx.onMenuShareTimeline({
-          title: "厉不厉害？大家看我今天赚了多少钱", // 分享标题
-          link: "http://egg.wufuapp.com?openid=" + $this.sendOpenid + "&makeMoney=100&onlyMine=100",
-          imgUrl:
-            "http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180912/1536745700851746.png", // 分享图标
-          success: function() {
-            console.log("已分享到朋友圈");
-          },
-          cancel: function() {
-            console.log("取消分享朋友圈");
-          },
-          fail: function(res) {
-            window.alert(JSON.stringify(res));
-          }
-        });
-      });
-          }.bind(this)
-        );
-      },
+import { Toast } from "mint-ui";
+import axios from "axios";
+import qs from "qs";
+import wx from "weixin-js-sdk";
+export default {
+  name: "invite_details",
+  data() {
+    return {
+      list: [],
+      sumNumber: "",
+      orderNumber: "",
+      username: "",
+      phone: "",
+      invitedNumber: "",
+      img: require("../../img/bg1-1.png"),
+      sendOpenid: ""
+    };
+  },
+  methods: {
+    //返回上一界面“邀请明细”
+    goBack() {
+      this.$router.push({ path: "/" });
     },
-        created(){
-          document.title="邀请明细";
-        },
-        mounted(){
-          this.getInviteDetails();
-          this.sendOpenid=localStorage.getItem('openid')
-          this.WxZd()
-          // this.wxShare('大家请看我今天赚了多少钱');
-          // this.wxShare('厉不厉害？大家看我今天赚了多少钱');
-          },
-        components:{}
+    getInviteDetails() {
+      var $this = this;
+      var baseUrl = BaseUrl + "/api/invitedInfo";
+      var data = qs.stringify({
+        openid: localStorage.getItem("openid"),
+        several: this.$route.query.several
+      });
+      console.log(data);
+      axios({
+        method: "post",
+        url: baseUrl,
+        type: "json",
+        data: data
+      })
+        .then(function(data) {
+          console.log(data);
+
+          let datas = data.data.data;
+          if (data.data.status == 1) {
+            //                  alert(data.data.msg)
+            $this.list = datas;
+          } else {
+            Toast({
+              message: datas.msg,
+              duration: 1500
+            });
+          }
+        })
+        .catch(function() {
+          //alert("程序异常，联系技术人员")
+        });
+    },
+    //微信自定义分享
+    WxZd() {
+      //获取微信请求的字段
+      const openid = localStorage.getItem("openid");
+
+      var data = qs.stringify({
+        originUrl: window.location.href
+      });
+      console.log(data);
+      var baseUrl = BaseUrl + "index/getSignPackage";
+      axios({
+        method: "POST",
+        url: baseUrl,
+        type: "json",
+        data: data
+      }).then(
+        function(res) {
+          var $this = this;
+          var info = res.data.data.signPackage;
+          this.appId = info.appId;
+          this.nonceStr = info.nonceStr;
+          this.timestamp = info.timestamp;
+          this.signature = info.signature;
+          wx.config({
+            debug: false,
+            appId: this.appId, // 和获取Ticke的必须一样------必填，公众号的唯一标识
+            timestamp: this.timestamp, // 必填，生成签名的时间戳
+            nonceStr: this.nonceStr, // 必填，生成签名的随机串
+            signature: this.signature, // 必填，签名，见附录1
+            //需要分享的列表项:发送给朋友，分享到朋友圈，
+            jsApiList: ["onMenuShareAppMessage", "onMenuShareTimeline"]
+          });
+
+          //处理验证失败的信息
+          wx.error(function(res) {
+            // logUtil.printLog("验证失败返回的信息:", res);
+            console.log(res);
+          });
+          wx.ready(function() {
+            // 分享给朋友
+            wx.onMenuShareAppMessage({
+              title: "大家请看我今天赚了多少钱", // 分享标题
+              desc: "我就分享了一下伍福世嘉的绿色无抗鸡蛋就狠赚了一笔", // 分享描述
+              link:
+                "http://egg.wufuapp.com?openid=" +
+                $this.sendOpenid +
+                "&makeMoney=100&onlyMine=100",
+              imgUrl:
+                "http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180912/1536745700851746.png", // 分享图标
+              type: "", // 分享类型,music、video或link，不填默认为link
+              dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
+              success: function() {
+                console.log("已分享给朋友");
+              },
+              cancel: function() {
+                console.log("取消分享朋友");
+                // 用户取消分享后执行的回调函数
+              },
+              fail: function(res) {
+                window.alert(JSON.stringify(res));
+              }
+            });
+            // 分享到朋友圈
+            wx.onMenuShareTimeline({
+              title: "厉不厉害？大家看我今天赚了多少钱", // 分享标题
+              link:
+                "http://egg.wufuapp.com?openid=" +
+                $this.sendOpenid +
+                "&makeMoney=100&onlyMine=100",
+              imgUrl:
+                "http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180912/1536745700851746.png", // 分享图标
+              success: function() {
+                console.log("已分享到朋友圈");
+              },
+              cancel: function() {
+                console.log("取消分享朋友圈");
+              },
+              fail: function(res) {
+                window.alert(JSON.stringify(res));
+              }
+            });
+          });
+        }.bind(this)
+      );
     }
+  },
+  created() {
+    document.title = "邀请明细";
+  },
+  mounted() {
+    this.getInviteDetails();
+    this.sendOpenid = localStorage.getItem("openid");
+    this.WxZd();
+  },
+  components: {}
+};
 </script>
 
 <style lang="scss" scoped>
-#invite_details{
-  background: #E9844D;
+#invite_details {
+  background: #e9844d;
   min-height: 41.6rem;
-  .caizhi{
+  .caizhi {
     width: 100%;
     display: block;
   }
@@ -195,13 +206,13 @@
       background: #fff;
       width: 90%;
       margin: 0 auto;
-      margin-top: .2rem;
+      margin-top: 0.2rem;
       display: flex;
       align-items: center;
-      border-radius: .3rem;
+      border-radius: 0.3rem;
       ul {
         width: 100%;
-        margin: .5rem 0;
+        margin: 0.5rem 0;
         list-style-type: none;
         padding: 0;
         overflow: hidden; /*溢出隐藏*/
@@ -217,28 +228,28 @@
             text-align: center;
           }
           .circle {
-            width: .6rem;
-            height: .6rem;
-            margin: 0 .6rem;
+            width: 0.6rem;
+            height: 0.6rem;
+            margin: 0 0.6rem;
             border-radius: 50%;
-            background: #E9844D;
+            background: #e9844d;
           }
           .phoneInfo {
             width: 100%;
             display: flex;
             align-items: center;
             color: #666666;
-            font-size: .9rem;
+            font-size: 0.9rem;
             .phone {
               width: 50%;
             }
             .money {
               width: 50%;
               text-align: right;
-              padding-right: .5rem;
+              padding-right: 0.5rem;
             }
             span {
-              color: #CC3E36;
+              color: #cc3e36;
             }
           }
         }
@@ -249,11 +260,11 @@
     }
   }
   /*分享按钮*/
-  .share{
-    width:13.5rem;
+  .share {
+    width: 13.5rem;
     font-size: 1.3rem;
     line-height: 3.5rem;
-    background: #EF3C69;
+    background: #ef3c69;
     color: #fff;
     border-radius: 2rem;
     margin: 0 auto;
