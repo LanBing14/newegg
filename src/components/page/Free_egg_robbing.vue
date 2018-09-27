@@ -25,8 +25,7 @@
             <span class="specialfont">XX</span>
           </p>
           <p class="successRob">抢了
-            <span class="specialfont">1</span>枚翡翠蛋</p>
-          <p class="canBuy">您可以:</p>
+            <span class="specialfont">1</span>枚翡翠蛋,您还可以</p>
           <div class="fxThree">
             <div class="leftBuy colf">
               <div class="btnYellow " @click="gobuyClick">去购买</div>
@@ -657,21 +656,18 @@ export default {
   }
   .top1 {
     height: 22rem;
-    background-color: #fff;
     position: relative;
     .otherTop {
       text-align: center;
-      margin-top: 1rem;
+      padding-top: 1.5rem;
       .successRob {
         line-height: 2rem;
-        font-size: 20px;
+        font-size: 1.2rem;
       }
-      .canBuy {
-        line-height: 2.5rem;
-        font-size: 16px;
-      }
+
       .fxThree {
         display: flex;
+        margin-top: 1.5rem;
         height: 13rem;
         align-content: center;
         justify-content: center;
@@ -681,23 +677,21 @@ export default {
           width: 35%;
           margin: 1%;
           height: 100%;
-          // padding-top: 3rem;
           align-content: center;
           justify-content: center;
-          // background-color: #fbd48c;
-
           position: relative;
+          border-radius: 0.5rem;
         }
         .leftBuy {
-          background-image: url("../../img/eggbg.png");
+          background-image: url("../../img/BgM1.png");
           background-size: contain;
         }
         .centerRob {
-          background-image: url("../../img/eggbg.png");
+          background-image: url("../../img/BgM2.png");
           background-size: contain;
         }
         .rightBuy {
-          background-image: url("../../img/eggbg.png");
+          background-image: url("../../img/BgM3.png");
           background-size: contain;
         }
         .btnYellow {

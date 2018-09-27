@@ -52,9 +52,15 @@
     <div class="productDetails">
       <p v-html="content"></p>
     </div>
-
-    <div class="scrollbottom">
+    <div class="scrollbottomWx" v-if="showClose">
       <div class="xiaosanjiao"></div>
+    </div>
+    <div class="scrollbottom" @click="closeModel" v-if="showClose">
+
+      <ul class="scrolLton" ref="con1" :class="{anim:animate==true}">
+        <li v-for="(item,index)  in sendList "> <img :src="img" alt="">{{item.title}}
+        </li>
+      </ul>
     </div>
     <!--立即购买-->
     <div class="buyAndRob">
@@ -156,9 +162,11 @@ export default {
       isGetEgg: false, //领取提醒
       isXiadan: false, //领取提醒-下单
       showShare: false,
+      animate: false,
       img: "",
       phone: "",
       comments: 0,
+      showClose: true,
       content: "",
       contents: "",
       eggNum: "",
@@ -178,6 +186,7 @@ export default {
       price: 0,
       sale: "0",
       avgPrice: "",
+      sendList: [],
       amount: 1, //input数量
       openid: "",
       targetUrl: "",
@@ -290,6 +299,9 @@ export default {
         }.bind(this)
       );
     },
+    closeModel() {
+      this.showClose = false;
+    },
     // 返回上一页
     goBack() {
       this.$router.push({
@@ -320,6 +332,20 @@ export default {
       this.showShare = false;
       this.isFalse = false;
     },
+    scroll() {
+      let con1 = this.$refs.con1;
+      con1.style.marginTop = "-64px";
+      this.animate = !this.animate;
+      var that = this;
+      setTimeout(() => {
+        //  这里直接使用了es6的箭头函数，省去了处理this指向偏移问题，代码也比之前简化了很多
+        that.sendList.push(that.sendList[0]); // 将数组的第一个元素添加到数组的
+        that.sendList.shift(); //删除数组的第一个元素
+        con1.style.marginTop = "0px";
+        that.animate = !this.animate;
+      }, 500);
+    },
+
     //点击 领取提醒 -‘立即下单’
     goGetNow() {
       this.isGetEgg = !this.isGetEgg;
@@ -461,6 +487,8 @@ export default {
         $this.title = info.data.data.title;
         $this.freight = info.data.data.freight;
         $this.activityId = info.data.data.activityId;
+        $this.sendList = info.data.data.sendList;
+
         $this.imgs = info.data.data.imgs;
         $this.packageList = info.data.data.packageList;
         $this.sale = info.data.data.sale;
@@ -511,11 +539,6 @@ export default {
           let datas = data.data.data;
           if ((data.isType = 0)) {
             $this.params = datas.params;
-          } else {
-            // Toast({
-            //   message: datas.msg,
-            //   duration: 1500
-            // });
           }
         })
         .catch(function() {});
@@ -527,10 +550,10 @@ export default {
       this.isShowAt = true;
       this.isShow = true;
     }
+
+    setInterval(this.scroll, 1000);
   },
   mounted() {
-    // Indicator.open('Loading...');
-
     if (!localStorage.getItem("openid")) {
       if (utils.getQueryString("code")) {
         this.logins();
@@ -729,29 +752,62 @@ export default {
       width: 100%;
     }
   }
-  /*立即购买*/
-  .scrollbottom {
+  // 定时器
+  .scrollbottomWx {
     position: fixed;
-    bottom: 4.5rem;
-    background-color: red;
-    width: 90%;
-    height: 4rem;
-    margin-left: 30px;
-    z-index: 999;
-    border-radius: 0.3rem;
+    bottom: 5rem;
+    z-index: 998;
     .xiaosanjiao {
-      //
       display: block;
       width: 0;
       height: 0;
-      border-width: 20px 20px 0;
+      border-width: 17px 17px 0;
       border-style: solid;
-      border-color: rgb(160, 160, 160) transparent transparent; /*黄 透明 透明 */
+      border-color: #79797b transparent transparent; /*黄 透明 透明 */
       position: absolute;
-      bottom: -1.2rem;
-      left: 30px;
+      bottom: -1.4rem;
+      left: 80px;
     }
   }
+  .scrollbottom {
+    position: fixed;
+    bottom: 4.5rem;
+    background-color: #79797b;
+    overflow: hidden;
+    width: 95%;
+    height: 4rem;
+    margin-left: 10px;
+    z-index: 999;
+    border-radius: 0.3rem;
+
+    .anim {
+      transition: all 0.5s;
+      margin-top: -30px;
+    }
+    .scrolLton {
+      position: absolute;
+      left: 0;
+      height: 40rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+
+      li {
+        height: 4rem;
+        font-size: 0.9rem;
+        line-height: 4rem;
+        img {
+          width: 3rem;
+          height: 3rem;
+          margin: 0.4rem;
+          float: left;
+        }
+      }
+    }
+  }
+  /*立即购买*/
+
   .buyAndRob {
     width: 95%;
     padding: 0 0.7rem;
@@ -795,7 +851,7 @@ export default {
   .box {
     opacity: 0.9;
     background: #000;
-    z-index: 9;
+    z-index: 999;
     width: 100%;
     height: 100%;
     position: fixed;
