@@ -14,26 +14,31 @@
         <div class="bgt"></div>
         <div class="link fx">
           <p class="fx-f1" style="padding-right:1.5rem;"> 翡翠蛋 乌鸡蛋 无抗生素的新鲜绿壳蛋</p>
-          <p class="fx fx-jf-c fx-ai-c" @click="goBuy">去购买</p>
+          <p class="fx fx-jf-c fx-ai-c" @click="goBuy">去购买
+            <span>></span>
+          </p>
         </div>
       </div>
       <div class="top1" v-if="topHelpRob">
         <div class="otherTop">
-          <p class="successRob">您已成功帮微信好友XX抢到翡翠蛋一枚</p>
+          <p class="successRob">您已成功帮
+            <span class="specialfont">微信好友XX</span>
+          </p>
+          <p class="successRob">抢了
+            <span class="specialfont">1</span>枚翡翠蛋</p>
           <p class="canBuy">您可以:</p>
           <div class="fxThree">
             <div class="leftBuy colf">
-              <p>绿色健康,无抗绿壳翡翠鸡蛋</p>
-              <div class="btnYellow ">去购买</div>
+              <div class="btnYellow " @click="gobuyClick">去购买</div>
             </div>
             <div class="centerRob colf">
-              <p>30枚鸡蛋免费领</p>
-              <div class="btnYellow Bgred">去抢蛋</div>
+
+              <div class="btnYellow Bgred" @click="goRobClick">去抢蛋</div>
 
             </div>
             <div class="rightBuy colf">
-              <p> 累计已发放赏金7888888.99 </p>
-              <div class="btnYellow">转赏金</div>
+
+              <div class="btnYellow" @click="shareFreJin">赚赏金</div>
 
             </div>
           </div>
@@ -44,11 +49,11 @@
         <div class="otherTop">
           <p class="successRob">您已成功帮微信好友
             <span>xx</span> 抢到翡翠蛋一枚</p>
-          <p class="canBuy">Ta已抢到25枚</p>
+          <p class="canBuy">Ta已抢到了25枚</p>
 
           <div class="fx recodeBuy">
             <img src="../../img/code.jpg" alt="" class="Rcode">
-            <img src="../../img/code.jpg" alt="" class="Rcode">
+            <!-- <img src="../../img/code.jpg" alt="" class="Rcode"> -->
           </div>
           <p class="guanZhu">长按关注公众号</p>
           <p class="guanZhu">您可以向好友发起抢蛋活动</p>
@@ -80,10 +85,11 @@
 
       <!-- 已经满了30没已经关注的内容 -->
       <div class="progressOne bg2 fx fx-y" v-if="isbntMan">
-        <p class="text-Ali">您已经成功抢满30枚绿壳无抗翡翠蛋</p>
+        <p class="text-Ali">您已经成功抢满
+          <span>30枚</span> 绿壳无抗翡翠蛋</p>
         <p class="text-Ali font12">您还可以:</p>
         <div class="fx splitY">
-          <div @click="helpRobMy" class="buttOne whiteCol">了解赚赏金</div>
+          <div @click="knowShare" class="buttOne whiteCol">了解赚赏金</div>
           <div @click="helpRobOn" class="buttOne redCol">立即领取</div>
         </div>
       </div>
@@ -107,11 +113,11 @@
         </ul>
       </div>
       <div class="bottomEWM" v-if="isMyself == '5'">
-        <p class="MyTeam">我的抢蛋小分队</p>
-        <p class="MyGuan">关注后可查看小分队成员</p>
-        <div class="fx">
-          <img src="../../img/code.jpg" alt="">
-          <img src="../../img/code.jpg" alt="">
+        <p class="f1 c3 MyTeam">我的抢蛋分队</p>
+        <div style="position: relative">
+          <img src="../../img/chicken.png" alt="" class="eggChicken">
+          <img src="../../img/code.jpg" alt="" class="imgEr">
+          <img src="../../img/reGuan.png" alt="" class="reGuan">
         </div>
       </div>
 
@@ -143,7 +149,55 @@
         </div>
         <img src="../../img/code.jpg" alt="" class="Rcode">
       </div>
+      <!-- 模态框赏金按钮的 -->
+      <div class="box" id="box" @click="shareModel=false" v-if="shareModel"></div>
+      <div class="hintBoxShare" v-if="shareModel">
+        <img src="../../img/remaindyello.png" alt="" class="mbicon">
+        <div class="attenShare">
+          <p>最高可赚
+            <span class="redBtn">18%</span>的奖金</p>
+          <p>已有9999个小伙伴赚了￥99999</p>
+        </div>
+        <div class="fx quera">
+          <div>
+            <div class="shareLeft commit">
+              <p>赚</p>
+              <p>7%</p>
+            </div>
+            <p class="orderDe">好友下单</p>
+          </div>
+          <div>
+            <div class="shareCente commit">
+              <p>赚</p>
+              <p>6%</p>
+            </div>
+            <p class="orderDe">ta的好友下单</p>
+          </div>
+          <div>
+            <div class="shareRight commit">
+              <p>赚</p>
+              <p>5%</p>
+            </div>
+            <p class="orderDe">ta的好友下单</p>
+          </div>
+        </div>
+        <div class="yeloBtns">
+          <span class="cancel" @click="shareMyFridend">分享给好友</span>
+        </div>
+      </div>
+      <!-- 赚赏金模块 -->
+      <div class="box" id="box" @click="shareJin=false" v-if="shareJin"></div>
+      <div class="hintmodel" @click="shareJin=false" v-if="shareJin">
+        <p class="infoTitle">最高可赚18%赏金</p>
+        <p class="inofMoy">已有9999个小伙伴赚了￥99999</p>
+        <p class="infoPer">1.将抢蛋游戏分享给好友下单单可赚下单金额的7%</p>
+        <p class="infoPer">2.好友分享给他的好友下单，可赚下单金额的6%</p>
+        <P class="infoPer">3.他的好友分享给他的好友下单，可赚下单金额的5%</p>
 
+        <div class="goByBtns">
+          <span class="goByBtnIn" @click="RobClick">分享给好友</span>
+        </div>
+      </div>
       <!--价钱蒙版-->
       <!--领取提醒-->
       <!--蒙版-->
@@ -175,7 +229,9 @@ export default {
       showQp: false,
       topGuan: false,
       topSwiper: false,
+      shareJin: false,
       proDel: false,
+      shareModel: false,
       manNum: false,
       isMyself: "",
       isbntMan: false,
@@ -210,6 +266,10 @@ export default {
       var r = url.match(reg);
       if (r != null) return decodeURI(r[2]);
       return null;
+    },
+    shareMyFridend() {
+      this.shareModel = false;
+      this.isShow = true;
     },
     WxZd() {
       var $this = this;
@@ -311,6 +371,12 @@ export default {
       this.isGetEgg = false;
       this.isShow = false;
     },
+    shareFreJin() {
+      this.shareJin = true;
+    },
+    knowShare() {
+      this.shareModel = true;
+    },
     goGetNow() {
       this.$router.push({ path: "/" });
     },
@@ -370,8 +436,7 @@ export default {
             //判断有没有关注过
             if (data.isSubscribe == 1) {
               //关注过
-              //顶部轮播隐藏
-              // that.topSwiper = false;
+
               //帮抢显示
               that.topHelpRob = true;
               //ta的小分队显示
@@ -397,7 +462,6 @@ export default {
             that.isbnt = "2";
           }
         }
-        // ---------------------------------------------------------------
 
         that.activityImg = data.activityImg;
         that.activityUsername = data.activityUsername;
@@ -433,7 +497,15 @@ export default {
       this.bindRelat();
       this.$router.push({ path: "/product_details" });
     },
-
+    gobuyClick() {
+      this.$router.push({ path: "/product_details" });
+    },
+    goRobClick() {
+      this.isShow = true;
+    },
+    RobClick() {
+      this.isShow = true;
+    },
     //绑定关系
     bindRelat() {
       var $this = this;
@@ -541,7 +613,7 @@ export default {
 #Free_egg_robbing {
   background-color: #f1f1f2;
   width: 100%;
-  height: 41rem;
+  height: 42rem;
   .text-align-font {
     text-align: center;
     font-size: 14px;
@@ -563,7 +635,7 @@ export default {
     font-size: 0.85rem;
   }
   .bg1 {
-    background-color: white;
+    // background-color: white;
   }
   .hh {
     border: 1px solid red;
@@ -583,23 +655,23 @@ export default {
     position: relative;
   }
   .top1 {
-    height: 23rem;
+    height: 22rem;
     background-color: #fff;
     position: relative;
     .otherTop {
       text-align: center;
-
+      margin-top: 1rem;
       .successRob {
-        line-height: 3rem;
+        line-height: 2rem;
         font-size: 20px;
       }
       .canBuy {
         line-height: 2.5rem;
-        font-size: 14px;
+        font-size: 16px;
       }
       .fxThree {
         display: flex;
-        height: 12rem;
+        height: 13rem;
         align-content: center;
         justify-content: center;
         text-align: center;
@@ -607,38 +679,45 @@ export default {
         .colf {
           width: 35%;
           margin: 1%;
-          padding-top: 3rem;
+          height: 100%;
+          // padding-top: 3rem;
           align-content: center;
           justify-content: center;
-          background-color: #f1f1f1;
-        }
-        p {
-          height: 3rem;
+          // background-color: #fbd48c;
+
+          position: relative;
         }
         .leftBuy {
-        }
-        .rightBuy {
+          background-image: url("../../img/eggbg.png");
+          background-size: contain;
         }
         .centerRob {
+          background-image: url("../../img/eggbg.png");
+          background-size: contain;
         }
-        .centerRob p {
-          line-height: 2rem;
-          //   padding-top: 1rem;
+        .rightBuy {
+          background-image: url("../../img/eggbg.png");
+          background-size: contain;
         }
         .btnYellow {
-          width: 50%;
+          width: 65%;
           height: 2rem;
           line-height: 2rem;
-          border: 1px solid red;
-          color: red;
+          border: 1px solid #2e0406;
+          color: #000;
           border-radius: 1.2rem;
           font-size: 0.8rem;
           text-align: center;
-          margin: 2rem auto;
+          margin: 2rem auto 0;
+          position: absolute;
+          bottom: 10%;
+          left: 50%;
+          transform: translate(-50%);
         }
         .Bgred {
-          background-color: red;
-          color: #fff;
+          background-color: #ffb011;
+          border: 1px solid #ffb011;
+          border: none;
         }
       }
     }
@@ -651,26 +730,37 @@ export default {
     background-size: 100%;
   }
   .link {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     color: #2e0406;
     box-sizing: border-box;
-    height: 5rem;
+    height: 6.25rem;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.1);
     position: absolute;
     bottom: 0;
+    left: 0;
     z-index: 22;
-    padding: 1rem;
-    z-index: 1;
+  }
+  .link > p:first-child {
+    width: 60%;
+    height: 3.5rem;
+    margin: 2rem 0 0 1rem;
+    padding: 0 !important;
   }
   .link > p:last-child {
+    padding: 2rem 0 0 0;
     font-size: 1.1rem;
-    padding: 0 1rem;
-    width: 5rem;
-    background-color: #cc3e36;
-    color: white;
+    width: 50%;
+    height: 3rem;
+    color: #000;
     border-radius: 2rem;
     letter-spacing: 0.05rem;
+
+    span {
+      font-size: 28px;
+      color: rgb(100, 100, 100);
+      margin-left: 5%;
+    }
   }
   .launch {
     width: 12rem;
@@ -715,13 +805,15 @@ export default {
   .progress .searchProgress {
     padding: 0.85rem 2rem 0 2rem;
   }
+  .specialfont {
+    color: #840c32 !important;
+  }
   .topTwo {
     background: #fff;
     height: 15rem;
     position: relative;
     .otherTop {
       text-align: center;
-
       .successRob {
         line-height: 2rem;
         font-size: 16px;
@@ -732,7 +824,7 @@ export default {
       }
       .guanZhu {
         line-height: 1.5rem;
-        font-size: 14px;
+        font-size: 12px;
       }
       .recodeBuy {
         margin: 0 auto;
@@ -766,6 +858,10 @@ export default {
       line-height: 2.5rem;
       font-size: 16px;
       text-align: center;
+      span {
+        font-size: 18px;
+        color: #840c32;
+      }
     }
     .font12 {
       font-size: 14px;
@@ -780,22 +876,23 @@ export default {
 
       .buttOne {
         width: 35%;
-        height: 2.5rem;
-        line-height: 2.5rem;
-        font-size: 0.9rem;
+        height: 3rem;
+        line-height: 3rem;
+        font-size: 1rem;
         margin-top: 2rem;
         margin-right: 1rem;
         background-color: #ffb011;
-        border-radius: 1.2rem;
+        border-radius: 1.4rem;
       }
       .whiteCol {
         background-color: #fff;
-        border: 1px solid #000;
+        border: 1px solid #840c32;
+        color: #840c32;
       }
       .redCol {
-        background-color: red;
-        border: 1px solid red;
-        color: #fff;
+        background-color: #ffb011;
+        border: 1px solid #ffb011;
+        color: #2e0406;
       }
     }
   }
@@ -834,28 +931,44 @@ export default {
   .bottomEWM {
     min-height: 4rem;
     box-sizing: border-box;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
     background-color: #fff;
     text-align: center;
-    padding-top: 0.5rem;
-    padding-bottom: 0.8rem;
+
     .MyTeam {
+      text-align: left;
       line-height: 2rem;
-      font-size: 20px;
+      font-size: 16px;
+      padding-left: 1.5rem;
     }
-    .MyGuan {
-      line-height: 2rem;
-      font-size: 0.8rem;
-      margin-bottom: 0.5rem;
-    }
+
     div {
       margin: 0 auto;
-      align-items: center;
-      justify-content: center;
-      img {
+      height: 11rem;
+      width: 100%;
+      .reGuan {
+        position: absolute;
+        left: 60%;
+        width: 30%;
+        height: 25%;
+        top: 0.2rem;
+      }
+      .eggChicken {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        top: 0;
         width: 6rem;
         height: 6rem;
-        margin: 0 1rem 0.5rem 1rem;
+      }
+      .imgEr {
+        width: 6rem;
+        height: 6rem;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        top: 30%;
       }
     }
   }
@@ -900,7 +1013,6 @@ export default {
     height: 100%;
     position: fixed;
     top: 0;
-    /*display:none*/
   }
   .shareHint {
     width: 80%;
@@ -973,6 +1085,125 @@ export default {
         border-radius: 2rem;
         margin-right: 0.5rem;
       }
+    }
+  }
+  .hintmodel {
+    background: #fff;
+    width: 70%;
+    // height: 13rem;
+    margin: 0 auto;
+    padding: 1rem;
+    color: #0b0b0b;
+    font-size: 0.8rem;
+    border-radius: 0.7rem;
+    z-index: 999;
+    position: fixed;
+    top: 20%;
+    left: 10%;
+
+    .infoTitle {
+      text-align: center;
+      line-height: 2rem;
+      font-size: 18px;
+    }
+    .inofMoy {
+      text-align: center;
+      line-height: 2rem;
+      font-size: 14px;
+      margin-bottom: 1.5rem;
+    }
+    .infoPer {
+      line-height: 1rem;
+    }
+    .goByBtns {
+      width: 100%;
+      height: 3rem;
+      text-align: center;
+      .goByBtnIn {
+        width: 40%;
+        height: 2rem;
+        line-height: 2rem;
+        display: block;
+        padding: 0.2rem;
+        margin: 1rem auto;
+
+        font-size: 14px;
+        border-radius: 0.4rem;
+        border: 1px solid #000;
+      }
+    }
+  }
+  .hintBoxShare {
+    text-align: center;
+    background: #ffffff;
+    width: 70%;
+    margin: 0 18% 0 18%;
+    color: #0b0b0b;
+    font-size: 0.8rem;
+    border-radius: 0.4rem;
+    z-index: 966;
+    position: absolute;
+    left: 0;
+    top: 30%;
+    .mbicon {
+      width: 100%;
+      height: 100%;
+    }
+    .attenShare {
+      p {
+        line-height: 1rem;
+        font-size: 14px;
+      }
+      p:first-child {
+        line-height: 2rem;
+        font-size: 18px;
+      }
+      .redBtn {
+        color: #bd2021;
+        font-size: 20px;
+      }
+    }
+    .quera {
+      display: flex;
+      width: 100%;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      div {
+        width: 4rem;
+        height: 100%;
+        margin: 2%;
+        margin: 0 auto;
+
+        .commit {
+          height: 4rem;
+          line-height: 2.5rem;
+          width: 100%;
+          border-radius: 50%;
+          color: #eee326;
+          border: 1px solid rgb(202, 190, 26);
+          p:last-child {
+            line-height: 0;
+            font-size: 16px;
+            color: #eee326;
+          }
+        }
+        .orderDe {
+          font-size: 12px;
+          margin: -4px !important;
+          margin-top: 0.5rem !important;
+        }
+      }
+    }
+    .yeloBtns {
+      height: 3rem;
+      line-height: 3rem;
+      font-size: 16px;
+      border-top: 0.1rem solid #eee;
+      background-color: #fff;
+      margin-top: 0.5rem;
+      color: #eee326;
+      border-radius: 0.4rem;
     }
   }
   .box1 {

@@ -2,6 +2,7 @@
   <div id="placeNow">
     <mt-header fixed title="提现" style="font-size:1.2rem;height: 3rem;"></mt-header>
     <input type="text" v-model="withdraw" placeholder="输入提现金额" class="money">
+    <p class="tiMony">提现金额必须大于或等于100</p>
     <p class="withdrawNum">可提现余额
       <span> ￥{{balance}}</span>
     </p>
@@ -281,6 +282,14 @@ export default {
   .mint-header {
     background: #cc3e36;
   }
+  .tiMony {
+    color: #cc3e36;
+    font-size: 0.9rem;
+    width: 85%;
+    line-height: 2rem;
+
+    margin: 0 7.5%;
+  }
   .money {
     color: #666666;
     line-height: 3rem;
@@ -288,6 +297,7 @@ export default {
     width: 85%;
     margin: 0 7.5%;
     margin-top: 6rem;
+    padding-left: 1rem;
     display: inline-block;
     border: 1px solid #030000;
     border-radius: 12px;
@@ -296,8 +306,8 @@ export default {
     color: #060606;
     width: 85%;
     margin: 0 7.5%;
-    font-size: 0.9rem;
-    line-height: 4rem;
+    font-size: 1rem;
+    line-height: 2rem;
     span {
       color: #cc3e36;
     }

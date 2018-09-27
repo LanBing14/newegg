@@ -52,6 +52,10 @@
     <div class="productDetails">
       <p v-html="content"></p>
     </div>
+
+    <div class="scrollbottom">
+      <div class="xiaosanjiao"></div>
+    </div>
     <!--立即购买-->
     <div class="buyAndRob">
       <div class="rob" @click="goRobEgg">
@@ -726,6 +730,28 @@ export default {
     }
   }
   /*立即购买*/
+  .scrollbottom {
+    position: fixed;
+    bottom: 4.5rem;
+    background-color: red;
+    width: 90%;
+    height: 4rem;
+    margin-left: 30px;
+    z-index: 999;
+    border-radius: 0.3rem;
+    .xiaosanjiao {
+      //
+      display: block;
+      width: 0;
+      height: 0;
+      border-width: 20px 20px 0;
+      border-style: solid;
+      border-color: rgb(160, 160, 160) transparent transparent; /*黄 透明 透明 */
+      position: absolute;
+      bottom: -1.2rem;
+      left: 30px;
+    }
+  }
   .buyAndRob {
     width: 95%;
     padding: 0 0.7rem;
