@@ -172,14 +172,14 @@
               <p>赚</p>
               <p>6%</p>
             </div>
-            <p class="orderDe">ta的好友下单</p>
+            <p class="orderDe">Ta的好友下单</p>
           </div>
           <div>
             <div class="shareRight commit">
               <p>赚</p>
               <p>5%</p>
             </div>
-            <p class="orderDe">ta的好友下单</p>
+            <p class="orderDe">Ta的好友下单</p>
           </div>
         </div>
         <div class="yeloBtns">
@@ -1164,7 +1164,8 @@ export default {
     margin: 0 18% 0 18%;
     color: #0b0b0b;
     font-size: 0.8rem;
-    border-radius: 0.4rem;
+    border-radius: 0.6rem;
+    // overflow: hidden;
     z-index: 966;
     position: absolute;
     left: 0;
@@ -1191,7 +1192,8 @@ export default {
       display: flex;
       width: 100%;
       margin-top: 1rem;
-      margin-bottom: 2rem;
+
+      padding-bottom: 2rem;
       text-align: center;
       div {
         width: 4rem;
@@ -1204,17 +1206,17 @@ export default {
           line-height: 2.5rem;
           width: 100%;
           border-radius: 50%;
-          color: #eee326;
-          border: 1px solid rgb(202, 190, 26);
+          color: #ffb011;
+          border: 1px solid #ffb011;
           p:last-child {
             line-height: 0;
             font-size: 16px;
-            color: #eee326;
+            color: #ffb011;
           }
         }
         .orderDe {
           font-size: 12px;
-          margin: -4px !important;
+          margin: -5px !important;
           margin-top: 0.5rem !important;
         }
       }
@@ -1226,7 +1228,7 @@ export default {
       border-top: 0.1rem solid #eee;
       background-color: #fff;
       margin-top: 0.5rem;
-      color: #eee326;
+      color: #ffb011;
       border-radius: 0.4rem;
     }
   }
