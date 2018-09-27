@@ -21,8 +21,8 @@
       </div>
       <div class="top1" v-if="topHelpRob">
         <div class="otherTop">
-          <p class="successRob">您已成功帮
-            <span class="specialfont">微信好友XX</span>
+          <p class="successRob">您已成功帮微信好友
+            <span class="specialfont">XX</span>
           </p>
           <p class="successRob">抢了
             <span class="specialfont">1</span>枚翡翠蛋</p>
@@ -44,19 +44,21 @@
           </div>
         </div>
       </div>
-
+      <!-- 未关注 -->
       <div class="topTwo" v-if="topGuan">
         <div class="otherTop">
-          <p class="successRob">您已成功帮微信好友
-            <span>xx</span> 抢到翡翠蛋一枚</p>
-          <p class="canBuy">Ta已抢到了25枚</p>
-
-          <div class="fx recodeBuy">
-            <img src="../../img/code.jpg" alt="" class="Rcode">
-            <!-- <img src="../../img/code.jpg" alt="" class="Rcode"> -->
-          </div>
-          <p class="guanZhu">长按关注公众号</p>
-          <p class="guanZhu">您可以向好友发起抢蛋活动</p>
+          <p class="successRob">您已成功帮好友
+            <span class="specialfont">起什么名字最烦了</span>
+          </p>
+          <p class="successRob">抢了
+            <span class="specialfont">1</span>枚翡翠蛋</p>
+          <p class="canBuy">Ta已抢到了
+            <span class="specialfont">25</span>枚</p>
+        </div>
+        <div style="position: relative" class="commonit">
+          <img src="../../img/chicken.png" alt="" class="eggChicken">
+          <img src="../../img/code.jpg" alt="" class="imgEr">
+          <img src="../../img/robHelpfr.png" alt="" class="reGuan">
         </div>
       </div>
       <!-- 中间部分 -->
@@ -123,7 +125,7 @@
 
       <div class="bottom" v-if="isMyself == '6'">
         <p class="f1 c3">Ta的抢蛋小分队</p>
-        <div class="text-align-font">关注后可查看Ta的抢蛋小分队</div>
+        <div class="text-align-font">关注后可查看Ta的抢蛋小分队~!</div>
       </div>
       <!-- 蒙版 -->
       <div class="box" id="box" @click="isShow=false" v-if="isShow"></div>
@@ -616,8 +618,8 @@ export default {
   height: 42rem;
   .text-align-font {
     text-align: center;
-    font-size: 14px;
-    line-height: 50px;
+    font-size: 16px;
+    line-height: 10rem;
   }
   .c1 {
     color: #2b0405;
@@ -635,7 +637,6 @@ export default {
     font-size: 0.85rem;
   }
   .bg1 {
-    // background-color: white;
   }
   .hh {
     border: 1px solid red;
@@ -810,21 +811,50 @@ export default {
   }
   .topTwo {
     background: #fff;
-    height: 15rem;
+    height: 20rem;
+    margin-top: 2.5rem;
     position: relative;
+    .commonit {
+      margin: 2rem auto 0;
+      height: 11rem;
+      width: 100%;
+      .reGuan {
+        position: absolute;
+        left: 60%;
+        width: 30%;
+        height: 25%;
+        top: 0.2rem;
+      }
+      .eggChicken {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        top: 0;
+        width: 6rem;
+        height: 6rem;
+      }
+      .imgEr {
+        width: 6rem;
+        height: 6rem;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        top: 30%;
+      }
+    }
     .otherTop {
       text-align: center;
       .successRob {
         line-height: 2rem;
-        font-size: 16px;
+        font-size: 20px;
       }
       .canBuy {
         line-height: 2rem;
-        font-size: 16px;
+        font-size: 18px;
       }
       .guanZhu {
         line-height: 1.5rem;
-        font-size: 12px;
+        font-size: 18px;
       }
       .recodeBuy {
         margin: 0 auto;
