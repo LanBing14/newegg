@@ -256,7 +256,7 @@ export default {
 <style lang="scss" scoped>
 #make_money {
   background: #e9844d;
-  min-height: 41.6rem;
+  min-height: 43rem;
   .mint-header {
     background: #ffffff;
     color: #000;
@@ -403,6 +403,7 @@ export default {
     margin: 0 auto;
     margin-top: 0.5rem;
     color: #954c24;
+    padding-bottom: 1rem;
     font-size: 0.9rem;
     border-bottom: 1px solid #954b24;
   }

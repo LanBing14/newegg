@@ -95,7 +95,7 @@
       <p class="remindTop">领蛋提醒</p>
       <p class="remindCenter">您已抢满30枚绿壳无抗乌鸡蛋,可立即领取</p>
       <div class="remindBot">
-        <div class="btn btn1" @click="hideToggle">下次获取</div>
+        <div class="btn btn1" @click="hideToggle">下次领取</div>
         <div class="btn btn2" @click="getNow">立即领取</div>
       </div>
     </div>
@@ -106,7 +106,7 @@
       <div class="color-choice">
         <div v-for="(list,key) in packageList" :key="key" class="color" :class="{active:iskey==key}" @click="choice(key)">{{list.number}}枚/{{list.dateTime}}个月</div>
       </div>
-      <p class="infuse" v-for="(item,index) in packageList">每月配送30枚，共{{item.dateTime}}个</p>
+      <p class="infuse">每月配送30枚，共{{dateTime}}个月</p>
       <div class="btns">
         <div class="cancel" @click="hideToggle">下次领取</div>
         <div class="true" @click="goPlace">立即下单</div>
@@ -167,7 +167,7 @@ export default {
       isMaNum: true,
       isFalse: false, //领蛋提醒
       isGetEgg: false, //领取提醒
-      isXiadan: false, //领取提醒-下单
+      isXiadan: true, //领取提醒-下单
       showShare: false,
       animate: false,
       img: "",
@@ -332,6 +332,7 @@ export default {
     hideToggle() {
       this.isShow = !this.isShow;
       this.isFalse = !this.isFalse;
+      this.isXiadan = !this.isXiadan;
     },
     hideMind() {
       this.isShowAt = false;
@@ -999,7 +1000,8 @@ export default {
     text-align: center;
     position: fixed;
     top: 30%;
-    left: 1rem;
+    left: 50%;
+    transform: translate(-50%);
     z-index: 999;
     border-radius: 0.3rem;
     .remindTop {
@@ -1014,6 +1016,7 @@ export default {
     .color-choice {
       display: flex;
       align-items: center;
+      justify-content: center;
       flex-wrap: wrap;
       margin-top: 1rem;
       width: 100%;
