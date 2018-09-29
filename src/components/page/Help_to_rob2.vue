@@ -8,8 +8,8 @@
             <span>一</span> 枚</div>
         </div>
         <div class="userInfo">
-          <!--<img src="../../img/addEgg.png" alt="" class="touxiang">-->
-          <img :src="img" alt="" class="touxiang">
+          <img src="../../img/egg.png" alt="" class="touxiang">
+          <!-- <img :src="img" alt="" class="touxiang"> -->
           <p class="userName">{{name}}</p>
           <p class="alrealy">已经抢到
             <span>{{residueEggNum}}枚</span>鸡蛋</p>
@@ -87,11 +87,6 @@ export default {
     //喊好友帮ta抢
     goQiang(desc) {
       this.isFalse = true;
-
-      /*if 未关注公众号，点击显示‘关注’面板*/
-      /*if 已关注公众号，跳转下一页面*/
-      // this.wxShare(desc);
-      //      this.$router.push({path:'/Free_egg_robbing',query:{}});
     },
     //喊好友帮我抢
     goFriendQiang() {
@@ -273,7 +268,7 @@ export default {
         height: 5.5rem;
         .touxiang {
           width: 3rem;
-          height: 2.5rem;
+          height: 3rem;
           border-radius: 50%;
         }
         .userName {

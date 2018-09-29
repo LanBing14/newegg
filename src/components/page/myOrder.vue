@@ -5,16 +5,15 @@
       <mt-tab-item @click="getMyOrder" id="0">全部</mt-tab-item>
       <mt-tab-item @click="getMyOrder" id="1">待付款</mt-tab-item>
       <mt-tab-item @click="getMyOrder" id="2">待收货</mt-tab-item>
-      <mt-tab-item @click="getMyOrder" id="3">待评价</mt-tab-item>
+      <!--<mt-tab-item @click="getMyOrder" id="3">待评价</mt-tab-item>-->
     </mt-navbar>
 
     <!-- tab-container -->
-    <mt-tab-container v-model="selected">
+    <mt-tab-container v-model="selected">   
       <mt-tab-container-item id="0">
-
+       <!--列表信息-->
         <div class="orderBox" v-for="(item,index) in obligationList" :key="index">
           <div class="goodsInfo">
-
             <img src="../../img/swiper.png" alt="">
             <div class="name">
               <p>{{item.packageInfo.goodsName}}</p>
@@ -36,7 +35,7 @@
             <!-- <div class="goPay">去支付</div> -->
           </div>
         </div>
-
+       <!--列表信息-->
         <div class="orderBox" v-for="(item,index) in receivingList" :key="index">
           <div class="goodsInfo" @click="getOrderDetail(item.id)">
 
@@ -61,6 +60,7 @@
             <div class="goPay">确认收货</div>
           </div>
         </div>
+       <!--列表信息-->
         <div class="orderBox" v-for="(item,index) in evaluateList" :key="index">
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
@@ -84,9 +84,11 @@
             <div class="goPay">去评价</div>
           </div>
         </div>
-
+        
       </mt-tab-container-item>
+      
       <mt-tab-container-item id="1">
+      <!--列表信息-->
         <div class="orderBox" v-for="(item,index) in obligationList" :key="index">
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
@@ -178,12 +180,14 @@ export default {
   name: "myOrder",
   data() {
     return {
+    	openid:"",
       selected: "0",
       packageInfo: [],
       allList: [],
-      obligationList: [],
-      receivingList: [],
-      evaluateList: []
+      obligationList: [], //tab 全部的列表信息循环
+      receivingList: [],  //tab 待付款的列表信息循环
+      evaluateList: [],    //tab 待收货列表信息循环
+      quanbu:[]           //全部
     };
   },
   methods: {
@@ -191,7 +195,7 @@ export default {
       this.$router.push({
         path: "/order_details",
         query: {
-          orderId: id
+          orderId: id,
         }
       });
     },
@@ -200,7 +204,7 @@ export default {
       var $this = this;
       var baseUrl = BaseUrl + "/api/getOrderList";
       var data = qs.stringify({
-        openid: localStorage.getItem("openid"),
+        openid: 'oX6js0fhr1q8cs1jfrjU65wsnfpc',
         type: $this.selected
       });
       axios({
@@ -214,9 +218,11 @@ export default {
         if (data.data.status == 1) {
           $this.allList = datas;
           for (var i in datas) {
+          	$this.quanbu.push(datas[i].status); //全部
             if (datas[i].status == "未支付") {
               datas[i].status = "待付款";
               $this.obligationList.push(datas[i]);
+              console.log($this.obligationList);
             } else if (datas[i].status == "待发货") {
               datas[i].status = "待收货";
               $this.receivingList.push(datas[i]);
@@ -237,7 +243,8 @@ export default {
       this.$router.push({
         path: "/Fullcreate_Address",
         query: {
-          openid: localStorage.getItem("openid"),
+        	openid: 'oX6js0fhr1q8cs1jfrjU65wsnfpc',
+//        openid: localStorage.getItem("openid"),
           orderId: receivingList[i].id
         }
       });
@@ -246,7 +253,7 @@ export default {
       var $this = this;
       var baseUrl = "/api/api/channelOrder";
       var data = qs.stringify({
-        openid: localStorage.getItem("openid"),
+        openid: localStorage.getItem("openid"), 
         id: receivingList[i].id
       });
       axios({

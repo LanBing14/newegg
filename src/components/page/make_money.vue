@@ -15,12 +15,28 @@
       </div>
     </div>
     <!--滚轮公告-->
-    <div class="marquee_box">
+    <!-- <div class="marquee_box">
       <ul class="marquee_list" :style="{ top: -Num + 'px'}" :class="{marquee_top:Num}">
         <!-- 当显示最后一条的时候（Num=0转换布尔类型为false）去掉过渡效果-->
-        <li v-for="(lists,i) in list" :key="i">
-          <p>{{lists.username}}邀请{{lists.num}}人成功赚了{{lists.sumNum}}元</p>
-        </li>
+    <!-- <li v-for="(lists,i) in list" :key="i">
+      <p>{{lists.username}}邀请{{lists.num}}人成功赚了{{lists.sumNum}}元</p>
+    </li>
+    </ul>
+  </div> -->
+
+    <!-- 文字描述 -->
+    <div class="infoMsg">
+      <p class="infoTitle">
+        <span class="red"></span>
+        <span>分享一次 最高可得</span>
+
+      </p>
+      <p class="infoMy">￥123.84</p>
+      <p class="infoEmp">例：购买688元的套餐</p>
+      <ul>
+        <li>• 您分享您的好友购买，您可获得下单金额的7%的赏金48.16元</li>
+        <li>• 您的好友分享Ta的好友购买，您可获得下单金额的6%的赏金41.28元</li>
+        <li>• Ta的好友分享Ta的好友下单购买，您可获得下单金额5%的赏金34.4元</li>
       </ul>
     </div>
     <!--分享按钮-->
@@ -252,7 +268,7 @@ export default {
   }
   .bgBox {
     width: 100%;
-    background: url("http://egg.wufuapp.com/static/img/makeMoney.ceff3a0.png")
+    background: url("http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180928/1538128038482726.png")
       no-repeat;
     background-size: 100% 100%;
     -moz-background-size: 100% 100%;
@@ -277,7 +293,7 @@ export default {
     }
     .box2 {
       width: 7rem;
-      padding-left: 17rem;
+      padding-left: 16rem;
       margin-top: 2.5rem;
     }
     .box3 {
@@ -297,10 +313,6 @@ export default {
     line-height: 1.2rem;
   }
 
-  ul {
-    list-style: none;
-    width: 100%;
-  }
   .marquee_box {
     display: block;
     position: relative;
@@ -310,15 +322,70 @@ export default {
     margin: 1rem auto;
     height: 4rem; /*关键样式*/
     overflow: hidden;
-  }
-  .marquee_list {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0;
+
+    ul {
+      list-style: none;
+      width: 100%;
+    }
+    .marquee_list {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 0;
+    }
   }
 
+  .infoMsg {
+    text-align: center;
+    background-color: #f1d52e;
+    margin: 1rem;
+    border-radius: 0.5rem;
+    padding: 0.1rem 0.5rem 1rem;
+    .infoTitle {
+      position: relative;
+      height: 3rem;
+      text-decoration: line-through;
+      span {
+        font-size: 13px;
+        position: absolute;
+        width: 50%;
+        left: 50%;
+        transform: translate(-50%);
+        top: 20%;
+        line-height: 2rem;
+        background-color: #f1d52e;
+      }
+      .red {
+        width: 100%;
+        height: 0.1rem;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background-color: #ef3c67;
+      }
+    }
+    .infoMy {
+      font-size: 24px;
+      color: #ea6f2c;
+    }
+    .infoEmp {
+      font-size: 14px;
+      color: #2e0406;
+      line-height: 2rem;
+    }
+    ul {
+      text-align: left;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li {
+        color: #2e0406;
+        line-height: 1.5rem;
+        font-size: 14px;
+      }
+    }
+  }
   /*分享按钮*/
   .share {
     width: 13.5rem;

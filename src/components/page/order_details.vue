@@ -3,63 +3,139 @@
     <mt-header fixed title="订单详情" style="font-size:1.2rem;height: 3rem;">
       <mt-button icon="back" slot="left" @click="goBack"></mt-button>
     </mt-header>
-    <!--等待买家收货提醒-->
-    <div class="waitReceiving">
-      <p>等待买家收货</p>
-      <div class="btns">
-        <!--<div class="applyBtn applyFor">申请退款</div>-->
-        <div class="applyBtn active" @click="goEvaluate">确认收货</div>
-      </div>
-    </div>
-    <!--收货人信息-->
-    <div class="Consignee">
-      <div class="messages">
-        <p class="name">{{receiver}}
-          <span class="phone">{{phone}}</span>
-        </p>
-        <div class="add">
-          <img src="../../img/map.png" alt="" class="sign">
-          <p class="address">{{province}}{{city}}{{county}}{{detail}}</p>
-        </div>
-      </div>
-      <!--<img src="../../img/right.png" alt="" class="right">-->
-    </div>
-    <!--商品信息-->
-    <div class="productInfo">
-      <img src="../../img/swiper.png" alt="" class="goodPic">
-      <div class="line1">
-        <p class="name">{{packageInfo.goodsName}}</p>
-        <p class="money">￥{{packageInfo.sellPrice}}</p>
-      </div>
-      <div class="line2">
-        <p class="guige">{{packageInfo.number}}枚/{{packageInfo.dateTime}}个月</p>
-        <p class="num">x1</p>
-      </div>
-    </div>
-    <!--其他-->
-    <div class="other">
-      <p>配送方式：快递 ￥{{freight}}</p>
-      <p>积分抵扣：{{discount? discount:0}}</p>
-      <p>买家留言：<input type="text" placeholder="选填" style="width: 75%;font-size: 1rem;line-height: 1.1rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"></p>
-    </div>
-    <!--合计-->
-    <div class="total">
-      <p>总计
-        <span>￥{{packageInfo.sellPrice}}</span>
-      </p>
-    </div>
-    <!--订单信息-->
-    <div class="orderDetails">
-      <div class="title">订单信息</div>
-      <div class="line">
-        <p class="p1">下单时间</p>
-        <p class="p2">{{addTime}}</p>
-      </div>
-      <div class="line">
-        <p class="p1">付款时间</p>
-        <p class="p2">{{payTime}}</p>
-      </div>
-    </div>
+    
+  <!--  待收货模块-->
+      <div class="collect_momdel" style="display: none;">
+	    <!--等待买家收货提醒-->
+			    <div class="waitReceiving">
+			    	<img src="../../img/stay_icon.png"/>
+			      <p>待收货</p>
+			      <!--<div class="btns">
+			        <div class="applyBtn applyFor">申请退款</div>
+			        <div class="applyBtn active" @click="goEvaluate">确认收货</div>
+			      </div>-->
+			    </div>
+			    <!--收货人信息-->
+			    <div class="Consignee">
+			      <div class="messages">
+			        <p class="name">{{receiver}}
+			          <span class="phone">{{phone}}</span>
+			        </p>
+			        <div class="add">
+			          <img src="../../img/map.png" alt="" class="sign">
+			          <p class="address">{{province}}{{city}}{{county}}{{detail}}</p>
+			          <img src="../../img/right.png" alt="" class="right">
+			        </div>
+			      </div>
+			     
+			    </div>
+			    <!--商品信息-->
+			    <div class="productInfo">
+			      <img src="../../img/swiper.png" alt="" class="goodPic" >
+			      <div class="line1">
+			        <p class="name">{{packageInfo.goodsName}}</p>
+			        <p class="money">￥{{packageInfo.sellPrice}}</p>
+			      </div>
+			      <div class="line2">
+			        <p class="guige">{{packageInfo.number}}枚/{{packageInfo.dateTime}}个月</p>
+			        <p class="num">x1</p>
+			      </div>
+			    </div>
+			    <!--其他-->
+			    <div class="other">
+			      <p>配送方式：快递 ￥{{freight}}</p>
+			      <p>积分抵扣：{{discount? discount:0}}</p>
+			      <p>买家留言：<input type="text" placeholder="选填" style="width: 75%;font-size: 1rem;line-height: 1.1rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"></p>
+			    </div>
+			    <!--合计-->
+			    <div class="total">
+			      <p>总计
+			        <span>￥{{packageInfo.sellPrice}}</span>
+			      </p>
+			    </div>
+			    <!--订单信息-->
+			    <div class="orderDetails">
+			      <div class="title">订单信息</div>
+			      <div class="line">
+			        <p class="p1">下单时间</p>
+			        <p class="p2">{{addTime}}</p>
+			      </div>
+			      <div class="line">
+			        <p class="p1">付款时间</p>
+			        <p class="p2">{{payTime}}</p>
+			      </div>
+			    </div>
+			    <!--订单信息end-->
+	    </div>
+  <!--待收货模块end-->
+  
+  <!--待评价模块-->
+     <div class="review_momdel" style="display:block;">
+     	
+	    <!--等待买家收货提醒-->
+			    <div class="waitReceiving">
+			    	<img src="../../img/review-icons.png"/>
+			      <p>待评价</p>
+			      <!--<div class="btns">
+			        <div class="applyBtn applyFor">申请退款</div>
+			        <div class="applyBtn active" @click="goEvaluate">确认收货</div>
+			      </div>-->
+			    </div>
+			    
+			    <!--物流信息-->
+			      <div class="logistics_information">
+			      	  <img src="../../img/car.png"/>  
+			      	  <p style="padding-top: 1.25rem;">物流信息：<span>中国邮政</span></p>
+			      	  <p >快递单号：<span>45632135468743213</span> <span class="single_number">复制单号</span></p>
+			      	 
+			      </div>
+			    <!--物理信息end-->
+			    
+			    <!--收货人信息-->
+			    <div class="Consignee">
+			      <div class="messages">
+			        <p class="name">{{receiver}}
+			          <span class="phone">{{phone}}</span>
+			        </p>
+			        <div class="add">
+			          <img src="../../img/map.png" alt="" class="sign">
+			          <p class="address">{{province}}{{city}}{{county}}{{detail}}</p>
+			          <img src="../../img/right.png" alt="" class="right">
+			        </div>
+			      </div>
+			     
+			    </div>
+			    <!--商品信息-->
+			    <div class="productInfo">
+			      <img src="../../img/swiper.png" alt="" class="goodPic" style="width: 5.6875rem;height: 6.5625rem;">
+			      <div class="line1">
+			        <p class="name">{{packageInfo.goodsName}}</p>
+			        <p class="money" style="margin-top: 1.5rem;">￥{{packageInfo.sellPrice}}</p>
+			      </div>
+			      <div class="line2">
+			        <p class="guige" style="margin: 1rem;">{{packageInfo.number}}枚/{{packageInfo.dateTime}}个月</p>
+			        <p class="num">x1</p>
+			      </div>
+			    </div>
+			  <!--备注信息-->
+			    <div class="remarks_information">
+			    	     <span style="position: absolute;">备注:</span>
+					    	 <p>2018/3/20 收货地址变更</p>
+					    	 <p>2018/3/20 收货地址变更</p>
+					    	 <p>2018/3/20 收货地址变更</p>
+			    </div>
+			   <!-- 备注信息end-->
+			    <!--订单信息-->
+			    <div class="orderDetails">
+			       <div class="title">订单信息</div>
+			       <p class="line" style="padding-top:0.5rem ;">下单时间<span class="p2">{{addTime}}</span></p>
+			       <p class="line">付款时间<span class="p2">{{payTime}}</span></p>
+			       <p class="line">收货时间<span class="p2">{{payTime}}</span></p>
+			    </div>
+			    <!--订单信息end-->
+			    
+	    </div>
+  <!--待评价模块end-->
   </div>
 </template>
 
@@ -198,10 +274,20 @@ export default {
   .waitReceiving {
     margin-top: 3rem;
     background: #fff;
-    padding: 2rem;
+    padding: 1.5rem;
+    img{
+    	margin-left: 38%;
+    	width: 1.625rem;
+    	height: 1.625rem;
+    }
     p {
+    	margin-right: 38%;
+    	float:right;
+    	display: inline-block;
       text-align: center;
-      font-size: 1.3rem;
+      font-size: 0.9rem;
+      color: #CC3E36;
+      padding-top: 0.2rem;
     }
     .btns {
       display: flex;
@@ -227,15 +313,41 @@ export default {
       }
     }
   }
+  /*物流信息*/
+  .logistics_information{
+  	        height:4.125rem;
+  	        background-color: #FFFFFF;
+  	        margin-top: 0.4375rem;
+  	       
+  	        img {
+  	        	display: block;
+  	        	width: 1.6875rem;
+  	        	height: 1.3125rem;
+  	        	float: left;
+  	        	margin: 1.4375rem 1.3125rem 1.4375rem 1.8125rem;
+  	        }
+  	        p{
+  	        
+  	        	font-size:0.75rem;
+  	        	color: #999999;
+             .single_number{ 	        	
+						  	        	color:#CC3E36;
+						  	        	font-size:0.75rem;
+						  	        	padding-left: 0.1rem;
+						  	        }
+  	        }
+  	       
+  }
   /*收货人信息*/
   .Consignee {
     display: flex;
     align-items: center;
-    margin-top: 1rem;
-    padding: 0.5rem 0.5rem;
+    margin-top: 0.4375rem;
+    padding: 0.2rem 0.8rem;
+    height:6rem;
     background: #fff;
     .messages {
-      width: 95%;
+      width: 100%;
       .name {
         font-size: 1rem;
         .phone {
@@ -257,22 +369,27 @@ export default {
         }
       }
     }
+    img{
+    	width: 24px;
+    	height: 28px;
+    }
   }
   /*商品信息*/
   .productInfo {
     width: 100%;
-    margin-top: 1rem;
+    margin-top:0.5rem;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     background: #ffffff;
     border-bottom: 1px solid #c1c5c8;
     .goodPic {
-      width: 5rem;
-      margin: 0.5rem;
+      width: 3.75rem;
+      height: 3.75rem;
+      margin: 0.9rem;
     }
     .line1 {
-      width: 70%;
+      width: 65%;
       font-size: 0.9rem;
       margin-top: -2rem;
       display: flex;
@@ -309,11 +426,23 @@ export default {
       }
     }
   }
+  /*备注信息*/
+ .remarks_information{
+ 	       padding:0.375rem 0 0 1.1875rem ;
+ 	       height: 3.4375rem;
+ 	       background-color: #FFFFFF;
+ 	       color: #8B8989;
+ 	       font-size: 0.75rem;
+ 	       p{
+           padding-left: 2rem;
+ 	       	 margin-bottom: 0.1rem;
+ 	       }
+ }
   /*其他*/
   .other {
     background: #ffffff;
     padding-left: 1rem;
-    font-size: 1rem;
+    font-size: 0.925rem;
     border-bottom: 1px solid #c1c5c8;
     padding-bottom: 1rem;
     p {
@@ -329,37 +458,30 @@ export default {
     padding-right: 1rem;
     line-height: 2.5rem;
     p {
-      font-size: 1.2rem;
+      font-size: 1rem;
       span {
-        color: #be700b;
+        color: #CC3E36;
       }
     }
   }
   /*订单详情*/
   .orderDetails {
-    margin-top: 1rem;
+    margin-top: 0.25rem;
     background: #fff;
+    /*padding: 0 1rem;*/
+    font-size: 0.8125rem;
     .title {
-      font-size: 1.2rem;
+    	padding: 0 1rem;
       line-height: 2.5rem;
-      padding-left: 1rem;
-      border-bottom: 1px solid #c1c5c8;
+      border-bottom: 0.0625rem solid #c1c5c8;
     }
     .line {
       color: #c1c5c8;
       display: flex;
       align-items: center;
-      font-size: 1.1rem;
-      line-height: 2rem;
-      .p1 {
-        width: 30%;
-        padding-left: 1rem;
-      }
-      .p2 {
-        width: 70%;
-        text-align: right;
-        padding-right: 1rem;
-      }
+      font-size: 0.8125rem;
+      line-height: 1.2rem;
+      padding: 0 1rem; 
     }
   }
 }

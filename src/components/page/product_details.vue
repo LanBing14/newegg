@@ -52,21 +52,27 @@
     <div class="productDetails">
       <p v-html="content"></p>
     </div>
-    <div class="scrollbottomWx" v-if="showClose">
-      <div class="xiaosanjiao"></div>
+    <div class="scrollbottomWx" v-if="showClose" @click="closeModel">
+      <!-- <div class="xiaosanjiao"></div> -->
+      <img src="../../img/white.png" alt="">
     </div>
     <div class="scrollbottom" @click="closeModel" v-if="showClose">
 
       <ul class="scrolLton" ref="con1" :class="{anim:animate==true}">
-        <li v-for="(item,index)  in sendList "> <img :src="img" alt="">{{item.title}}
+        <li v-for="(item,index)  in sendList " :key="index"> <img :src="item.img" alt="">{{item.title}}
         </li>
       </ul>
     </div>
     <!--立即购买-->
     <div class="buyAndRob">
-      <div class="rob" @click="goRobEgg">
+      <div class="rob" @click="goRobEgg" v-if="isMaNum">
         <p class="free">发起抢蛋</p>
         <p class="waitRob">您还有{{eggNum}}枚鸡蛋待抢</p>
+      </div>
+
+      <div class="rob" @click="goRobEgg" v-if="!isMaNum">
+        <p class='atOnRob'>立即领蛋</p>
+
       </div>
       <div class="buy" @click="showToggle">
         <p>立即购买</p>
@@ -158,6 +164,7 @@ export default {
       isShowAt: false, //规格
       clist: [],
       marketPrice: "",
+      isMaNum: true,
       isFalse: false, //领蛋提醒
       isGetEgg: false, //领取提醒
       isXiadan: false, //领取提醒-下单
@@ -498,7 +505,6 @@ export default {
         $this.sellPrice = info.data.data.packageList[0].sellPrice;
         $this.marketPrice = info.data.data.packageList[0].marketPrice;
         $this.stock = info.data.data.packageList[0].stock;
-        //    this.amount = info.data.data.packageList.number;
         $this.eggNum = info.data.data.eggNum;
         $this.isApply = info.data.data.isApply;
         $this.clist = info.data.data.clist;
@@ -509,12 +515,12 @@ export default {
         $this.img = info.data.data.clist[0].img;
         $this.contents = info.data.data.clist[0].content;
 
-        // Indicator.close();
-        this.WxZd();
-        this.choice(0);
+        $this.WxZd();
+        $this.choice(0);
         if ($this.eggNum == 0 && $this.isApply == 0) {
           $this.isFalse = true;
           $this.isShow = true;
+          $this.isMaNum = false;
         }
       });
     },
@@ -550,7 +556,10 @@ export default {
       this.isShowAt = true;
       this.isShow = true;
     }
-
+    // if (this.eggNum == 0 && this.isApply == 0) {
+    //   this.isFalse = true;
+    //   this.isShow = true;
+    // }
     setInterval(this.scroll, 1000);
   },
   mounted() {
@@ -642,7 +651,6 @@ export default {
         text-align: right;
       }
     }
-    // margin-bottom: 0.5rem;
   }
   /*选择套餐*/
   .chooseSpecial {
@@ -755,29 +763,37 @@ export default {
   // 定时器
   .scrollbottomWx {
     position: fixed;
-    bottom: 5rem;
-    z-index: 998;
+    bottom: 7rem;
+    right: 3%;
+    z-index: 99;
     .xiaosanjiao {
       display: block;
       width: 0;
       height: 0;
       border-width: 17px 17px 0;
       border-style: solid;
-      border-color: #79797b transparent transparent; /*黄 透明 透明 */
+      border-color: rgb(73, 72, 72) transparent transparent; /*黄 透明 透明 */
+      opacity: 0.8;
       position: absolute;
-      bottom: -1.4rem;
+      bottom: -0.9rem;
       left: 80px;
+    }
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+      display: block;
     }
   }
   .scrollbottom {
     position: fixed;
     bottom: 4.5rem;
-    background-color: #79797b;
+    background-color: rgba(73, 72, 72, 0.8);
     overflow: hidden;
     width: 95%;
     height: 4rem;
     margin-left: 10px;
-    z-index: 999;
+    z-index: 98;
     border-radius: 0.3rem;
 
     .anim {
@@ -795,12 +811,14 @@ export default {
 
       li {
         height: 4rem;
+        color: #fff;
         font-size: 0.9rem;
         line-height: 4rem;
+        overflow: hidden;
         img {
           width: 3rem;
           height: 3rem;
-          margin: 0.4rem;
+          margin: 0.6rem;
           float: left;
         }
       }
@@ -834,6 +852,11 @@ export default {
         line-height: 1rem;
         color: rgb(223, 45, 21);
       }
+      .atOnRob {
+        // height: 3.6rem;
+        line-height: 2.7rem;
+        font-size: 1.2rem;
+      }
     }
     .buy {
       width: 50%;
@@ -851,7 +874,7 @@ export default {
   .box {
     opacity: 0.9;
     background: #000;
-    z-index: 999;
+    z-index: 998;
     width: 100%;
     height: 100%;
     position: fixed;
@@ -875,7 +898,8 @@ export default {
     position: fixed;
     top: 30%;
     left: 1rem;
-    z-index: 11;
+    z-index: 999;
+    padding-bottom: 1rem;
     border-radius: 0.3rem;
     .remindTop {
       font-size: 20px;
@@ -939,7 +963,7 @@ export default {
     position: fixed;
     top: 30%;
     left: 1rem;
-    z-index: 11;
+    z-index: 999;
     border-radius: 0.3rem;
     .remindTop {
       font-size: 20px;
@@ -976,7 +1000,7 @@ export default {
     position: fixed;
     top: 30%;
     left: 1rem;
-    z-index: 11;
+    z-index: 999;
     border-radius: 0.3rem;
     .remindTop {
       font-size: 20px;

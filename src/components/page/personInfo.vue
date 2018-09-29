@@ -1,37 +1,37 @@
 <template>
-	<div id="personInfo">
-		<mt-header fixed title="个人资料" style="font-size:1.2rem;height: 3rem;">
-			<mt-button slot="right" @click="updateInfo">更改</mt-button>
-		</mt-header>
-		<div class="personalInfo">
-			<div class="touxiang">
-				<p>头像</p>
-				<img :src="f.src" v-if="f" />
-				<img :src="img" @click="add" v-else/>
-				<input class="value" style="display:none" type="file" ref="file" accept="image/*" multiple="multiple" @change="getFile($event)" />
-			</div>
-			<div class="inputs">
-				<div class="item">
-					<label>昵称</label>
-					<input type="text" placeholder="请设置你的昵称" v-model="username">
-					<img src="../../img/right.png" alt="">
-				</div>
-				<div class="item" @click="sexChange">
-					<label>性别</label>
-					<input type="text" v-model="sex" @blur="showOut" readonly='readonly'>
-					<img src="../../img/right.png" alt="">
-				</div>
-				<div class="item">
-					<label>年龄</label>
-					<input type="text" placeholder="请输入你的年龄" v-model="age">
-					<img src="../../img/right.png" alt="">
-				</div>
-			</div>
-		</div>
-		<mt-popup v-model="popupVisible" position="bottom" class="mint-popup">
-			<mt-picker :slots="sexSlots" v-model="popupVisible" @change="onSexChange" v-show="isShow" value-key="sex" :visible-item-count="3" ref='picker'></mt-picker>
-		</mt-popup>
-	</div>
+  <div id="personInfo">
+    <mt-header fixed title="个人资料" style="font-size:1.2rem;height: 3rem;">
+      <mt-button slot="right" @click="updateInfo">更改</mt-button>
+    </mt-header>
+    <div class="personalInfo">
+      <div class="touxiang">
+        <p>头像</p>
+        <img :src="f.src" v-if="f" />
+        <img :src="img" @click="add" v-else/>
+        <input class="value" style="display:none" type="file" ref="file" accept="image/*" multiple="multiple" @change="getFile($event)" />
+      </div>
+      <div class="inputs">
+        <div class="item">
+          <label>昵称</label>
+          <input type="text" placeholder="请设置你的昵称" v-model="username">
+          <img src="../../img/right.png" alt="">
+        </div>
+        <div class="item" @click="sexChange">
+          <label>性别</label>
+          <input type="text" v-model="sex" @blur="showOut" readonly='readonly'>
+          <img src="../../img/right.png" alt="">
+        </div>
+        <div class="item">
+          <label>年龄</label>
+          <input type="text" placeholder="请输入你的年龄" v-model="age">
+          <img src="../../img/right.png" alt="">
+        </div>
+      </div>
+    </div>
+    <mt-popup v-model="popupVisible" position="bottom" class="mint-popup">
+      <mt-picker :slots="sexSlots" v-model="popupVisible" @change="onSexChange" v-show="isShow" value-key="sex" :visible-item-count="3" ref='picker'></mt-picker>
+    </mt-popup>
+  </div>
 </template>
 
 <script>
@@ -119,22 +119,6 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    // submitForm(event) {
-    //   event.preventDefault();
-    //   let formData = new FormData();
-    //   formData.append("file", this.file);
-    //   let config = {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data"
-    //     }
-    //   };
-    //   this.axios
-    //     .post("http://127.0.0.1/index/index/upload", formData, config)
-    //     .then(function(res) {
-    //       if (res.status === 200) {
-    //       }
-    //     });
-    // },
 
     /* 性别的显示隐藏 */
     sexChange(e) {

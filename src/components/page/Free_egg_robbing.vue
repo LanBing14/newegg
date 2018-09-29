@@ -11,18 +11,20 @@
           <p class="fx-f1 c1">{{activityUsername}}</p>
           <!--我正在发起抢蛋活动-->
         </div>
-        <div class="bgt"></div>
+        <div class="bgt">
+        </div>
+        <!-- <div class="bgt"><img src="../../img/egg3.jpg" alt=""></div> -->
         <div class="link fx">
           <p class="fx-f1" style="padding-right:1.5rem;"> 翡翠蛋 乌鸡蛋 无抗生素的新鲜绿壳蛋</p>
-          <p class="fx fx-jf-c fx-ai-c" @click="goBuy">去购买
-            <span>></span>
+          <p class="fx fx-jf-c fx-ai-c" @click="goBuy">商品详情
+            <img src="../../img/right.png" alt="">
           </p>
         </div>
       </div>
       <div class="top1" v-if="topHelpRob">
         <div class="otherTop">
           <p class="successRob">您已成功帮微信好友
-            <span class="specialfont">XX</span>
+            <span class="specialfont">{{activityUsername}}</span>
           </p>
           <p class="successRob">抢了
             <span class="specialfont">1</span>枚翡翠蛋,您还可以</p>
@@ -46,13 +48,13 @@
       <!-- 未关注 -->
       <div class="topTwo" v-if="topGuan">
         <div class="otherTop">
-          <p class="successRob">您已成功帮好友
-            <span class="specialfont">起什么名字最烦了</span>
+          <p class="successRob">您已成功帮微信好友
+            <span class="specialfont">{{activityUsername}}</span>
           </p>
           <p class="successRob">抢了
             <span class="specialfont">1</span>枚翡翠蛋</p>
           <p class="canBuy">Ta已抢到了
-            <span class="specialfont">25</span>枚</p>
+            <span class="specialfont">{{eggNumber}}</span>枚</p>
         </div>
         <div style="position: relative" class="commonit">
           <img src="../../img/chicken.png" alt="" class="eggChicken">
@@ -91,7 +93,7 @@
         <p class="text-Ali font12">您还可以:</p>
         <div class="fx splitY">
           <div @click="knowShare" class="buttOne whiteCol">了解赚赏金</div>
-          <div @click="helpRobOn" class="buttOne redCol">立即领取</div>
+          <div @click="helpLeng" class="buttOne redCol">立即领取</div>
         </div>
       </div>
 
@@ -113,6 +115,7 @@
           </li>
         </ul>
       </div>
+      <!--  -->
       <div class="bottomEWM" v-if="isMyself == '5'">
         <p class="f1 c3 MyTeam">我的抢蛋分队</p>
         <div style="position: relative">
@@ -157,7 +160,7 @@
         <div class="attenShare">
           <p>最高可赚
             <span class="redBtn">18%</span>的奖金</p>
-          <p>已有9999个小伙伴赚了￥99999</p>
+          <p>已有24938 个小伙伴赚了￥527438.72</p>
         </div>
         <div class="fx quera">
           <div>
@@ -187,7 +190,7 @@
         </div>
       </div>
       <!-- 赚赏金模块 -->
-      <div class="box" id="box" @click="shareJin=false" v-if="shareJin"></div>
+      <!-- <div class="box" id="box" @click="shareJin=false" v-if="shareJin"></div>
       <div class="hintmodel" @click="shareJin=false" v-if="shareJin">
         <p class="infoTitle">最高可赚18%赏金</p>
         <p class="inofMoy">已有9999个小伙伴赚了￥99999</p>
@@ -198,7 +201,7 @@
         <div class="goByBtns">
           <span class="goByBtnIn" @click="RobClick">分享给好友</span>
         </div>
-      </div>
+      </div> -->
       <!--价钱蒙版-->
       <!--领取提醒-->
       <!--蒙版-->
@@ -259,6 +262,9 @@ export default {
   methods: {
     box1Close() {
       this.isPub = false;
+    },
+    helpLeng() {
+      this.$router.push({ path: "/product_details" });
     },
     getQueryString(name, url) {
       url = url || window.location.search.substr(1);
@@ -373,7 +379,7 @@ export default {
       this.isShow = false;
     },
     shareFreJin() {
-      this.shareJin = true;
+      this.shareModel = true;
     },
     knowShare() {
       this.shareModel = true;
@@ -408,7 +414,7 @@ export default {
               that.isbntMan = true;
               //我的抢蛋小分队显示
               that.isMyself = "3";
-            } else {
+            } else if (data.eggNumber < 30) {
               // 未满30
               //轮播图显示
               that.topSwiper = true;
@@ -421,17 +427,19 @@ export default {
               //好友帮我抢按钮显示
               that.isbnt = "1";
             }
-          } else {
+          } else if (data.isSubscribe == 0) {
             // 未关注
             //轮播图显示
             that.topSwiper = true;
             //有进度条外面的盒子显示
             that.manNum = true;
             that.proDel = true;
+            //好友帮我抢按钮显示
+            that.isbnt = "1";
             //带图片的二维码显示
             that.isMyself = "5";
           }
-        } else {
+        } else if (data.isMyself == 0) {
           // 不是自己 判断有没有抢过
           if (data.isClick == 1) {
             //判断有没有关注过
@@ -442,25 +450,25 @@ export default {
               that.topHelpRob = true;
               //ta的小分队显示
               that.isMyself = "4";
-            } else {
+            } else if (data.isSubscribe == 0) {
               //未关注
               that.topGuan = true;
               //ta的小分队显示
               that.isMyself = "6";
             }
-          } else {
+          } else if (data.isClick == 0) {
             // 没有抢过
             that.topSwiper = true;
-            //帮抢隐藏
-            // that.topHelpRob = false;
             //ta的小分队显示
             that.isMyself = "4";
             //进度条大框显示
             that.manNum = true;
-            //进度条隐藏
-            // that.proDel = false;
+            //进度条显示
+            that.proDel = true;
             //帮ta抢显示
             that.isbnt = "2";
+            that.eggNumber = data.eggNumber >= 30 ? 29 : data.eggNumber;
+            that.progWid = 29 / 30 * 100 + "%";
           }
         }
 
@@ -496,7 +504,6 @@ export default {
     //点击‘去购买’
     goBuy() {
       this.bindRelat();
-      this.$router.push({ path: "/product_details" });
     },
     gobuyClick() {
       this.$router.push({ path: "/product_details" });
@@ -522,6 +529,7 @@ export default {
         data: data
       }).then(function(data) {
         console.log(data);
+        $this.$router.push({ path: "/product_details" });
       });
     },
 
@@ -650,13 +658,19 @@ export default {
     margin: 0;
   }
   .top {
+    width: 100%;
     height: 18rem;
     // background: white;
     position: relative;
+    background: url("http://yykj-wufu.oss-cn-beijing.aliyuncs.com/uploads/ueditor/image/20180929/1538208120849636.jpg")
+      no-repeat center; //不要改，vue开发环境和生产环境图片路径不同，线上这个路径有图片
+    background-size: 100% 18rem;
   }
   .top1 {
-    height: 22rem;
+    height: 21rem;
     position: relative;
+    // background-color: #fff;
+
     .otherTop {
       text-align: center;
       padding-top: 1.5rem;
@@ -683,15 +697,15 @@ export default {
           border-radius: 0.5rem;
         }
         .leftBuy {
-          background-image: url("../../img/BgM1.png");
+          background-image: url("http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180928/1538121217881795.png");
           background-size: contain;
         }
         .centerRob {
-          background-image: url("../../img/BgM2.png");
+          background-image: url("http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180928/1538121223229741.png");
           background-size: contain;
         }
         .rightBuy {
-          background-image: url("../../img/BgM3.png");
+          background-image: url("http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180928/1538121231598542.png");
           background-size: contain;
         }
         .btnYellow {
@@ -717,34 +731,42 @@ export default {
       }
     }
   }
-  .bgt {
-    width: 18rem;
-    height: 18rem;
-    margin: 0 auto;
-    background: url("/static/img/egg2.png") no-repeat center 10%; //不要改，vue开发环境和生产环境图片路径不同，线上这个路径有图片
-    background-size: 100%;
-  }
+  // .bgt {
+  //   // width: 18rem;
+  //   width: 100%;
+  //   height: 100%;
+  //   margin: 0 auto;
+  //   background: url("http://yykj-wufu.oss-cn-beijing.aliyuncs.com/uploads/ueditor/image/20180929/1538208120849636.jpg")
+  //     no-repeat center; //不要改，vue开发环境和生产环境图片路径不同，线上这个路径有图片
+  //   background-size: contain;
+  // }
   .link {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #2e0406;
     box-sizing: border-box;
-    height: 6.25rem;
+    height: 4.5rem;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(251, 212, 140, 0.5);
     position: absolute;
     bottom: 0;
     left: 0;
     z-index: 22;
+
+    img {
+      margin-left: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+    }
   }
   .link > p:first-child {
     width: 60%;
     height: 3.5rem;
-    margin: 2rem 0 0 1rem;
+    margin: 1rem 0 0 1rem;
     padding: 0 !important;
   }
   .link > p:last-child {
-    padding: 2rem 0 0 0;
-    font-size: 1.1rem;
+    padding: 1rem 0 0 0;
+    font-size: 1rem;
     width: 50%;
     height: 3rem;
     color: #000;
@@ -787,7 +809,9 @@ export default {
   }
   /*进度条部分样式*/
   .progress {
-    min-height: 6rem;
+    min-height: 7.5rem;
+    padding-top: 1.5rem;
+    background-color: #fff;
   }
 
   .eggprog {
@@ -806,7 +830,7 @@ export default {
   .topTwo {
     background: #fff;
     height: 20rem;
-    margin-top: 2.5rem;
+    // margin-top: 2.5rem;
     position: relative;
     .commonit {
       margin: 2rem auto 0;
@@ -816,7 +840,7 @@ export default {
         position: absolute;
         left: 60%;
         width: 30%;
-        height: 25%;
+        height: 18%;
         top: 0.2rem;
       }
       .eggChicken {
@@ -955,7 +979,7 @@ export default {
   .bottomEWM {
     min-height: 4rem;
     box-sizing: border-box;
-    margin-top: 0.5rem;
+    margin-top: 0.2rem;
     padding-top: 0.5rem;
     background-color: #fff;
     text-align: center;
@@ -975,7 +999,7 @@ export default {
         position: absolute;
         left: 60%;
         width: 30%;
-        height: 25%;
+        height: 18%;
         top: 0.2rem;
       }
       .eggChicken {
