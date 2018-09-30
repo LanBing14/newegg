@@ -67,11 +67,12 @@
     <div class="buyAndRob">
       <div class="rob" @click="goRobEgg" v-if="isMaNum">
         <p class="free">发起抢蛋</p>
-        <p class="waitRob">您还有{{eggNum}}枚鸡蛋待抢</p>
+        <p class="waitRob1">您还有{{eggNum}}枚鸡蛋待抢</p>
       </div>
 
       <div class="rob" @click="goRobEgg" v-if="!isMaNum">
-        <p class='atOnRob'>立即领蛋</p>
+        <p class="free">立即领取</p>
+        <p class="waitRob">您已成功抢到30枚翡翠蛋</p>
 
       </div>
       <div class="buy" @click="showToggle">
@@ -167,7 +168,7 @@ export default {
       isMaNum: true,
       isFalse: false, //领蛋提醒
       isGetEgg: false, //领取提醒
-      isXiadan: true, //领取提醒-下单
+      isXiadan: false, //领取提醒-下单
       showShare: false,
       animate: false,
       img: "",
@@ -330,15 +331,22 @@ export default {
     },
     // 点击蒙版，套餐选择宽隐藏
     hideToggle() {
-      this.isShow = !this.isShow;
-      this.isFalse = !this.isFalse;
-      this.isXiadan = !this.isXiadan;
+      // this.isShow = !this.isShow;
+      // this.isFalse = !this.isFalse;
+      // this.isXiadan = !this.isXiadan;
+      this.isGetEgg = false;
+      this.isShow = false;
+      this.isFalse = false;
+      this.isXiadan = false;
     },
     hideMind() {
       this.isShowAt = false;
+      this.isGetEgg = false;
       this.isShow = false;
       this.showShare = false;
       this.isFalse = false;
+      this.isFalse = false;
+      this.isXiadan = false;
     },
     scroll() {
       let con1 = this.$refs.con1;
@@ -356,8 +364,8 @@ export default {
 
     //点击 领取提醒 -‘立即下单’
     goGetNow() {
-      this.isGetEgg = !this.isGetEgg;
-      this.isFalse = true;
+      this.isGetEgg = false;
+      this.isShowAt = true;
     },
     //点击 领蛋提醒 -‘立即领取’
     getNow() {
@@ -557,10 +565,7 @@ export default {
       this.isShowAt = true;
       this.isShow = true;
     }
-    // if (this.eggNum == 0 && this.isApply == 0) {
-    //   this.isFalse = true;
-    //   this.isShow = true;
-    // }
+
     setInterval(this.scroll, 1000);
   },
   mounted() {
@@ -848,8 +853,13 @@ export default {
         font-size: 1rem;
         line-height: 1.5rem;
       }
-      .waitRob {
+      .waitRob1 {
         font-size: 0.8rem;
+        line-height: 1rem;
+        color: rgb(223, 45, 21);
+      }
+      .waitRob {
+        font-size: 0.7rem;
         line-height: 1rem;
         color: rgb(223, 45, 21);
       }
@@ -1024,7 +1034,7 @@ export default {
         border: 1px solid #79797b;
         color: #000;
         border-radius: 5rem;
-        width: 35%;
+        width: 36%;
         margin: 0.5rem 0.3rem;
         line-height: 2.3rem;
         text-align: center;
@@ -1131,7 +1141,7 @@ export default {
             border: 1px solid #79797b;
             color: #000;
             border-radius: 5rem;
-            width: 30%;
+            width: 32%;
             margin: 0.5rem 0.3rem;
             line-height: 2.3rem;
             text-align: center;
@@ -1165,7 +1175,7 @@ export default {
           width: 9rem;
           height: 2.3rem;
           position: relative;
-          right: -7rem;
+          right: -5rem;
           .low {
             background: #000;
             width: 1rem;
