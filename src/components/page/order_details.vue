@@ -5,15 +5,15 @@
     </mt-header>
     
   <!--  待收货模块-->
-      <div class="collect_momdel" style="display: none;">
+      <div class="collect_momdel" v-if="show1" style="display: none;">
 	    <!--等待买家收货提醒-->
 			    <div class="waitReceiving">
 			    	<img src="../../img/stay_icon.png"/>
-			      <p>待收货</p>
-			      <!--<div class="btns">
+			      <p>{{zhuangtai}}</p>
+			      <div class="btns">
 			        <div class="applyBtn applyFor">申请退款</div>
 			        <div class="applyBtn active" @click="goEvaluate">确认收货</div>
-			      </div>-->
+			      </div>
 			    </div>
 			    <!--收货人信息-->
 			    <div class="Consignee">
@@ -23,7 +23,7 @@
 			        </p>
 			        <div class="add">
 			          <img src="../../img/map.png" alt="" class="sign">
-			          <p class="address">{{province}}{{city}}{{county}}{{detail}}</p>
+			          <p class="address">{{address}}</p>
 			          <img src="../../img/right.png" alt="" class="right">
 			        </div>
 			      </div>
@@ -37,8 +37,8 @@
 			        <p class="money">￥{{packageInfo.sellPrice}}</p>
 			      </div>
 			      <div class="line2">
-			        <p class="guige">{{packageInfo.number}}枚/{{packageInfo.dateTime}}个月</p>
-			        <p class="num">x1</p>
+			        <p class="guige"></p>
+			        <p class="num">30枚</p>
 			      </div>
 			    </div>
 			    <!--其他-->
@@ -58,11 +58,11 @@
 			      <div class="title">订单信息</div>
 			      <div class="line">
 			        <p class="p1">下单时间</p>
-			        <p class="p2">{{addTime}}</p>
+			        <p class="p2">{{packageInfo.addTime}}</p>
 			      </div>
 			      <div class="line">
 			        <p class="p1">付款时间</p>
-			        <p class="p2">{{payTime}}</p>
+			        <p class="p2">{{packageInfo.payTime}}</p>
 			      </div>
 			    </div>
 			    <!--订单信息end-->
@@ -70,12 +70,12 @@
   <!--待收货模块end-->
   
   <!--待评价模块-->
-     <div class="review_momdel" style="display:block;">
+     <div class="review_momdel" v-if="show2">
      	
 	    <!--等待买家收货提醒-->
 			    <div class="waitReceiving">
 			    	<img src="../../img/review-icons.png"/>
-			      <p>待评价</p>
+			      <p>{{zhuangtai}}</p>
 			      <!--<div class="btns">
 			        <div class="applyBtn applyFor">申请退款</div>
 			        <div class="applyBtn active" @click="goEvaluate">确认收货</div>
@@ -85,8 +85,8 @@
 			    <!--物流信息-->
 			      <div class="logistics_information">
 			      	  <img src="../../img/car.png"/>  
-			      	  <p style="padding-top: 1.25rem;">物流信息：<span>中国邮政</span></p>
-			      	  <p >快递单号：<span>45632135468743213</span> <span class="single_number">复制单号</span></p>
+			      	  <p style="padding-top: 1.25rem;">物流信息:<span>{{KdName}}</span></p>
+			      	  <p >快递单号：<span>{{kdNo}}</span> <span class="single_number" @click="copyNum">复制单号</span></p>
 			      	 
 			      </div>
 			    <!--物理信息end-->
@@ -99,8 +99,8 @@
 			        </p>
 			        <div class="add">
 			          <img src="../../img/map.png" alt="" class="sign">
-			          <p class="address">{{province}}{{city}}{{county}}{{detail}}</p>
-			          <img src="../../img/right.png" alt="" class="right">
+			          <p class="address">{{address}}</p>
+			          <!--<img src="../../img/right.png" alt="" class="right">-->
 			        </div>
 			      </div>
 			     
@@ -113,24 +113,17 @@
 			        <p class="money" style="margin-top: 1.5rem;">￥{{packageInfo.sellPrice}}</p>
 			      </div>
 			      <div class="line2">
-			        <p class="guige" style="margin: 1rem;">{{packageInfo.number}}枚/{{packageInfo.dateTime}}个月</p>
-			        <p class="num">x1</p>
+			        <p class="guige" style="margin: 1rem;"></p>
+			        <p class="num">30枚</p>
 			      </div>
 			    </div>
 			  <!--备注信息-->
-			    <div class="remarks_information">
-			    	     <span style="position: absolute;">备注:</span>
-					    	 <p>2018/3/20 收货地址变更</p>
-					    	 <p>2018/3/20 收货地址变更</p>
-					    	 <p>2018/3/20 收货地址变更</p>
-			    </div>
+			    <div class="remarks_information">备注:{{remark}}</div>
 			   <!-- 备注信息end-->
 			    <!--订单信息-->
 			    <div class="orderDetails">
 			       <div class="title">订单信息</div>
-			       <p class="line" style="padding-top:0.5rem ;">下单时间<span class="p2">{{addTime}}</span></p>
-			       <p class="line">付款时间<span class="p2">{{payTime}}</span></p>
-			       <p class="line">收货时间<span class="p2">{{payTime}}</span></p>
+			       <p class="line" style="padding-top:0.5rem ;">发货时间<span class="p2">{{sendTime}}</span></p>
 			    </div>
 			    <!--订单信息end-->
 			    
@@ -156,13 +149,19 @@ export default {
       freight:'',
       amount:'',
       addTime:'',
+      discount:'',
       payTime:'',
+      addTime:'',
+      remark:'',
       receiver:"",  //收货人
       phone:"",//手机号
-      province:"",//省份
-      city:"", //城市
-      county:"",  //区
-      detail:"", //详细地址
+      address:"",
+      show1:false,
+      show2:true,
+      zhuangtai:'',
+      kdNo:'',
+      sendTime:'',
+      KdName:''
     };
   },
   methods: {
@@ -193,11 +192,24 @@ export default {
       });
     },
     datas: function() {
+			    	this.zhuangtai = this.$route.query.name;
+			    	this.KdName = this.$route.query.kdNames;
+			    	this.kdNo = this.$route.query.kdNos;
+			    	this.sendTime = this.$route.query.shi;
+    	if(this.zhuangtai == '已发货'){
+//  		 this.show1 = false;
+    		 this.show2 = true;
+    	}else if(this.zhuangtai == '待评价'){
+//  		 this.show1 = false;
+    		 this.show2 = true;
+    	}
       var $this = this;
       var baseUrl =BaseUrl+"api/getOrderDetail";
       var data = qs.stringify({
-        id: this.$route.query.orderId,
-        openid: localStorage.getItem("openid")
+          id:$this.$route.query.orderId,    //335
+
+          openid:localStorage.getItem('openid')     
+
       });
       console.log(data)
       axios({
@@ -206,9 +218,13 @@ export default {
         type: "json",
         data: data
       }).then(function(data) {
-         
+         console.log(data);
           let datas = data.data.data;
           if (data.data.status == 1) {
+          	$this.receiver = datas.name;
+          	$this.phone = datas.phone;
+          	$this.remark = datas.remark;
+          	$this.address = datas.address;
             $this.packageInfo=datas.packageInfo;
             $this.amount=datas.amount;
             $this.addTime=datas.addTime;
@@ -227,7 +243,8 @@ export default {
       var $this = this;
       var baseUrl=BaseUrl+"api/getAddressList";
       var data=qs.stringify({
-              openid:localStorage.getItem("openid"),
+//            openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s',
+              openid:localStorage.getItem('openid')
       });
       axios({
         method: "post",
@@ -235,19 +252,16 @@ export default {
         type: 'json',
         data:data
       }).then(function (data) {
+      	console.log(data);
         let datas=data.data.data;
         if(data.data.status==1){
           for (var i in datas){
             if(datas[i].isDefault=1){
-
-              $this.receiver=datas[i].receiver,  //收货人
-                $this.phone=datas[i].phone //手机号
-              $this.province=datas[i].province //省份
-              $this.city=datas[i].city //城市
-              $this.county=datas[i].county  //区
-              $this.detail=datas[i].detail //详细地址
-            }
-          }
+	               $this.receiver=datas[i].receiver,  //收货人
+	               $this.phone=datas[i].phone //手机号
+	               $this.address = datas.address;
+                }
+              }
         }else{
           alert(datas.msg);
         }
@@ -255,10 +269,15 @@ export default {
         //alert("程序异常，联系技术人员")
       });
     },
+    copyNum() {
+    	var value = this.singleNumber;
+    	console.log(value);
+    }
   },
   mounted() {
     this.Address();
     this.datas();
+
   },
   components: {}
 };
@@ -267,6 +286,7 @@ export default {
 <style lang="scss" scoped>
 #order_details {
   background: #f0f0f2;
+  height: 42rem;
   .mint-header {
     background: #cc3e36;
   }
@@ -433,11 +453,7 @@ export default {
  	       background-color: #FFFFFF;
  	       color: #8B8989;
  	       font-size: 0.75rem;
- 	       p{
-           padding-left: 2rem;
- 	       	 margin-bottom: 0.1rem;
- 	       }
- }
+        }
   /*其他*/
   .other {
     background: #ffffff;
@@ -466,14 +482,16 @@ export default {
   }
   /*订单详情*/
   .orderDetails {
+  	height: 10rem;
+  	background:#fff ;
     margin-top: 0.25rem;
-    background: #fff;
     /*padding: 0 1rem;*/
     font-size: 0.8125rem;
     .title {
+    	background-color:#FFFFFF ;
     	padding: 0 1rem;
       line-height: 2.5rem;
-      border-bottom: 0.0625rem solid #c1c5c8;
+      border-bottom: 2px solid #f2f2f2;
     }
     .line {
       color: #c1c5c8;

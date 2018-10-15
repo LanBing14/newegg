@@ -1,7 +1,7 @@
 <template>
   <div id="placeNow">
     <mt-header fixed title="提现" style="font-size:1.2rem;height: 3rem;"></mt-header>
-    <input type="text" v-model="withdraw" placeholder="输入提现金额" class="money">
+    <input type="text" v-model="withdraw" placeholder="输入提现金额" class="money" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}">
     <p class="tiMony">提现金额必须大于或等于100</p>
     <p class="withdrawNum">可提现余额
       <span> ￥{{balance}}</span>
@@ -75,7 +75,7 @@ export default {
       AlipayShow: false, //zhifubao
       bankShow: false, //银行
       balance: "",
-      withdraw: "",
+      withdraw:"",
       slects: "",
       bankName: "",
       accounts: "",
@@ -95,31 +95,50 @@ export default {
     },
     //点击'确认提现',蒙版，'取消'，显示信息框
     hideToggle() {
-      if (this.withdraw.length == 0) {
-        Toast({
-          message: "提现金额不能空",
-          duration: 1500
-        });
-        return false;
-      } else if (this.withdraw < 100) {
-        Toast({
-          message: "可提现金额必须大于或等于100",
-          duration: 1500
-        });
-        return false;
+    	var $this = this;
+    	axios
+        .get(
+          "http://wufuapp.com/index.php/api_egg/api/checkUserPermissions/index?openid=" +
+                $this.openid +
+            "&money=" +
+                $this.withdraw  
+        )
+      .then(function(data){
+      	console.log(data);
+      	if(data.data.status == 0){
+      		 Toast({
+			          message: "请先绑定手机号",
+			          duration: 1500
+	            });
+	           return false;
+      	}else if ($this. withdraw.length == 0) {
+	        Toast({
+	          message: "提现金额不能空",
+	          duration: 1500
+	        });
+	        return false;
+      } else if($this. withdraw < 100) {
+	        Toast({
+	          message: "可提现金额必须大于或等于100",
+	          duration: 1500
+	        });
+	        return false;
       } else {
-        if (parseFloat(this.withdraw) > parseFloat(this.balance)) {
-          Toast({
-            message: "提现金额不能大于可提现金额",
-            duration: 1500
-          });
+        if (parseFloat($this. withdraw) > parseFloat($this.balance)) {
+	          Toast({
+	            message: "提现金额不能大于可提现金额",
+	            duration: 1500
+	          });
         } else {
-          this.isShow = !this.isShow;
-          this.hintShow = !this.hintShow;
+             $this.isShow = !$this.isShow;
+             $this.hintShow = !$this.hintShow;
         }
       }
+         
+      })
     },
-    //获取验证码
+    
+      //获取验证码
     getCode() {
       if (this.phone == "") {
         Toast({

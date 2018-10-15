@@ -368,12 +368,9 @@ export default {
         this.addressSlots[0].defaultIndex = 0;
       }, 100);
     });
-    this.openid = localStorage.getItem("openid");
+    this.openid = this.$route.query.openid;
     // console.log("添加地址++" + this.openid);
 
-    this.packageId = this.$route.query.packageId;
-    this.amount = this.$route.query.number;
-    this.sellPrice = this.$route.query.sellPrice;
     this.packageId = this.$route.query.packageId;
     this.amount = this.$route.query.number;
     this.sellPrice = this.$route.query.sellPrice;
@@ -381,6 +378,7 @@ export default {
     console.log(this.packageId);
     console.log(this.amount);
     console.log(this.sellPrice);
+    console.log(this.openid);
   },
   components: {
     "mt-picker": Picker,

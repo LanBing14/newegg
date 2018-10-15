@@ -29,6 +29,7 @@ import Brought_egg_error from '@/components/page/Brought_egg_error'
 import blank from '@/components/page/blank'
 // import Fullcreate_Address from '@/components/page/Fullcreate_Address'
 import place_success from '@/components/page/place_success'
+import robEgg from '@/components/page/robEgg'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/personInfo',
       name: 'personInfo',
       component: personInfo
+    },
+    {
+      path: '/robEgg',
+      name: 'robEgg',
+      component: robEgg
     },
     {
       path: '/product_details',

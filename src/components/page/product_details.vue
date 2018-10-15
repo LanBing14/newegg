@@ -53,9 +53,10 @@
       <p v-html="content"></p>
     </div>
     <div class="scrollbottomWx" v-if="showClose" @click="closeModel">
-      <!-- <div class="xiaosanjiao"></div> -->
       <img src="../../img/white.png" alt="">
     </div>
+    <div class="xiaosanjiao" @click="closeModel" v-if="showClose"></div>
+
     <div class="scrollbottom" @click="closeModel" v-if="showClose">
 
       <ul class="scrolLton" ref="con1" :class="{anim:animate==true}">
@@ -65,15 +66,19 @@
     </div>
     <!--立即购买-->
     <div class="buyAndRob">
-      <div class="rob" @click="goRobEgg" v-if="isMaNum">
+      <div class="rob" @click="goRobEgg" v-if="isMaNum == 1">
         <p class="free">发起抢蛋</p>
         <p class="waitRob1">您还有{{eggNum}}枚鸡蛋待抢</p>
       </div>
 
-      <div class="rob" @click="goRobEgg" v-if="!isMaNum">
+      <div class="rob" @click="goRobEggLin" v-if="isMaNum == 2">
         <p class="free">立即领取</p>
         <p class="waitRob">您已成功抢到30枚翡翠蛋</p>
+      </div>
 
+      <div class="rob" @click="goModel" v-if="isMaNum == 3">
+        <p class="free">炫耀一下</p>
+        <p class="waitRob">30枚翡翠蛋推荐给好友</p>
       </div>
       <div class="buy" @click="showToggle">
         <p>立即购买</p>
@@ -165,7 +170,7 @@ export default {
       isShowAt: false, //规格
       clist: [],
       marketPrice: "",
-      isMaNum: true,
+      isMaNum: 1,
       isFalse: false, //领蛋提醒
       isGetEgg: false, //领取提醒
       isXiadan: false, //领取提醒-下单
@@ -213,6 +218,10 @@ export default {
     clearStor() {
       localStorage.setItem("openid", "");
       alert("已清除openid" + localStorage.getItem("openid"));
+    },
+    goModel(){
+      this.isShow = true
+      this.showShare = true
     },
     //获取微信字段
     WxZd() {
@@ -271,6 +280,19 @@ export default {
                 // 用户确认分享后执行的回调函数
                 // logUtil.printLog("分享到朋友圈成功返回的信息为:", res);
                 // _this.showMsg("分享成功!");
+                  var paramInfo = qs.stringify({
+                    url: window.location.href,
+                    openid:localStorage.getItem("openid")
+                  });
+                  var baseUrl = BaseUrl + "index/shareStatistics"
+                  axios({
+                    method: "post",
+                    url: baseUrl,
+                    type: "json",
+                    data: paramInfo
+                  }).then(function (res) {
+                    console.log(res)
+                  })
               },
               cancel: function(res) {
                 // 用户取消分享后执行的回调函数
@@ -296,6 +318,19 @@ export default {
                 // 用户确认分享后执行的回调函数
                 // logUtil.printLog("分享给朋友成功返回的信息为:", res);
                 // console.log(res);
+                  var paramInfo = qs.stringify({
+                    url: window.location.href,
+                    openid:localStorage.getItem("openid")
+                  });
+                  var baseUrl = BaseUrl + "index/shareStatistics"
+                  axios({
+                    method: "post",
+                    url: baseUrl,
+                    type: "json",
+                    data: paramInfo
+                  }).then(function (res) {
+                    console.log(res)
+                  })
               },
               cancel: function(res) {
                 // 用户取消分享后执行的回调函数
@@ -331,9 +366,6 @@ export default {
     },
     // 点击蒙版，套餐选择宽隐藏
     hideToggle() {
-      // this.isShow = !this.isShow;
-      // this.isFalse = !this.isFalse;
-      // this.isXiadan = !this.isXiadan;
       this.isGetEgg = false;
       this.isShow = false;
       this.isFalse = false;
@@ -359,7 +391,7 @@ export default {
         that.sendList.shift(); //删除数组的第一个元素
         con1.style.marginTop = "0px";
         that.animate = !this.animate;
-      }, 500);
+      }, 1000);
     },
 
     //点击 领取提醒 -‘立即下单’
@@ -373,6 +405,8 @@ export default {
       //      this.$router.push({path: "/getEgg_success"});
       //if未下单，弹出‘领取提醒’-下单的弹框进行选择套餐，
       if (this.isPayOrder == 1) {
+        // this.isMaNum = true;
+        this.isMaNum = 1;
         this.$router.push({ path: "/Brought_egg_success" });
       } else {
         this.isGetEgg = false;
@@ -412,6 +446,16 @@ export default {
       this.isShow = !this.isShow;
       this.showShare = !this.showShare;
       // this.$router.push({ path: "/Free_egg_robbing" });
+    },
+    //立即领取
+    goRobEggLin() {
+      if (this.isPayOrder == 1) {
+        this.isMaNum = 1;
+        this.$router.push({ path: "/Brought_egg_success" });
+      } else {
+        this.isShow = true;
+        this.isXiadan = true;
+      }
     },
     // '点'赞 + '取消' 赞
     goZan() {
@@ -526,11 +570,25 @@ export default {
 
         $this.WxZd();
         $this.choice(0);
-        if ($this.eggNum == 0 && $this.isApply == 0) {
-          $this.isFalse = true;
-          $this.isShow = true;
-          $this.isMaNum = false;
+        //eggNum表示还可以抢到的蛋
+        if ($this.eggNum == 30) {
+           $this.isMaNum = 1;
+        } else if($this.eggNum> 0 && $this.eggNum < 30) {
+            $this.isMaNum = 1;
+        }else if ($this.eggNum == 0){
+          if ($this.isApply == 0) {
+              $this.isFalse = true;
+              $this.isShow = true;
+              $this.isMaNum = 2;
+          } else if ($this.isApply == 1){
+              $this.isMaNum = 3;
+          }
         }
+        // if ($this.eggNum == 0 && $this.isApply == 0) {
+        //   $this.isFalse = true;
+        //   $this.isShow = true;
+        //   $this.isMaNum = 2;
+        // }
       });
     },
     //支付
@@ -565,8 +623,7 @@ export default {
       this.isShowAt = true;
       this.isShow = true;
     }
-
-    setInterval(this.scroll, 1000);
+    setInterval(this.scroll, 2000);
   },
   mounted() {
     if (!localStorage.getItem("openid")) {
@@ -591,7 +648,6 @@ export default {
   .swipeImg {
     width: 100%;
     height: 23.875rem;
-    // margin-top: 3rem;
     img {
       width: 100%;
       height: 100%;
@@ -772,18 +828,6 @@ export default {
     bottom: 7rem;
     right: 3%;
     z-index: 99;
-    .xiaosanjiao {
-      display: block;
-      width: 0;
-      height: 0;
-      border-width: 17px 17px 0;
-      border-style: solid;
-      border-color: rgb(73, 72, 72) transparent transparent; /*黄 透明 透明 */
-      opacity: 0.8;
-      position: absolute;
-      bottom: -0.9rem;
-      left: 80px;
-    }
 
     img {
       width: 1.5rem;
@@ -791,6 +835,21 @@ export default {
       display: block;
     }
   }
+
+  .xiaosanjiao {
+    display: block;
+    width: 0;
+    height: 0;
+    border-width: 8.5px 10px 0;
+    border-style: solid;
+    border-color: rgb(73, 72, 72) transparent transparent; /*黄 透明 透明 */
+    opacity: 0.8;
+    position: fixed;
+    left: 20%;
+    bottom: 4rem;
+    z-index: 99;
+  }
+
   .scrollbottom {
     position: fixed;
     bottom: 4.5rem;
@@ -890,6 +949,9 @@ export default {
     height: 100%;
     position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
   .shareHint {
     width: 80%;

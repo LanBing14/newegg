@@ -93,7 +93,7 @@
         <p class="text-Ali font12">您还可以:</p>
         <div class="fx splitY">
           <div @click="knowShare" class="buttOne whiteCol">了解赚赏金</div>
-          <div @click="helpLeng" class="buttOne redCol">立即领取</div>
+          <div @click="helpLeng" class="buttOne redCol">炫耀一下</div>
         </div>
       </div>
 
@@ -189,19 +189,7 @@
           <span class="cancel" @click="shareMyFridend">分享给好友</span>
         </div>
       </div>
-      <!-- 赚赏金模块 -->
-      <!-- <div class="box" id="box" @click="shareJin=false" v-if="shareJin"></div>
-      <div class="hintmodel" @click="shareJin=false" v-if="shareJin">
-        <p class="infoTitle">最高可赚18%赏金</p>
-        <p class="inofMoy">已有9999个小伙伴赚了￥99999</p>
-        <p class="infoPer">1.将抢蛋游戏分享给好友下单单可赚下单金额的7%</p>
-        <p class="infoPer">2.好友分享给他的好友下单，可赚下单金额的6%</p>
-        <P class="infoPer">3.他的好友分享给他的好友下单，可赚下单金额的5%</p>
 
-        <div class="goByBtns">
-          <span class="goByBtnIn" @click="RobClick">分享给好友</span>
-        </div>
-      </div> -->
       <!--价钱蒙版-->
       <!--领取提醒-->
       <!--蒙版-->
@@ -318,7 +306,6 @@ export default {
           });
           //处理验证成功的信息
           wx.ready(function() {
-            //              alert(window.location.href.split('#')[0]);
             //分享到朋友圈
             wx.onMenuShareTimeline({
               title:
@@ -336,6 +323,19 @@ export default {
                 // console.log(res);
                 // _this.showMsg("分享成功!");
                 this.isPub = true;
+                var paramInfo = qs.stringify({
+                  url: window.location.href,
+                  openid:localStorage.getItem("openid")
+                });
+                var baseUrl = BaseUrl + "index/shareStatistics"
+                axios({
+                  method: "post",
+                  url: baseUrl,
+                  type: "json",
+                  data: paramInfo
+                }).then(function (res) {
+                  console.log(res)
+                })
               },
               cancel: function(res) {
                 // 用户取消分享后执行的回调函数
@@ -363,6 +363,19 @@ export default {
                 // logUtil.printLog("分享给朋友成功返回的信息为:", res);
                 // console.log(res);
                 this.isPub = true;
+                var paramInfo = qs.stringify({
+                  url: window.location.href,
+                  openid:localStorage.getItem("openid")
+                });
+                var baseUrl = BaseUrl + "index/shareStatistics"
+                axios({
+                  method: "post",
+                  url: baseUrl,
+                  type: "json",
+                  data: paramInfo
+                }).then(function (res) {
+                  console.log(res)
+                })
               },
               cancel: function(res) {
                 // 用户取消分享后执行的回调函数
@@ -392,7 +405,7 @@ export default {
       var that = this;
       var baseUrl = BaseUrl + "index/joinActivity";
       var data = qs.stringify({
-        activityId: that.activityIdOther,
+        activityId: that.activityIdOther || that.$route.query.activityId,
         openid: localStorage.getItem("openid")
       });
       axios({
@@ -622,7 +635,6 @@ export default {
 #Free_egg_robbing {
   background-color: #f1f1f2;
   width: 100%;
-  height: 42rem;
   .text-align-font {
     text-align: center;
     font-size: 16px;
@@ -1061,6 +1073,9 @@ export default {
     height: 100%;
     position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
   .shareHint {
     width: 80%;
@@ -1100,7 +1115,6 @@ export default {
     .mbicon {
       width: 100%;
       height: 100%;
-      // border-radius: 0.4rem;
     }
     .attention1 {
       display: flex;
@@ -1189,11 +1203,10 @@ export default {
     color: #0b0b0b;
     font-size: 0.8rem;
     border-radius: 0.6rem;
-    // overflow: hidden;
     z-index: 966;
     position: absolute;
     left: 0;
-    top: 30%;
+    top: 20%;
     .mbicon {
       width: 100%;
       height: 100%;
@@ -1264,6 +1277,9 @@ export default {
     height: 100%;
     position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
   .attention {
     position: fixed;
@@ -1302,26 +1318,8 @@ export default {
       left: 50%;
       transform: translate(-50%);
     }
-    // .Rcode {
-    //   display: block;
-    //   width: 35%;
-    //   height: 60%;
-    //   position: absolute;
-    //   top: 2.1rem;
-    //   margin: 0 33.5%;
-    // }
   }
 
-  // 弹出框价格
-  // .box3 {
-  //   opacity: 0.9;
-  //   background: #000;
-  //   z-index: 9;
-  //   width: 100%;
-  //   height: 100%;
-  //   position: fixed;
-  //   top: 0;
-  // }
   /*领取提醒*/
   .getRemind {
     background: #fff;
@@ -1331,7 +1329,7 @@ export default {
     text-align: center;
     position: fixed;
     padding: 0.3rem;
-    top: 40%;
+    top: 20%;
     left: 1rem;
     z-index: 11;
     border-radius: 0.3rem;

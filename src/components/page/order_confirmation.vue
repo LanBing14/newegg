@@ -171,6 +171,11 @@ export default {
         totalPrice: $this.totalPrice,
         aid: this.address.id
       });
+      
+      this.packageId = this.$route.query.packageId;
+    this.amount = this.$route.query.number;
+    this.openid = localStorage.getItem("openid");
+    this.sellPrice = this.$route.query.sellPrice;
 
       axios({
         method: "post",

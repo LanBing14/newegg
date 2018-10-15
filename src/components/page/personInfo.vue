@@ -3,6 +3,20 @@
     <mt-header fixed title="个人资料" style="font-size:1.2rem;height: 3rem;">
       <mt-button slot="right" @click="updateInfo">更改</mt-button>
     </mt-header>
+    <div class="makeFri">
+      <img :src="erweima" alt="">
+      <!-- <img src="../../img/code.jpg" alt=""> -->
+      <p class="invitedCode" style="color:#000; font-size: 14px">我的抢蛋邀请码</p>
+      <p style="color:#666; font-size: 12px">好蛋免费拿 分享最快乐!</p>
+    </div>
+    <div class="shareFriden" @click="makeMoney">
+      <span style="float:left">分享赏金</span>
+      <div style="float:right" class="spanColor">
+        <span>去了解</span>
+        <img src="../../img/rightL.png" alt="">
+      </div>
+
+    </div>
     <div class="personalInfo">
       <div class="touxiang">
         <p>头像</p>
@@ -49,6 +63,7 @@ export default {
       file: null,
       f: null,
       sex: null,
+      erweima: null,
       sexSlots: [
         {
           flex: 1,
@@ -100,6 +115,9 @@ export default {
     },
     add() {
       this.$refs.file.click();
+    },
+    makeMoney() {
+      this.$router.push("make_money");
     },
     getFile(event) {
       this.file = event.target.files[0];
@@ -155,6 +173,8 @@ export default {
         this.age = data.age;
         this.username = data.username;
         this.img = data.img;
+        var path = "data:image/png;base64," + data.erweima;
+        this.erweima = path;
         var sex = data.sex;
         if (sex == 2) {
           //sex的返回值
@@ -225,8 +245,46 @@ export default {
   .mint-header {
     background: #cc3e36;
   }
-  .personalInfo {
+  .shareFriden {
+    height: 2.5rem;
+    font-size: 14px;
+    line-height: 2.5rem;
+    padding-left: 0.5rem;
+    background-color: #fff;
+    margin: 0.5rem 0 1.5rem 0;
+    padding-right: 0.8rem;
+
+    .spanColor {
+      span {
+        color: #cc3e36;
+        float: left;
+        line-height: 2.5rem;
+      }
+      img {
+        width: 0.65rem;
+        padding-left: 1rem;
+        float: left;
+        padding-top: 0.7rem;
+      }
+    }
+  }
+  .makeFri {
+    width: 100%;
+    background-color: #fff;
+    margin: 0 auto;
     margin-top: 3rem;
+    padding: 1rem 0;
+    text-align: center;
+    img {
+      width: 30%;
+      // height: 50%;
+    }
+    p:last-child {
+      line-height: 1.2rem;
+    }
+  }
+  .personalInfo {
+    // margin-top: 3rem;
     background: #ffffff;
     .touxiang {
       display: flex;
