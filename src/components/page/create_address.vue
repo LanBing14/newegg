@@ -86,6 +86,7 @@ export default {
       orderids: '',
       remark: '',
       goodsName:'',
+      goodsId: '',
       zhuangtai:'待付款',
       addressSlots: [
         {
@@ -306,7 +307,9 @@ export default {
                     goodsName: $this.$route.query.goodsName,
                     remark: $this.$route.query.remark,
                     amount:  $this.$route.query.amount,
-                    totalPrice: $this.$route.query.totalPrice
+                    totalPrice: $this.$route.query.totalPrice,
+                    goodsId: $this.$route.query.goodsId,
+                    orderSn: $this.$route.query.orderSn
                   }
               });
             }, 1500);
@@ -391,6 +394,8 @@ export default {
       }, 100);
     });
     this.openid = localStorage.getItem('openid');
+    // this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
+
     this.packageId = this.$route.query.packageId;
     this.amount = this.$route.query.number;
     this.sellPrice = this.$route.query.sellPrice;
@@ -401,6 +406,7 @@ export default {
     this.remark = this.$route.query.remark;
     this.orderids = this.$route.query.orderids;
     this.amount = this.$route.query.amount;
+    this.goodsId = this.$route.query.goodsId;
     console.log(this.zhuangtai)
   },
   components: {

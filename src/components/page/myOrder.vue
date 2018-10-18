@@ -481,7 +481,6 @@ export default {
   },
   mounted() {
     this.getMyOrder();
-//  console.log(this.getMyOrder);
   },
   components: {}
 };

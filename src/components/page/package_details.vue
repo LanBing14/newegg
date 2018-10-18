@@ -159,6 +159,7 @@ export default {
       show2:'none',
       infoBlock:'none',
       orderBlock:'block',
+      orderSn: '',
       butNum:1,
 //    content:'',
       back1:'#CC3E36',
@@ -169,6 +170,7 @@ export default {
       packageInfo:[],
       numberAll:'',
       sellPriceAll:'',
+      goodsId:'',
       isdetails: [],
       orderId: '',
       isTrue:false,
@@ -242,11 +244,10 @@ export default {
       var baseUrl = BaseUrl + "api/preOrder";
       var data = qs.stringify({
         goodsId: $this.$route.query.goodsId,
-        packageId: $this.packageId,
-        number: $this.amount,  
+        packageId: $this.$route.query.packageId,
+        number: $this.$route.query.amount,  
         openid: $this.openid
       });
-      //console.log($this.openid);
       
       axios({
         method: "post",
@@ -353,7 +354,9 @@ goPay() {
           remark: this.$route.query.remark,
           orderids :  this.$route.query.orderids,
           amount:  this.$route.query.amount,
-          totalPrice: this.$route.query.totalPrice
+          totalPrice: this.$route.query.totalPrice,
+          goodsId: this.$route.query.goodsId,
+          orderSn: this.$route.query.orderSn
         }
      });
     },
@@ -378,7 +381,7 @@ goPay() {
       var baseUrl = BaseUrl + "api/getPackageDetail";
       var data = qs.stringify({
          id: that.orderids,  
-//       openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s'  , 
+      // openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s'  , 
 				openid:that.openid
 
       });
@@ -461,8 +464,9 @@ Address() {
     this.orderids = this.$route.query.orderids;
     this.amount = this.$route.query.amount;
     this.packageId = this.$route.query.packageId;
-
- this.openid = localStorage.getItem("openid");
+    this.goodsId = this.$route.query.goodsId;
+    this.openid = localStorage.getItem("openid");
+    this.orderSn = this.$route.query.orderSn;
 //  this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
 
     this.datas();
