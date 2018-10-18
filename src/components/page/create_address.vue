@@ -79,6 +79,14 @@ export default {
       hintShowSeason: false,
       companyName: "",
       openid: "",
+      statusId: 1,
+      orderids: '',
+      totalPrice: 1,
+      amount:'',
+      orderids: '',
+      remark: '',
+      goodsName:'',
+      zhuangtai:'待付款',
       addressSlots: [
         {
           flex: 1,
@@ -129,7 +137,8 @@ export default {
   methods: {
     //返回上页面‘订单确认order_confirmation’
     goBack() {
-      this.$router.push({
+     if (this.statusId == 0) {
+        this.$router.push({
         path: "/order_confirmation",
         query: {
           packageId: this.packageId,
@@ -138,6 +147,9 @@ export default {
           sellPrice: this.sellPrice
         }
       });
+     } else if (this.statusId == 1){
+       this.$router.back()
+     }
     },
     //点击蒙版：蒙版+弹出框隐藏
     hideToggle() {
@@ -266,18 +278,39 @@ export default {
               message: data.data.msg,
               duration: 1500
             });
-            setTimeout(function() {
-              $this.$router.push({
-                path: "/order_confirmation",
-                query: {
-                  packageId: $this.$route.query.packageId,
-                  number: $this.$route.query.number,
-                  openid: $this.openid,
-                  sellPrice: $this.$route.query.sellPrice,
-                  id: datas.id
-                }
+            if ($this.statusId == 0) {
+              setTimeout(function() {
+                $this.$router.push({
+                  path: "/order_confirmation",
+                  query: {
+                    packageId: $this.$route.query.packageId,
+                    number: $this.$route.query.number,
+                    openid: $this.openid,
+                    sellPrice: $this.$route.query.sellPrice,
+                    id: datas.id
+                  }
               });
             }, 1500);
+            } else if($this.statusId == 1){
+              setTimeout(function() {
+                $this.$router.push({
+                  path: "/package_details",
+                  query: {
+                    packageId: $this.$route.query.packageId,
+                    number: $this.$route.query.number,
+                    openid: $this.openid,
+                    sellPrice: $this.$route.query.sellPrice,
+                    ids: datas.id,
+                    orderids: $this.$route.query.orderids,
+                    id:$this.zhuangtai,
+                    goodsName: $this.$route.query.goodsName,
+                    remark: $this.$route.query.remark,
+                    amount:  $this.$route.query.amount,
+                    totalPrice: $this.$route.query.totalPrice
+                  }
+              });
+            }, 1500);
+            }
           } else {
             Toast({
               message: data.data.msg,
@@ -309,18 +342,7 @@ export default {
     /* 下拉框消失 */
     showOut() {
       this.isShow = false;
-      // if (
-      //   this.address.substring(0, 3) == "青海省" ||
-      //   this.address.substring(0, 2) == "西藏" ||
-      //   this.address.substring(0, 3) == "海南省" ||
-      //   this.address.substring(0, 2) == "新疆" ||
-      //   this.address.substring(0, 2) == "香港" ||
-      //   this.address.substring(0, 2) == "澳门"
-      // ) {
-      //   // this.goCancel();
-      //   this.hintShow = true;
-      //   this.isMark = true;
-      // }
+    
     },
     clickBody() {
       this.isShow = false;
@@ -368,17 +390,18 @@ export default {
         this.addressSlots[0].defaultIndex = 0;
       }, 100);
     });
-    this.openid = this.$route.query.openid;
-    // console.log("添加地址++" + this.openid);
-
+    this.openid = localStorage.getItem('openid');
     this.packageId = this.$route.query.packageId;
     this.amount = this.$route.query.number;
     this.sellPrice = this.$route.query.sellPrice;
-
-    console.log(this.packageId);
-    console.log(this.amount);
-    console.log(this.sellPrice);
-    console.log(this.openid);
+    this.statusId = this.$route.query.statusId;
+    this.zhuangtai = this.$route.query.id;
+    this.totalPrice = this.$route.query.totalPrice;
+    this.goodsName = this.$route.query.goodsName;
+    this.remark = this.$route.query.remark;
+    this.orderids = this.$route.query.orderids;
+    this.amount = this.$route.query.amount;
+    console.log(this.zhuangtai)
   },
   components: {
     "mt-picker": Picker,

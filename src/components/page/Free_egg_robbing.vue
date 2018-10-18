@@ -306,6 +306,7 @@ export default {
           });
           //处理验证成功的信息
           wx.ready(function() {
+            //              alert(window.location.href.split('#')[0]);
             //分享到朋友圈
             wx.onMenuShareTimeline({
               title:
@@ -323,19 +324,6 @@ export default {
                 // console.log(res);
                 // _this.showMsg("分享成功!");
                 this.isPub = true;
-                var paramInfo = qs.stringify({
-                  url: window.location.href,
-                  openid:localStorage.getItem("openid")
-                });
-                var baseUrl = BaseUrl + "index/shareStatistics"
-                axios({
-                  method: "post",
-                  url: baseUrl,
-                  type: "json",
-                  data: paramInfo
-                }).then(function (res) {
-                  console.log(res)
-                })
               },
               cancel: function(res) {
                 // 用户取消分享后执行的回调函数
@@ -363,19 +351,6 @@ export default {
                 // logUtil.printLog("分享给朋友成功返回的信息为:", res);
                 // console.log(res);
                 this.isPub = true;
-                var paramInfo = qs.stringify({
-                  url: window.location.href,
-                  openid:localStorage.getItem("openid")
-                });
-                var baseUrl = BaseUrl + "index/shareStatistics"
-                axios({
-                  method: "post",
-                  url: baseUrl,
-                  type: "json",
-                  data: paramInfo
-                }).then(function (res) {
-                  console.log(res)
-                })
               },
               cancel: function(res) {
                 // 用户取消分享后执行的回调函数

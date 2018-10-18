@@ -202,19 +202,6 @@ export default {
               dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
               success: function() {
                 console.log("已分享给朋友");
-                var paramInfo = qs.stringify({
-                  url: window.location.href,
-                  openid:localStorage.getItem("openid")
-                });
-                var baseUrl = BaseUrl + "index/shareStatistics"
-                axios({
-                  method: "post",
-                  url: baseUrl,
-                  type: "json",
-                  data: paramInfo
-                }).then(function (res) {
-                  console.log(res)
-                })
               },
               cancel: function() {
                 console.log("取消分享朋友");
@@ -235,19 +222,6 @@ export default {
                 "http://biuimage.oss-cn-qingdao.aliyuncs.com/uploads/ueditor/image/20180912/1536745700851746.png", // 分享图标
               success: function() {
                 console.log("已分享到朋友圈");
-                var paramInfo = qs.stringify({
-                  url: window.location.href,
-                  openid:localStorage.getItem("openid")
-                });
-                var baseUrl = BaseUrl + "index/shareStatistics"
-                axios({
-                  method: "post",
-                  url: baseUrl,
-                  type: "json",
-                  data: paramInfo
-                }).then(function (res) {
-                  console.log(res)
-                })
               },
               cancel: function() {
                 console.log("取消分享朋友圈");

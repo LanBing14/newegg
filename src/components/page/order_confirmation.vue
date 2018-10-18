@@ -137,6 +137,7 @@ export default {
         path: "/create_address",
         query: {
           packageId: this.packageId,
+          statusId: 0,
           number: this.amount,
           openid: this.openid,
           sellPrice: this.sellPrice
@@ -175,6 +176,7 @@ export default {
       this.packageId = this.$route.query.packageId;
     this.amount = this.$route.query.number;
     this.openid = localStorage.getItem("openid");
+    // this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s'
     this.sellPrice = this.$route.query.sellPrice;
 
       axios({
@@ -320,6 +322,8 @@ export default {
     this.packageId = this.$route.query.packageId;
     this.amount = this.$route.query.number;
     this.openid = localStorage.getItem("openid");
+    // this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
+
     this.sellPrice = this.$route.query.sellPrice;
     this.login();
     this.Address();

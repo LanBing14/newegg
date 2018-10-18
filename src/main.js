@@ -8,6 +8,9 @@ import Mint from 'mint-ui'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 
+// import mui from 'vue-awesome-mui'
+// Vue.use(mui)
+
 
 import { Header } from 'mint-ui';
 Vue.component(Header.name, Header)

@@ -7,8 +7,8 @@
           <p class="p1">我的分享</p>
           <p class="p2">{{allInvited}}人</p>
         </div>
-        <div class="rightBox">
-          <p class="p1">累计赏金</p>
+        <div class="rightBox" @click="makeMoneyBtn">
+          <p class="p1">累计赏金 去提现</p>
           <p class="p2">￥{{allMoney}}</p>
         </div>
       </div>
@@ -83,6 +83,9 @@ export default {
     goBack() {
       this.$router.push({ path: "/make_money" });
     },
+    makeMoneyBtn(){
+      this.$router.push({ path: "/balance" });
+    },
     goInvitedDetails(id) {
       console.log(id);
       this.$router.push({ path: "/invite_details", query: { several: id } });
@@ -91,7 +94,8 @@ export default {
       var $this = this;
       var baseUrl = BaseUrl + "api/invitedRecord";
       var data = qs.stringify({
-        openid: localStorage.getItem("openid")
+        openid: localStorage.getItem("openid"),
+        // openid: 'oX6js0S0Pqsh6ijuNs48kDFN3w6s'
       });
       axios({
         method: "post",
@@ -100,7 +104,7 @@ export default {
         data: data
       }).then(function(data) {
         console.log(data);
-        console.log(data.data.data.list);
+        console.log(data.data.data.list,11111);
 
         let datas = data.data.data;
         if (data.data.status == 1) {

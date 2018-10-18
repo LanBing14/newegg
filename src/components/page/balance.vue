@@ -1,6 +1,7 @@
 <template>
   <div id="balance">
     <mt-header fixed title="余额" style="font-size:1.2rem;height: 3rem;">
+     <mt-button icon="back" slot="left" @click="goBack"></mt-button>
       <mt-button slot="right" @click="changeDetails">明细</mt-button>
     </mt-header>
     <div class="balanceInfo">
@@ -60,7 +61,9 @@ export default {
         // window.location.href = datas.url;
       });
     },
-    //获取openid
+    goBack(){
+      this.$router.push({ path: "/Invited_record" });
+    },   //获取openid
     logins: function() {
       var $this = this;
       var baseUrl = BaseUrl + "index/getUserOpenid";

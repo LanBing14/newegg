@@ -86,8 +86,7 @@
 			      <div class="logistics_information">
 			      	  <img src="../../img/car.png"/>  
 			      	  <p style="padding-top: 1.25rem;">物流信息:<span>{{KdName}}</span></p>
-			      	  <p >快递单号：<span>{{kdNo}}</span> <span class="single_number" @click="copyNum">复制单号</span></p>
-			      	 
+			      	  <p >快递单号：<input id="copyObj" :value="kdNo" /> <span class="single_number" @click="copyNum">复制单号</span></p>
 			      </div>
 			    <!--物理信息end-->
 			    
@@ -270,8 +269,9 @@ export default {
       });
     },
     copyNum() {
-    	var value = this.singleNumber;
-    	console.log(value);
+    	var url = document.querySelector('#copyObj');
+    	url.select(); // 选择对象
+      document.execCommand("Copy");
     }
   },
   mounted() {

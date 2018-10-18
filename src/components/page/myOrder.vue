@@ -1,6 +1,6 @@
 <template>
   <div id="myOrder">
-    <mt-header class="bg" fixed title="我的订单" style="font-size:1.2rem;height:3rem;"></mt-header>
+    <mt-header class="bg" fixed title="我的订单" style="font-size:1.2rem;height:3rem;z-index: 99;"></mt-header>
     <mt-navbar v-model="selected">
       <mt-tab-item @click="getMyOrder" id="">全部</mt-tab-item>
       <mt-tab-item @click="getMyOrder" id="1">待付款</mt-tab-item>
@@ -26,7 +26,7 @@
           </div>
           <div class="total">
             <p>共{{item.number}}件商品，合计   
-              <span>{{item.amount}}￥</span>  
+              <span>￥{{item.amount}}</span>  
             </p>
           </div>
           <div class="btns">
@@ -195,8 +195,8 @@ export default {
       var $this = this;
       var baseUrl = BaseUrl + "/api/getOrderList";
       var data = qs.stringify({
-          openid:localStorage.getItem("openid"),    
-//        openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s',
+       openid:localStorage.getItem("openid"),  
+          // openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s',
           type: $this.selected
       });
       axios({
@@ -241,7 +241,7 @@ export default {
     nextPage(item){
     	var $this = this;
     	 $this.login(item,1);
-    	 console.log($this.totalPriceAll);
+    	 console.log(item);
     	 this.$router.push({
         path: "/package_details",
         query: {
@@ -253,7 +253,9 @@ export default {
            orderids:item.id,
            remark: item.remark,
            amount: item.number,
-           openid: item.openid
+           openid: item.openid,
+           goodsId:item.goodsId,
+           orderSn:item.orderSn
         } 
       });
        console.log(item)

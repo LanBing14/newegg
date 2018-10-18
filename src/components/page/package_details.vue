@@ -13,12 +13,12 @@
     <!--收货人信息-->
     <div class="collect_information">
       <div class="messages">
-        <p class="name">{{packageInfo.name}}
-          <span class="phone">{{packageInfo.phone}}</span>
+        <p class="name">{{receiver}}
+          <span class="phone">{{phone}}</span>
         </p>
         <div class="add">
           <img src="../../img/map.png" alt="" class="sign">
-          <p class="address">{{packageInfo.address}}</p>
+          <p class="address">{{province}}{{city}}{{county}}{{detail}}</p>
           <span @click="replaceAddress">更换待发货地址</span>
         </div>
       </div>
@@ -65,18 +65,18 @@
 		    		
 		    			<div class="already_huo" v-for="(item,index) in sentList" :key="index">
 		    			  	
-							    		<div class="box_one" @click='infoShow(item)'>
+							    		<div class="box_one" @click='infoShow(item)'> 
 								    			 <p>{{item.date}}月份 </p>
 								    		   <span>已发货</span>
-								    		   <img v-show="item.images!=true" src="../../img/arrow-dow.png"/>
-								    		   <img v-show="item.images!=false" src="../../img/arrow-up.png"/>
+								    		   <img  src="../../img/arrow-dow.png" v-show="item.images!=true"/> 
+								    		   <img  src="../../img/arrow-up.png" v-show="item.images!=false"/>
 							    		</div>
-							    		<p class="order_btn" v-show="item.isTrue!=true" @click='goBuyxiang(item)'>订单详情</p>
+							    		<!--<p class="order_btn" v-show="item.isTrue!=true" @click='goBuyxiang(item)'>订单详情</p>-->
 						    		
-							    		<div class="information_exhibition" v-show="item.isTrue==true">
+							    		<div class="information_exhibition" v-show="item.isTrue==true" >
 								    		<p>2018/{{item.age}}/3/13:10</p>
 								    		<span @click='goBuyxiang(item)'>订单详情</span>
-								    		<span @click='goBuyping'style="color: #999999;border:0.0625rem solid #999999;">立即评价</span>
+								    		<span @click='goBuyping' style="color: #999999;border:0.0625rem solid #999999;">立即评价</span>
 							    	  </div>
 					    	  
 				    	 </div>
@@ -110,7 +110,7 @@
     
     <div class="pay_staus" :style="{display:show2}">
     	
-    	<div class="go_paybtn" @click="goPay">去支付</div>
+    	<div class="go_paybtn" @click="login(0)">去支付</div>
     	<div class="pay_information">
 		    	<p style="padding-top: 0.8175rem;">订单总计 <span>¥688</span></p>
 		    	<p>下单时间 <span>2018/8/23/20:07</span></p>
@@ -120,14 +120,7 @@
     
     
     
-    <!--待发货信息之前版本-->
-    <!--<div class="shipping_information">
-      <p class="title">待发货信息</p>
-      <div class="waitInfomation" v-for="(item,key) in packageDetails" :key='key'>
-        <p class="monthed">{{item.date}}</p>
-        <p class="alreadys">{{item.status}}</p>
-      </div>
-    </div>-->
+   
     
     <!--客服-->
    <div class="kefu">若订单有疑问请联系公众号客服咨询~</div>
@@ -149,6 +142,8 @@ export default {
       dateTime: "",
       selected: "0",
       number: "",
+      totalPrice: 0,
+      amount: '',
       openid: '',
       sellPrice: "",
       packageDetails: [],
@@ -160,11 +155,12 @@ export default {
       detail:"",//详细地址
       zhuangtai:'',
       show1:'block',
+      number: 0,
       show2:'none',
       infoBlock:'none',
       orderBlock:'block',
       butNum:1,
-      content:'',
+//    content:'',
       back1:'#CC3E36',
       back2:'#f5f5f5',
       color1:'#f5f5f5',
@@ -174,12 +170,10 @@ export default {
       numberAll:'',
       sellPriceAll:'',
       isdetails: [],
-//    yueFenList:[
-//       {age:'1',yue:'1',isTrue:false,images:true},
-//       {age:'2',yue:'2',isTrue:false,images:true},
-//    ],
+      orderId: '',
       isTrue:false,
       images:true,
+      orderids: 335,
       stayFenList:[
          {stay:'2'},
       ],
@@ -188,6 +182,7 @@ export default {
       noHairList:[],  //待发货
       sentList:[] ,
       kdName: '',
+      goodsName:'',
       kdNo: '',
       sendTime: ''
       //已发货
@@ -201,14 +196,13 @@ export default {
         path: "/order_details",
         query: { 
         	       name:"待评论",
-//	        	     tai:this.$route.query.status,
 	        	     shi:this.sendTime,
 	        	     kdNames:this.kdName,
 	        	     kdNos:this.kdNo,        	    
-	        	     orderId: this.$route.query.orderIds
+	        	     orderId: this.orderids
             },
       });
-      console.log(item)
+      console.log(item);
     },
     
     goBuyping(){
@@ -230,37 +224,72 @@ export default {
     	this.back2 = '#f5f5f5';
     	this.color1 = '#ffffff';
     	this.color2 = '#CC3E36';
-//  	console.log("000");
     },
     getMyOrder2(){
     	this.back1 = '#f5f5f5';
     	this.back2 = '#CC3E36';
     	this.color1 = '#CC3E36';
     	this.color2 = '#ffffff';
-//  	console.log("111");
     },
     infoShow(item){
     item.isTrue = !item.isTrue;
     item.images = !item.images;
     },
-    goPaybtn(){
+
+    login(num){     //获取当前订单数据
+      console.log(num);
     	var $this = this;
-      axios
-        .get(
-          "http://wufuapp.com/index.php/api_egg/Weixinpay/index?openid=" +
-            $this.openid +
-            "&price=" +
-            $this.totalPrice +
-            "&remark=" +
-            $this.packageInfo.goodsName +
-            "&orderSn=" +
-            $this.orderSn
-        )
-        .then(function(data) {  
-           console.log(data);
-          let datas = data.data.data;
-          if (data.data.status == 1) {
-          	$this.orderSnAll = item.orderSn;
+      var baseUrl = BaseUrl + "api/preOrder";
+      var data = qs.stringify({
+        goodsId: $this.$route.query.goodsId,
+        packageId: $this.packageId,
+        number: $this.amount,  
+        openid: $this.openid
+      });
+      //console.log($this.openid);
+      
+      axios({
+        method: "post",
+        url: baseUrl,
+        type: "json",
+        data: data
+      }).then(function(data) {
+        console.log(data);
+        let datas = data.data.data;
+        if (data.data.status == 1) {
+           $this.goodsIdAll = datas.goodsId;
+           $this.packageIdAll = datas.packageId;
+           $this.numberAll = datas.number;
+           $this.totalPriceAll = datas.totalPrice/100;
+           $this.aidAll = datas.address;
+           
+           if(num == 0){
+           	   $this.goPay();
+           }
+        }
+      });
+    },
+
+
+
+goPay() {
+    var $this = this;
+    axios
+      .get(
+        "http://wufuapp.com/index.php/api_egg/Weixinpay/index?openid=" +
+          $this.openid +
+          "&price=" +
+          $this.amount +
+          "&remark=" +
+          $this.goodsName +
+          "&orderSn=" +
+          $this.$route.query.orderSn
+      )
+      .then(function(data) {
+      	console.log(data);
+        let datas = data.data.data;
+        if (data.data.status == 1) {
+          	$this.orderSnAll = $this.$route.query.orderSn;
             $this.onBridgeReady(datas);
           }else{
 	          Toast({
@@ -268,10 +297,11 @@ export default {
 	            duration: 1500
 	          });
           }
-        });
-       console.log("openid:"+this.openid+",totalPrice:"+this.totalPrice+",goodsName:"+this.goodsName+",orderSn:"+this.orderSn);
+      });
     },
-      onBridgeReady(data) {
+    //获取订单
+
+    onBridgeReady(data) {
       var $this = this;
 
       //支付成功，跳转到支付支付成功页面
@@ -296,117 +326,7 @@ export default {
               .then(function(data) {
                 $this.$router.push({
                   path: "pay_success",
-                  query: { orderId: $this.orderId, money: $this.totalPrice }
-                });
-              })
-              .catch(function() {
-                //alert("程序异常，联系技术人员")
-              });
-
-            //支付成功，跳转到支付支付成功页面
-          }
-        }
-      );
-    },
-//goPay() {
-//    if (
-//      this.province == "" ||
-//      this.phone == "" ||
-//      this.detail == "" ||
-//      this.city == "" ||
-//      this.receiver == "" ||
-//      this.detail == ""
-//     ){
-//      Toast({
-//        message: "收货地址不能为空",
-//        duration: 1500
-//      });
-//      return;
-//    }
-//    // this.$router.push({path:'/pay_success'});
-//    var $this = this;
-//    var baseUrl = BaseUrl + "api/buy";
-//    var data = qs.stringify({
-//      goodsId: 17,
-//      packageId: this.packageId,
-//      number: this.amount,
-//      openid: this.openid,
-//      remark: $this.sName,
-//      totalPrice: $this.totalPrice,
-//      aid: this.address.id
-//    });
-//    
-//    this.packageId = this.$route.query.packageId;
-//  this.amount = this.$route.query.number;
-//  this.openid = localStorage.getItem("openid");
-//  this.sellPrice = this.$route.query.sellPrice;
-//
-//    axios({
-//      method: "post",
-//      url: baseUrl,
-//      type: "json",
-//      data: data
-//    }).then(function(data) {
-//      let datas = data.data.data;
-//
-//      $this.orderSn = data.data.data.orderSn;
-//      if (data.data.status == 1) {
-//        $this.orderId = datas.orderId;
-//        $this.goPays();
-//      }
-//    });
-//  },
-    goPays() {
-      this.isPaying = false;
-      var $this = this;
-      axios
-        .get(
-          "http://wufuapp.com/index.php/api_egg/Weixinpay/index?openid=" +
-            this.openid +
-            "&price=" +
-            this.totalPrice +
-            "&remark=" +
-            this.packageInfo.goodsName +
-            "&orderSn=" +
-            this.orderSn
-        )
-        .then(function(data) {
-          let datas = data.data.data;
-
-          if (data.data.status == 1) {
-            $this.onBridgeReady(datas);
-          }
-        });
-    },
-    //获取订单
-
-    onBridgeReady(data) {
-      var $this = this;
-
-      //支付成功，跳转到支付支付成功页面
-
-      WeixinJSBridge.invoke(
-        "getBrandWCPayRequest",
-        {
-          appId: data.appId, //公众号名称，由商户传入
-          timeStamp: data.timeStamp, //时间戳，自1970年以来的秒数
-          nonceStr: data.nonceStr, //随机串
-          package: data.package,
-          signType: "MD5", //微信签名方式：
-          paySign: data.paySign //微信签名
-        },
-        function(res) {
-          $this.isPaying = true;
-          if (res.err_msg == "get_brand_wcpay_request:ok") {
-            axios
-              .get(
-                "http://wufuapp.com/index.php/api_egg/Weixinpay/H5Notify?out_trade_no=" +
-                  $this.orderSn
-              )
-              .then(function(data) {
-                $this.$router.push({
-                  path: "pay_success",
-                  query: { orderId: $this.orderId, money: data.data.data.money }
+                  query: { orderId: $this.orderId, money: $this.totalPriceAll }
                 });
               })
               .catch(function() {
@@ -423,10 +343,17 @@ export default {
     	this.$router.push({
         path: "/create_address",
         query: { 
-        	number: this.numberAll,
+          number: this.numberAll,
+          statusId: 1,
+          id: this.$route.query.id,
         	sellPrice: this.sellPriceAll,
         	packageId: this.$route.query.packageId,
-        	openid: this.$route.query.openid
+          openid: this.$route.query.openid,
+          goodsName: this.$route.query.goodsName,
+          remark: this.$route.query.remark,
+          orderids :  this.$route.query.orderids,
+          amount:  this.$route.query.amount,
+          totalPrice: this.$route.query.totalPrice
         }
      });
     },
@@ -434,13 +361,13 @@ export default {
     goOrderDetails() {
       this.$router.push({
         path: "/order_details",
-        query: { orderId: this.$route.query.orderId }
+        query: { orderId: this.orderIds }
       });
     },
     datas() {
     	this.zhuangtai = this.$route.query.id;
     	console.log(this.zhuangtai);
-    	if(this.zhuangtai == "已发货"){
+    	if(this.zhuangtai == "部分发货" || this.zhuangtai == '待收货'){
     		 this.show1 = 'block';
     		 this.show2 = 'none';
     	}else if(this.zhuangtai == '待付款'){
@@ -450,11 +377,12 @@ export default {
       var that = this;
       var baseUrl = BaseUrl + "api/getPackageDetail";
       var data = qs.stringify({
-         id:335 ,    /*this.$route.query.orderId  335  */
-         //openid:localStorage.getItem("openid")   /*localStorage.getItem("openid")*/
-        openid: 'oX6js0S0Pqsh6ijuNs48kDFN3w6s',
+         id: that.orderids,  
+//       openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s'  , 
+				openid:that.openid
+
       });
-         console.log(that.$route.query.orderids);
+       
       axios({
         method: "post",
         url: baseUrl,
@@ -463,20 +391,21 @@ export default {
       })
         .then(function(info) {
           let datas = info.data;
-          console.log(datas);
           if (datas.status == 1) {
-            that.packageInfo = datas.data.packageInfo;
-            that.sellPriceAll = datas.data.packageInfo.sellPrice;
-            that.numberAll = datas.data.packageInfo.number;
-            var details = datas.data.packageDetails;
-            var isdetails = datas.data.isSendPackageDetails
+             that.packageInfo = datas.data.packageInfo;
+             that.sellPriceAll = datas.data.packageInfo.sellPrice;
+             that.numberAll = datas.data.packageInfo.number;
+             that.goodsName = datas.data.packageInfo.goodsName;
+             
+            var details = datas.data.packageDetails;         //未发货
+            var isdetails = datas.data.isSendPackageDetails  //已发货
             console.log(isdetails);
 				         for (var i in details) {
 				              details[i].status = "待发货";
 				              that.noHairList.push(details[i]);
 				             };
 				         for (var j in isdetails) {
-				              isdetails[j].status = "已发货";				       
+				              isdetails[j].status = "已发货";	//加一个判断			       
 				              that.kdName = isdetails[j].kdName;
 				              that.sendTime = isdetails[j].sendTime;
 				              that.kdNo = isdetails[j].kdNo;
@@ -492,21 +421,56 @@ export default {
             });
           }
         })
-        .catch(function() {
-          //alert("程序异常，联系技术人员")
-        });
+        
+    },
+Address() {
+      var $this = this;
+      var baseUrl = BaseUrl + "/api/getAddressList";
+      var data = qs.stringify({
+        openid: $this.openid
+      });
+
+      axios({
+        method: "post",
+        url: baseUrl,
+        type: "json",
+        data: data
+      }).then(function(data) {
+        let datas = data.data.data;
+
+        if (data.data.status == 1) {
+          for (var i in datas) {
+            if (datas[i].isDefault == 1) {
+              $this.receiver = datas[i].receiver; //收货人
+              $this.phone = datas[i].phone; //手机号
+              $this.province = datas[i].province; //省份
+              $this.city = datas[i].city; //城市
+              $this.county = datas[i].county; //区
+              $this.detail = datas[i].detail; //详细地址
+            }
+          }
+        }
+      });
     }
+
   },
-  mounted() {
-  	
-  	this.openid = this.$route.query.openid;
+  created(){
     this.totalPrice = this.$route.query.totalPrice;
     this.goodsName = this.$route.query.goodsName;
     this.remark = this.$route.query.remark;
-    this.orderids = this.$route.query.orderids
-//  console.log(this.remark);
-//  console.log(this.$route.query,11111)
+    this.orderids = this.$route.query.orderids;
+    this.amount = this.$route.query.amount;
+    this.packageId = this.$route.query.packageId;
+
+ this.openid = localStorage.getItem("openid");
+//  this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
+
     this.datas();
+    this.Address();
+  	
+  },
+  mounted() {
+  	
   },
   components: {}
 };
@@ -524,19 +488,20 @@ export default {
     margin-top:3rem;
     background: #fff;
     padding: 1.5rem;
+    display: flex;
+    align-content: center;
+    justify-content: center;
     img{
-    	margin-left: 37%;
+
     	width: 1.625rem;
     	height: 1.625rem;
+    	margin-right: .5rem;
     }
     p {
-    	margin-right: 38%;
-    	float:right;
-    	display: inline-block;
-      text-align: center;
+
       font-size: 0.9rem;
       color: #CC3E36;
-      padding-top: 0.2rem;
+      /*padding-top: 0.2rem;*/
     } 
   }
   /*收货人信息*/
@@ -640,7 +605,7 @@ export default {
  .word{
  	  padding: 0 1rem;
  	  /*text-align: center;*/
- 	  /*height: 2rem;*/
+ 	  /*min-height: 2rem;*/
  	  line-height: 1.5rem;
  	  margin-top: 0.08rem;
 	 	font-size:0.9rem;
@@ -700,7 +665,7 @@ export default {
   	 	padding: 0.875rem 1rem 0.56rem 1rem;
   	 	color: #666666;
   	 	width: 92%;
-  	 	border-bottom:0.0625rem solid #C1C5C8;
+  	 
   	 	/*position: relative;*/
   	 	p{
   	 		display: inline-block;
@@ -751,14 +716,12 @@ export default {
   	 } 
   }
   .information_exhibition{
-  	   /*position: absolute;*/
-  	   width:92%;
-  	   background: #FFFFFF;
-  	   z-index: 9;
-  	   /*border-top:0.0625rem solid #C1C5C8;*/
-  	   /*height: 3.125rem;*/
-  	   top:2.25rem;
-  	   padding: 0 1rem;
+				  	   width:92%;
+				  	   background: #FFFFFF;
+				  	   z-index: 9;
+				  	   border-top:0.0625rem solid #C1C5C8;
+				  	   top:2.25rem;
+				  	   padding: 0 1rem;
   	   p {
   	   	 display: inline-block;
   	   	 font-size: 0.75rem;
