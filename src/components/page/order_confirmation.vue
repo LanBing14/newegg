@@ -172,12 +172,11 @@ export default {
         totalPrice: $this.totalPrice,
         aid: this.address.id
       });
-      
+
       this.packageId = this.$route.query.packageId;
-    this.amount = this.$route.query.number;
-    this.openid = localStorage.getItem("openid");
-    // this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s'
-    this.sellPrice = this.$route.query.sellPrice;
+      this.amount = this.$route.query.number;
+      this.openid = localStorage.getItem("openid");
+      this.sellPrice = this.$route.query.sellPrice;
 
       axios({
         method: "post",
@@ -322,8 +321,6 @@ export default {
     this.packageId = this.$route.query.packageId;
     this.amount = this.$route.query.number;
     this.openid = localStorage.getItem("openid");
-    // this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
-
     this.sellPrice = this.$route.query.sellPrice;
     this.login();
     this.Address();

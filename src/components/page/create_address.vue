@@ -80,14 +80,13 @@ export default {
       companyName: "",
       openid: "",
       statusId: 1,
-      orderids: '',
+      orderids: "",
       totalPrice: 1,
-      amount:'',
-      orderids: '',
-      remark: '',
-      goodsName:'',
-      goodsId: '',
-      zhuangtai:'待付款',
+      amount: "",
+      remark: "",
+      goodsName: "",
+      goodsId: "",
+      zhuangtai: "待付款",
       addressSlots: [
         {
           flex: 1,
@@ -138,19 +137,19 @@ export default {
   methods: {
     //返回上页面‘订单确认order_confirmation’
     goBack() {
-     if (this.statusId == 0) {
+      if (this.statusId == 0) {
         this.$router.push({
-        path: "/order_confirmation",
-        query: {
-          packageId: this.packageId,
-          number: this.amount,
-          openid: this.openid,
-          sellPrice: this.sellPrice
-        }
-      });
-     } else if (this.statusId == 1){
-       this.$router.back()
-     }
+          path: "/order_confirmation",
+          query: {
+            packageId: this.packageId,
+            number: this.amount,
+            openid: this.openid,
+            sellPrice: this.sellPrice
+          }
+        });
+      } else if (this.statusId == 1) {
+        this.$router.back();
+      }
     },
     //点击蒙版：蒙版+弹出框隐藏
     hideToggle() {
@@ -262,7 +261,8 @@ export default {
         city: city,
         county: county,
         detail: detail,
-        isDefault: isDefault
+        isDefault: isDefault,
+        orderId: $this.orderids
       });
 
       axios({
@@ -290,9 +290,9 @@ export default {
                     sellPrice: $this.$route.query.sellPrice,
                     id: datas.id
                   }
-              });
-            }, 1500);
-            } else if($this.statusId == 1){
+                });
+              }, 1500);
+            } else if ($this.statusId == 1) {
               setTimeout(function() {
                 $this.$router.push({
                   path: "/package_details",
@@ -303,16 +303,16 @@ export default {
                     sellPrice: $this.$route.query.sellPrice,
                     ids: datas.id,
                     orderids: $this.$route.query.orderids,
-                    id:$this.zhuangtai,
+                    id: $this.zhuangtai,
                     goodsName: $this.$route.query.goodsName,
                     remark: $this.$route.query.remark,
-                    amount:  $this.$route.query.amount,
+                    amount: $this.$route.query.amount,
                     totalPrice: $this.$route.query.totalPrice,
                     goodsId: $this.$route.query.goodsId,
                     orderSn: $this.$route.query.orderSn
                   }
-              });
-            }, 1500);
+                });
+              }, 1500);
             }
           } else {
             Toast({
@@ -345,7 +345,6 @@ export default {
     /* 下拉框消失 */
     showOut() {
       this.isShow = false;
-    
     },
     clickBody() {
       this.isShow = false;
@@ -393,7 +392,7 @@ export default {
         this.addressSlots[0].defaultIndex = 0;
       }, 100);
     });
-    this.openid = localStorage.getItem('openid');
+    this.openid = localStorage.getItem("openid");
     // this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
 
     this.packageId = this.$route.query.packageId;
@@ -407,7 +406,7 @@ export default {
     this.orderids = this.$route.query.orderids;
     this.amount = this.$route.query.amount;
     this.goodsId = this.$route.query.goodsId;
-    console.log(this.zhuangtai)
+    console.log(this.zhuangtai);
   },
   components: {
     "mt-picker": Picker,
