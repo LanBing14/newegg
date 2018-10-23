@@ -75,10 +75,11 @@ export default {
       AlipayShow: false, //zhifubao
       bankShow: false, //银行
       balance: "",
-      withdraw:"",
+      withdraw: "",
       slects: "",
       bankName: "",
       accounts: "",
+      openid: "",
       names: "",
       id: "", //提现方式 id  0 1 2
       codes: "",
@@ -95,50 +96,49 @@ export default {
     },
     //点击'确认提现',蒙版，'取消'，显示信息框
     hideToggle() {
-    	var $this = this;
-    	axios
+      var $this = this;
+      axios
         .get(
           "http://wufuapp.com/index.php/api_egg/api/checkUserPermissions/index?openid=" +
-                $this.openid +
+            $this.openid +
             "&money=" +
-                $this.withdraw  
+            $this.withdraw
         )
-      .then(function(data){
-      	console.log(data);
-      	if(data.data.status == 0){
-      		 Toast({
-			          message: "请先绑定手机号",
-			          duration: 1500
-	            });
-	           return false;
-      	}else if ($this. withdraw.length == 0) {
-	        Toast({
-	          message: "提现金额不能空",
-	          duration: 1500
-	        });
-	        return false;
-      } else if($this. withdraw < 100) {
-	        Toast({
-	          message: "可提现金额必须大于或等于100",
-	          duration: 1500
-	        });
-	        return false;
-      } else {
-        if (parseFloat($this. withdraw) > parseFloat($this.balance)) {
-	          Toast({
-	            message: "提现金额不能大于可提现金额",
-	            duration: 1500
-	          });
-        } else {
-             $this.isShow = !$this.isShow;
-             $this.hintShow = !$this.hintShow;
-        }
-      }
-         
-      })
+        .then(function(data) {
+          console.log(data);
+          if (data.data.status == 0) {
+            Toast({
+              message: "请先绑定手机号",
+              duration: 1500
+            });
+            return false;
+          } else if ($this.withdraw.length == 0) {
+            Toast({
+              message: "提现金额不能空",
+              duration: 1500
+            });
+            return false;
+          } else if ($this.withdraw < 100) {
+            Toast({
+              message: "可提现金额必须大于或等于100",
+              duration: 1500
+            });
+            return false;
+          } else {
+            if (parseFloat($this.withdraw) > parseFloat($this.balance)) {
+              Toast({
+                message: "提现金额不能大于可提现金额",
+                duration: 1500
+              });
+            } else {
+              $this.isShow = !$this.isShow;
+              $this.hintShow = !$this.hintShow;
+            }
+          }
+        });
     },
-    
-      //获取验证码
+
+    //获取验证码
     getCode() {
       if (this.phone == "") {
         Toast({
@@ -286,6 +286,9 @@ export default {
         this.bankShow = true;
       }
     }
+  },
+  created() {
+    this.openid = localStorage.getItem("openid");
   },
   mounted() {
     this.balance = this.$route.query.balances;
