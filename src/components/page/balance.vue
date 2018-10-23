@@ -24,6 +24,20 @@
         <div class="true" @click="goPlaces">立即下单</div>
       </div>
     </div>
+
+
+    <div class="bindingBox" v-show="phoneMsg"  >
+      <div class="phoneBox">
+          <h2>手机号绑定</h2>
+          <input type="text" v-model="phone" placeholder="请输入手机号"/>
+          <div class="phoneCode">
+              <input type="text" v-model="codes" placeholder="输入验证码" class="codeInput">
+            <button class="getCode" @click="getCode" :disabled="dis">获取验证码({{prompt}}s)</button>
+          </div>
+          <span class="cancleBtn" @click="cancel">取消</span>
+          <span class="confirmBtn" @click="nexteps">立即绑定</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -40,7 +54,8 @@ export default {
       hintShow: false,
       balance: "",
       freezeMoney: "",
-      checkOrder: 0
+      checkOrder: 0,
+      checkPhone: ""
     };
   },
   methods: {
@@ -61,9 +76,9 @@ export default {
         // window.location.href = datas.url;
       });
     },
-    goBack(){
+    goBack() {
       this.$router.push({ path: "/Invited_record" });
-    },   //获取openid
+    }, //获取openid
     logins: function() {
       var $this = this;
       var baseUrl = BaseUrl + "index/getUserOpenid";
@@ -114,10 +129,15 @@ export default {
           let datas = data.data.data;
           if ((data.data.status = 1)) {
             $this.checkOrder = datas.checkOrder;
+            $this.checkPhone = datas.checkPhone;
             if ($this.checkOrder == 1) {
               $this.$router.push({
                 name: "placeNow",
-                query: { balances: $this.balance }
+                query: {
+                  balances: $this.balance,
+                  checkOrder: datas.checkOrder,
+                  checkPhone: datas.checkPhone
+                }
               });
             } else {
               $this.isShow = true;
@@ -129,16 +149,6 @@ export default {
         .catch(function() {
           //alert("程序异常，联系技术人员")
         });
-
-      //如果没有购买过则弹出’提醒去下单‘的框
-      //          var $this = this;
-      //          if($this.checkOrder==0){
-      //            this.isShow = !this.isShow;
-      //            this.hintShow = !this.hintShow;
-      //          }else {
-      //            $this.$router.push({name:'placeNow',params:{balances:$this.balance}});
-      //
-      //          }
 
       //如果满足这两个条件Toast‘申请成功’
     },
@@ -297,6 +307,87 @@ export default {
         color: #ffffff;
         margin-left: 2%;
       }
+    }
+  }
+  .bindingBox {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    z-index: 66;
+    text-align: center;
+
+    .phoneBox {
+      width: 86%;
+      position: fixed;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%);
+      height: 20rem;
+      background: #ffffff;
+      border-radius: 5%;
+      text-align: center;
+      h2 {
+        font-size: 1.25rem;
+      }
+      input {
+        display: inline-block;
+        width: 85%;
+        height: 3rem;
+        padding-left: 1rem;
+        line-height: 3rem;
+        border: 1px solid #cccccc;
+      }
+      .phoneCode {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+        .codeInput {
+          width: 54%;
+          font-size: 0.9rem;
+          border: 1px solid #c1c5c8;
+          line-height: 2rem;
+          overflow: hidden;
+          outline: none;
+        }
+        .getCode {
+          width: 30%;
+          height: 3.1rem;
+          background: #c9161d;
+          border: 1px solid #c9161d;
+          color: #ffffff;
+          outline: none;
+          border: none;
+        }
+      }
+    }
+    .cancleBtn {
+      display: inline-block;
+      width: 30%;
+      height: 2.5rem;
+      text-align: center;
+      line-height: 2.5rem;
+      background: #cc3e36;
+      border-radius: 5%;
+      margin-top: 3rem;
+      color: #ffffff;
+    }
+    .confirmBtn {
+      display: inline-block;
+      width: 30%;
+      height: 2.5rem;
+      text-align: center;
+      line-height: 2.5rem;
+      background: #cc3e36;
+      border-radius: 5%;
+      margin-top: 3rem;
+      margin-left: 1rem;
+      color: #ffffff;
     }
   }
 }

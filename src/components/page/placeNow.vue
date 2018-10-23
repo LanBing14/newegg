@@ -10,7 +10,7 @@
     <div class="apply_for" @click="hideToggle">确认提现</div>
 
     <!--蒙版-->
-    <div class="box" id="box" v-show="isShow" @click="hideToggle"></div>
+    <div class="box" id="box" v-show="isShow" @click="isShow == false"></div>
 
     <div class="hintBox" v-show="hintShow">
       <div class="attention">
@@ -42,21 +42,41 @@
           <input type="text" v-model="bankName" placeholder="输入您的开户名称" class="atten">
           <input type="text" v-model="accounts" placeholder="输入银行开户卡号" class="atten">
           <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
-          <input type="text" v-model="phone" placeholder="输入您的手机号" class="atten">
+          <!--<input type="text" v-model="phone" placeholder="输入您的手机号" class="atten">-->
         </div>
 
         <!--<p class="remind">为确保您的账户安全，请获取您的账户000***00验证码</p>-->
-        <div class="phoneCode">
+        <!--<div class="phoneCode">
           <input type="text" v-model="codes" placeholder="输入验证码" class="codeInput">
           <button class="getCode" @click="getCode" :disabled="dis">获取验证码({{prompt}}s)</button>
-          <!--<div class="getCode">重新获取(60s)</div>-->
-        </div>
+          <div class="getCode">重新获取(60s)</div>-->
+        <!--</div>-->
       </div>
       <div class="btns">
-        <div class="cancel" @click="hideToggle">取消</div>
+        <div class="cancel" @click="cancel">取消</div>
         <div class="true" @click="goPlace">确认无误，立即提现</div>
       </div>
     </div>
+    
+    <!-- 蒙版用户未绑定  弹层-->
+    
+    <div class="bindingBox" v-show="phoneMsg"  >
+      <div class="phoneBox">
+          <h2>手机号绑定</h2>
+          <input type="text" v-model="phone" placeholder="请输入手机号"/>
+          <div class="phoneCode">
+              <input type="text" v-model="codes" placeholder="输入验证码" class="codeInput">
+            <button class="getCode" @click="getCode" :disabled="dis">获取验证码({{prompt}}s)</button>
+          </div>
+          <span class="cancleBtn" @click="cancel">取消</span>
+          <span class="confirmBtn" @click="nexteps">立即绑定</span>
+      </div>
+    </div>
+    
+    <!-- 蒙版用户未下单  弹层-->
+    
+    
+    
   </div>
 </template>
 
@@ -71,15 +91,16 @@ export default {
     return {
       isShow: false,
       hintShow: false,
+      phoneMsg: false,
       wxShow: false, //微信填写
       AlipayShow: false, //zhifubao
       bankShow: false, //银行
       balance: "",
       withdraw: "",
+      openid: "",
       slects: "",
       bankName: "",
       accounts: "",
-      openid: "",
       names: "",
       id: "", //提现方式 id  0 1 2
       codes: "",
@@ -94,48 +115,62 @@ export default {
         path: "/balance"
       });
     },
+    nexteps() {
+      if (this.phone == "") {
+        Toast({
+          message: "手机号不能为空",
+          duration: 1500
+        });
+        return false;
+      } else if (this.codes == "") {
+        Toast({
+          message: "验证码不能为空",
+          duration: 1500
+        });
+        return false;
+      } else {
+        this.phoneMsg = false;
+        this.hintShow = true;
+        this.isShow = true;
+      }
+    },
+    cancel() {
+      this.phoneMsg = false;
+      this.isShow = false;
+      this.hintShow = false;
+    },
     //点击'确认提现',蒙版，'取消'，显示信息框
     hideToggle() {
       var $this = this;
-      axios
-        .get(
-          "http://wufuapp.com/index.php/api_egg/api/checkUserPermissions/index?openid=" +
-            $this.openid +
-            "&money=" +
-            $this.withdraw
-        )
-        .then(function(data) {
-          console.log(data);
-          if (data.data.status == 0) {
-            Toast({
-              message: "请先绑定手机号",
-              duration: 1500
-            });
-            return false;
-          } else if ($this.withdraw.length == 0) {
-            Toast({
-              message: "提现金额不能空",
-              duration: 1500
-            });
-            return false;
-          } else if ($this.withdraw < 100) {
-            Toast({
-              message: "可提现金额必须大于或等于100",
-              duration: 1500
-            });
-            return false;
-          } else {
-            if (parseFloat($this.withdraw) > parseFloat($this.balance)) {
-              Toast({
-                message: "提现金额不能大于可提现金额",
-                duration: 1500
-              });
-            } else {
-              $this.isShow = !$this.isShow;
-              $this.hintShow = !$this.hintShow;
-            }
-          }
+
+      if ($this.checkPhone == 0) {
+        //未绑定手机
+        $this.phoneMsg = true;
+        return false;
+      }
+      if ($this.withdraw.length == 0) {
+        Toast({
+          message: "提现金额不能空",
+          duration: 1500
         });
+        return false;
+      } else if ($this.withdraw < 100) {
+        Toast({
+          message: "可提现金额必须大于或等于100",
+          duration: 1500
+        });
+        return false;
+      } else {
+        if (parseFloat($this.withdraw) > parseFloat($this.balance)) {
+          Toast({
+            message: "提现金额不能大于可提现金额",
+            duration: 1500
+          });
+        } else {
+          $this.isShow = true;
+          $this.hintShow = true;
+        }
+      }
     },
 
     //获取验证码
@@ -228,7 +263,8 @@ export default {
           } else {
             var baseUrl = BaseUrl + "api/applyWithdrawal";
             var datas = qs.stringify({
-              openid: localStorage.getItem("openid"),
+              //            openid: localStorage.getItem("openid"),
+              openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s",
               money: $this.withdraw, //string  提现金额
               account: $this.accounts, //string  （微信/支付宝/银行卡）账号
               realnamg: $this.names, //string 真实姓名
@@ -242,26 +278,22 @@ export default {
               url: baseUrl,
               type: "json",
               data: datas
-            })
-              .then(function(data) {
-                let datas = data.data.data;
-                if (data.data.status == 1) {
-                  $this.$router.push({
-                    path: "/place_success",
-                    query: {
-                      balances: $this.withdraw
-                    }
-                  });
-                } else {
-                  Toast({
-                    message: data.data.msg,
-                    duration: 1500
-                  });
-                }
-              })
-              .catch(function() {
-                //alert("程序异常，联系技术人员")
-              });
+            }).then(function(data) {
+              let datas = data.data.data;
+              if (data.data.status == 1) {
+                $this.$router.push({
+                  path: "/place_success",
+                  query: {
+                    balances: $this.withdraw
+                  }
+                });
+              } else {
+                Toast({
+                  message: data.data.msg,
+                  duration: 1500
+                });
+              }
+            });
           }
         }
       }
@@ -288,11 +320,13 @@ export default {
     }
   },
   created() {
-    this.openid = localStorage.getItem("openid");
-  },
-  mounted() {
+    //	this.openid = localStorage.getItem("openid");
+    this.openid = "oX6js0S0Pqsh6ijuNs48kDFN3w6s";
+    this.checkOrder = this.$route.query.checkOrder;
+    this.checkPhone = this.$route.query.checkPhone;
     this.balance = this.$route.query.balances;
   },
+  mounted() {},
   components: {}
 };
 </script>
@@ -466,6 +500,90 @@ export default {
       }
     }
   }
+  /* 未绑定样式*/
+  .bindingBox {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    z-index: 66;
+    text-align: center;
+
+    .phoneBox {
+      width: 86%;
+      position: fixed;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%);
+      height: 20rem;
+      background: #ffffff;
+      border-radius: 5%;
+      text-align: center;
+      h2 {
+        font-size: 1.25rem;
+      }
+      input {
+        display: inline-block;
+        width: 85%;
+        height: 3rem;
+        padding-left: 1rem;
+        line-height: 3rem;
+        border: 1px solid #cccccc;
+      }
+      .phoneCode {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+        .codeInput {
+          width: 54%;
+          font-size: 0.9rem;
+          border: 1px solid #c1c5c8;
+          line-height: 2rem;
+          overflow: hidden;
+          outline: none;
+        }
+        .getCode {
+          width: 30%;
+          height: 3.1rem;
+          background: #c9161d;
+          border: 1px solid #c9161d;
+          color: #ffffff;
+          outline: none;
+          border: none;
+        }
+      }
+    }
+    .cancleBtn {
+      display: inline-block;
+      width: 30%;
+      height: 2.5rem;
+      text-align: center;
+      line-height: 2.5rem;
+      background: #cc3e36;
+      border-radius: 5%;
+      margin-top: 3rem;
+      color: #ffffff;
+    }
+    .confirmBtn {
+      display: inline-block;
+      width: 30%;
+      height: 2.5rem;
+      text-align: center;
+      line-height: 2.5rem;
+      background: #cc3e36;
+      border-radius: 5%;
+      margin-top: 3rem;
+      margin-left: 1rem;
+      color: #ffffff;
+    }
+  }
+
+  /*未下单样式*/
 }
 </style>
 >
