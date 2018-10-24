@@ -1,8 +1,9 @@
 <template>
   <div id="placeNow">
     <mt-header fixed title="提现" style="font-size:1.2rem;height: 3rem;"></mt-header>
-    <input type="text" v-model="withdraw" placeholder="输入提现金额" class="money" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}">
-    <p class="tiMony">提现金额必须大于或等于100</p>
+    <!-- <input type='number' pattern="[1-9]*" v-model="withdraw" placeholder="输入提现金额" class="money"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" > -->
+    <input type='number' pattern="[0-9]*" v-model="withdraw" placeholder="输入提现金额" class="money"  @keyup="changeNumber" >
+    <p class="tiMony">提现金额必须大于或等于100的整数</p>
     <p class="withdrawNum">可提现余额
       <span> ￥{{balance}}</span>
     </p>
@@ -110,6 +111,15 @@ export default {
     };
   },
   methods: {
+    changeNumber() {
+      let str = "" + this.withdraw;
+      if (str.indexOf(".") != -1) {
+        let arr = str.split("");
+        arr.splice(arr.length - 1);
+        let str2 = arr.join("");
+        this.withdraw = +str2;
+      }
+    },
     goBack() {
       this.$router.push({
         path: "/balance"
@@ -586,6 +596,14 @@ export default {
   }
 
   /*未下单样式*/
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield; /* firefox */
+  }
 }
 </style>
 >
