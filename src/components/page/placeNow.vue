@@ -143,18 +143,14 @@ export default {
     hideToggle() {
       var $this = this;
 
-      if ($this.checkPhone == 0) {
-        //未绑定手机
-        $this.phoneMsg = true;
-        return false;
-      }
       if ($this.withdraw.length == 0) {
         Toast({
           message: "提现金额不能空",
           duration: 1500
         });
         return false;
-      } else if ($this.withdraw < 100) {
+      }
+      if ($this.withdraw < 100) {
         Toast({
           message: "可提现金额必须大于或等于100",
           duration: 1500
@@ -167,8 +163,14 @@ export default {
             duration: 1500
           });
         } else {
-          $this.isShow = true;
-          $this.hintShow = true;
+          if ($this.checkPhone == 0) {
+            //未绑定手机
+            $this.phoneMsg = true;
+            return false;
+          } else {
+            $this.isShow = true;
+            $this.hintShow = true;
+          }
         }
       }
     },
@@ -263,8 +265,8 @@ export default {
           } else {
             var baseUrl = BaseUrl + "api/applyWithdrawal";
             var datas = qs.stringify({
-              //            openid: localStorage.getItem("openid"),
-              openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s",
+              openid: localStorage.getItem("openid"),
+              // openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s",
               money: $this.withdraw, //string  提现金额
               account: $this.accounts, //string  （微信/支付宝/银行卡）账号
               realnamg: $this.names, //string 真实姓名
@@ -320,8 +322,8 @@ export default {
     }
   },
   created() {
-    //	this.openid = localStorage.getItem("openid");
-    this.openid = "oX6js0S0Pqsh6ijuNs48kDFN3w6s";
+    this.openid = localStorage.getItem("openid");
+    // this.openid = "oX6js0S0Pqsh6ijuNs48kDFN3w6s";
     this.checkOrder = this.$route.query.checkOrder;
     this.checkPhone = this.$route.query.checkPhone;
     this.balance = this.$route.query.balances;
@@ -549,7 +551,7 @@ export default {
         }
         .getCode {
           width: 30%;
-          height: 3.1rem;
+          height: 3.2rem;
           background: #c9161d;
           border: 1px solid #c9161d;
           color: #ffffff;

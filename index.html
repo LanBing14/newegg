@@ -1,82 +1,89 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- 设置字符集格式 -->
-    <meta charset="utf-8">
-    <!-- 设置宽度为设备的宽度，默认不缩放，不允许用户缩放（即禁止缩放），在网页加载时隐藏地址栏与导航栏（ios7.1新增） -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- 是否启动webapp功能，会删除默认的苹果工具栏和菜单栏。 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- 当启动webapp功能时，显示手机信号、时间、电池的顶部导航栏的颜色。默认值为default（白色），可以定为black（黑色）和black-translucent（灰色半透明）。这个主要是根据实际的页面设计的主体色为搭配来进行设置。 -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- 忽略页面中的数字识别为电话号码、email识别 -->
-    <meta name="format-detection" content="telephone=no, email=no">
-    <!-- 启用360浏览器的极速模式(webkit) -->
-    <meta name="renderer" content="webkit">
-    <!-- 避免IE使用兼容模式 -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
-    <meta name="HandheldFriendly" content="true">
-    <!-- 微软的老式浏览器 -->
-    <meta name="MobileOptimized" content="320">
-    <!-- uc强制竖屏 -->
-    <meta name="screen-orientation" content="portrait">
-    <!-- QQ强制竖屏 -->
-    <meta name="x5-orientation" content="portrait">
-    <!-- UC强制全屏 -->
-    <meta name="full-screen" content="yes">
-    <!-- QQ强制全屏 -->
-    <meta name="x5-fullscreen" content="true">
-    <!-- UC应用模式 -->
-    <meta name="browsermode" content="application">
-    <!-- QQ应用模式 -->
-    <meta name="x5-page-mode" content="app">
-    <!-- windows phone 点击无高光 -->
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="apple-touch-fullscreen" content="yes" />
-    <!--<link id="apple-touch-icon" rel="apple-touch-icon-precomposed" sizes="114x114" />-->
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-    <script>
-      var BaseUrl="http://wufuapp.com/index.php/api_egg/";
-    </script>
-    <title>伍福农场</title>
+
+<head>
+  <!-- 设置字符集格式 -->
+  <meta charset="utf-8">
+  <!-- 设置宽度为设备的宽度，默认不缩放，不允许用户缩放（即禁止缩放），在网页加载时隐藏地址栏与导航栏（ios7.1新增） -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- 是否启动webapp功能，会删除默认的苹果工具栏和菜单栏。 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- 当启动webapp功能时，显示手机信号、时间、电池的顶部导航栏的颜色。默认值为default（白色），可以定为black（黑色）和black-translucent（灰色半透明）。这个主要是根据实际的页面设计的主体色为搭配来进行设置。 -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- 忽略页面中的数字识别为电话号码、email识别 -->
+  <meta name="format-detection" content="telephone=no, email=no">
+  <!-- 启用360浏览器的极速模式(webkit) -->
+  <meta name="renderer" content="webkit">
+  <!-- 避免IE使用兼容模式 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+  <meta name="HandheldFriendly" content="true">
+  <!-- 微软的老式浏览器 -->
+  <meta name="MobileOptimized" content="320">
+  <!-- uc强制竖屏 -->
+  <meta name="screen-orientation" content="portrait">
+  <!-- QQ强制竖屏 -->
+  <meta name="x5-orientation" content="portrait">
+  <!-- UC强制全屏 -->
+  <meta name="full-screen" content="yes">
+  <!-- QQ强制全屏 -->
+  <meta name="x5-fullscreen" content="true">
+  <!-- UC应用模式 -->
+  <meta name="browsermode" content="application">
+  <!-- QQ应用模式 -->
+  <meta name="x5-page-mode" content="app">
+  <!-- windows phone 点击无高光 -->
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="apple-touch-fullscreen" content="yes" />
+  <!--<link id="apple-touch-icon" rel="apple-touch-icon-precomposed" sizes="114x114" />-->
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <script>
+    var BaseUrl = "http://wufuapp.com/index.php/api_egg/";
+  </script>
+  <title>伍福农场</title>
   <style>
-    input{
+    input {
       display: -webkit-inline-box;
-      background: transparent!important;
-      -webkit-tap-highlight-color:transparent;
+      background: transparent !important;
+      -webkit-tap-highlight-color: transparent;
       outline: none;
       border: none;
       padding: 0;
       margin: 0;
     }
-    #Search::-webkit-search-cancel-button{
+
+    #Search::-webkit-search-cancel-button {
       display: none;
     }
-    *{
-     -webkit-tap-highlight-color: rgba(0,0,0,0);
-    }
-    .mint-switch-input:checked + .mint-switch-core {
-      border-color: #ff7870!important;
-      background-color: #ff7870!important;
-    }
-    .mint-actionsheet-listitem, .mint-actionsheet-button{
-      color: #26a2ff!important;
-      font-size: 15px!important;
-    }
-    .mint-switch{
 
-  }
+    * {
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    .mint-switch-input:checked+.mint-switch-core {
+      border-color: #ff7870 !important;
+      background-color: #ff7870 !important;
+    }
+
+    .mint-actionsheet-listitem,
+    .mint-actionsheet-button {
+      color: #26a2ff !important;
+      font-size: 15px !important;
+    }
+
+    .mint-switch {}
   </style>
   <!--<link href=./static/css/app.2a8b0ff6530c1a7e9f1af59bdf868c57.css rel=stylesheet>-->
-  </head>
-  <body>
+</head>
+
+<body>
   <div id=app>
 
   </div>
-    <!--<script type=text/javascript src=./static/js/manifest.7304b1ff86cfe4b7dadc.js></script>-->
-    <!--<script type=text/javascript src=./static/js/app.68403b5d36124dfb7358.js></script>-->
-  </body>
+  <!--<script type=text/javascript src=./static/js/manifest.7304b1ff86cfe4b7dadc.js></script>-->
+  <!--<script type=text/javascript src=./static/js/app.68403b5d36124dfb7358.js></script>-->
+</body>
+
 </html>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
 <script>
@@ -92,27 +99,27 @@
 //  // button.hidden = YES;
 //  })(window);
 
-      mui.init({
-        keyEventBind: {
-          backbutton: true //关闭back按键监听
-        }
-      });
-      //首页返回键处理
-      //处理逻辑：1秒内，连续两次按返回键，则退出应用；
-      var first = null;
-      mui.back = function() {
-      //首次按键，提示 再按一次退出应用
-      if (!first) {
-        first = new Date().getTime();//记录第一次按下回退键的时间
-        mui.toast('再按一次退出应用');//给出提示
-        history.go(-1)//回退到上一页面
-        setTimeout(function() {//1s中后清除
-            first = null;
-          }, 1000)} else {
-          if (new Date().getTime() - first < 1000) {//如果两次按下的时间小于1s，
-           plus.runtime.quit();//那么就退出app
+      // mui.init({
+      //   keyEventBind: {
+      //     backbutton: true //关闭back按键监听
+      //   }
+      // });
+      // //首页返回键处理
+      // //处理逻辑：1秒内，连续两次按返回键，则退出应用；
+      // var first = null;
+      // mui.back = function() {
+      // //首次按键，提示 再按一次退出应用
+      // if (!first) {
+      //   first = new Date().getTime();//记录第一次按下回退键的时间
+      //   mui.toast('再按一次退出应用');//给出提示
+      //   history.go(-1)//回退到上一页面
+      //   setTimeout(function() {//1s中后清除
+      //       first = null;
+      //     }, 1000)} else {
+      //     if (new Date().getTime() - first < 1000) {//如果两次按下的时间小于1s，
+      //      plus.runtime.quit();//那么就退出app
 
-          }
-        } 
-      };
+      //     }
+      //   } 
+      // };
 </script>

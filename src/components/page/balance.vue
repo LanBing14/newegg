@@ -26,18 +26,7 @@
     </div>
 
 
-    <div class="bindingBox" v-show="phoneMsg"  >
-      <div class="phoneBox">
-          <h2>手机号绑定</h2>
-          <input type="text" v-model="phone" placeholder="请输入手机号"/>
-          <div class="phoneCode">
-              <input type="text" v-model="codes" placeholder="输入验证码" class="codeInput">
-            <button class="getCode" @click="getCode" :disabled="dis">获取验证码({{prompt}}s)</button>
-          </div>
-          <span class="cancleBtn" @click="cancel">取消</span>
-          <span class="confirmBtn" @click="nexteps">立即绑定</span>
-      </div>
-    </div>
+   
   </div>
 </template>
 
@@ -135,8 +124,8 @@ export default {
                 name: "placeNow",
                 query: {
                   balances: $this.balance,
-                  checkOrder: datas.checkOrder,
-                  checkPhone: datas.checkPhone
+                  checkOrder: $this.checkOrder,
+                  checkPhone: $this.checkPhone
                 }
               });
             } else {
@@ -167,7 +156,7 @@ export default {
         data: datas
       }).then(function(data) {
         let datas = data.data.data;
-        if ((data.data.status = 1)) {
+        if (data.data.status == 1) {
           console.log(data);
           $this.balance = datas.balance == null ? 0 : datas.balance;
           $this.freezeMoney = datas.freezeMoney == null ? 0 : datas.freezeMoney;
