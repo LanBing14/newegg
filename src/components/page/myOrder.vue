@@ -13,7 +13,7 @@
       <mt-tab-container-item id="">
        <!--待付款列表信息-->
         <div class="orderBox" v-for="(item,index) in obligationList" >   <!--v-for="(item,index) in obligationList" :key="index"-->
-          <p class="orderNum">订单编号:<span>{{item.orderSn}}</span></p>
+          <p class="orderNum">订单编号:<span> {{item.orderSn}} </span></p>
 
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
@@ -42,7 +42,7 @@
         
        <!--列表信息-->
         <div class="orderBox" v-for="(item,index) in receivingList" >
-          <p  class="orderNum">订单编号:<span>{{item.orderSn}}</span>/p>
+          <p  class="orderNum">订单编号:<span> {{item.orderSn}} </span></p>
 
           <div class="goodsInfo" @click="getOrderDetail(item.id)">
 
