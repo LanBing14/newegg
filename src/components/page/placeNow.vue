@@ -46,8 +46,8 @@
           <!--<input type="text" v-model="phone" placeholder="输入您的手机号" class="atten">-->
         </div>
 
-        <p class="remind" v-if="isTrue">为确保您账户安全，请获取您的账户{{phone}}验证码</p>
-          <input type="text" v-model="phone" placeholder="请输入手机号"  class="atten" v-if="!isTrue">
+        <p class="remind">为确保您账户安全，请获取您的账户{{myPhone}}验证码</p>
+          <!-- <input type="text" v-model="phone" placeholder="请输入手机号"  class="atten" v-if="!isTrue"> -->
 
         <div class="phoneCode">
           <input type="text" v-model="codeMy" placeholder="输入验证码" class="codeInput">
@@ -109,6 +109,7 @@ export default {
       id: "", //提现方式 id  0 1 2
       codes: "",
       phone: "",
+      myPhone: "",
       prompt: 60,
       promptTo: 60,
       dis: false //为true禁用
@@ -136,6 +137,7 @@ export default {
         path: "/balance"
       });
     },
+    //立即绑定
     nexteps() {
       if (this.phone == "") {
         Toast({
@@ -143,24 +145,42 @@ export default {
           duration: 1500
         });
         return false;
-      } else if (this.codes == "") {
+      }
+      if (this.codes == "") {
         Toast({
           message: "验证码不能为空",
           duration: 1500
         });
         return false;
-      } else {
+      }
+      var data = qs.stringify({
+        openid: localStorage.getItem("openid"),
+        username: "",
+        age: "",
+        sex: "",
+        file: "",
+        phone: this.phone,
+        smscode: this.codes
+      });
+      axios({
+        url: BaseUrl + "/index/editUserInfo",
+        method: "post",
+        data: data,
+        type: "json"
+      }).then(info => {
+        //修改成功
+        this.myPhone = this.phone;
         this.phoneMsg = false;
         this.hintShow = true;
         this.isShow = true;
         this.bankShow = true;
-        this.isTrue = true;
-      }
+      });
     },
     cancel() {
       this.phoneMsg = false;
       this.isShow = false;
       this.hintShow = false;
+      this.bankShow = false;
     },
     //点击'确认提现',蒙版，'取消'，显示信息框
     hideToggle() {
@@ -186,11 +206,11 @@ export default {
             duration: 1500
           });
         } else {
-          if ($this.checkPhone == 0) {
+          if ($this.phone == "") {
             //未绑定手机
             $this.phoneMsg = true;
-            return false;
           } else {
+            $this.myPhone = $this.phone;
             $this.isShow = true;
             $this.hintShow = true;
             $this.bankShow = true;
@@ -222,7 +242,6 @@ export default {
         }
       }, 1000);
       //倒计时
-      console.log(this.phone);
       var baseUrl = BaseUrl + "index/getSms";
       var datas = qs.stringify({
         phone: this.phone.toString(),
@@ -238,7 +257,7 @@ export default {
       }).then(function(data) {
         console.log(data);
         let datas = data.data.data;
-        if ((data.data.status = 1)) {
+        if (data.data.status == 1) {
           console.log(data.data);
           Toast({
             message: "发送成功",
@@ -247,6 +266,7 @@ export default {
         }
       });
     },
+    //工商银行获取验证码
     getCodeTo() {
       this.dis = true;
       //倒计时
@@ -264,11 +284,10 @@ export default {
       //倒计时
       var baseUrl = BaseUrl + "index/getSms";
       var datas = qs.stringify({
-        phone: this.phone.toString(),
+        phone: this.myPhone,
         openid: localStorage.getItem("openid"),
         type: "1"
       });
-
       axios({
         method: "post",
         url: baseUrl,
@@ -276,8 +295,7 @@ export default {
         data: datas
       }).then(function(data) {
         console.log(data);
-        let datas = data.data.data;
-        if ((data.data.status = 1)) {
+        if (data.data.status == 1) {
           console.log(data.data);
           Toast({
             message: "发送成功",
@@ -311,13 +329,7 @@ export default {
           });
           return false;
         } else {
-          if ($this.phone == "") {
-            Toast({
-              message: "手机号不能为空",
-              duration: 1500
-            });
-            return false;
-          } else if ($this.codeMy == "") {
+          if ($this.codeMy == "") {
             Toast({
               message: "验证码不能为空",
               duration: 1500
@@ -332,7 +344,7 @@ export default {
               realnamg: $this.names, //string 真实姓名
               type: 2, //string 0=支付宝 1=微信 2=银行转账
               bankofdeposit: $this.bankName,
-              phone: $this.phone,
+              phone: $this.myPhone,
               smscode: $this.codeMy
             });
             axios({
@@ -359,6 +371,27 @@ export default {
           }
         }
       }
+    },
+    goApply() {
+      //        	this.goPlace();
+      var $this = this;
+      var baseUrl = BaseUrl + "api/getUserPhone";
+      var datas = qs.stringify({
+        openid: localStorage.getItem("openid")
+        // openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s"
+      });
+
+      axios({
+        method: "post",
+        url: baseUrl,
+        type: "json",
+        data: datas
+      }).then(function(data) {
+        console.log(data);
+        $this.phone = data.data.data.phone;
+        console.log($this.phone);
+      });
+      //如果满足这两个条件Toast‘申请成功’
     }
 
     // switcher(slects) {
@@ -381,9 +414,9 @@ export default {
   },
   created() {
     this.openid = localStorage.getItem("openid");
+    this.goApply();
     // this.openid = "oX6js0S0Pqsh6ijuNs48kDFN3w6s";
-    this.checkOrder = this.$route.query.checkOrder;
-    this.checkPhone = this.$route.query.checkPhone;
+    // this.checkPhone = this.$route.query.checkPhone;
     this.balance = this.$route.query.balances;
   },
   mounted() {},

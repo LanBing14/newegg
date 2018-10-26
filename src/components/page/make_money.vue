@@ -17,7 +17,7 @@
     <!--滚轮公告-->
     <!-- <div class="marquee_box">
       <ul class="marquee_list" :style="{ top: -Num + 'px'}" :class="{marquee_top:Num}">
-        <!-- 当显示最后一条的时候（Num=0转换布尔类型为false）去掉过渡效果-->
+         当显示最后一条的时候（Num=0转换布尔类型为false）去掉过渡效果-->
     <!-- <li v-for="(lists,i) in list" :key="i">
       <p>{{lists.username}}邀请{{lists.num}}人成功赚了{{lists.sumNum}}元</p>
     </li>

@@ -43,7 +43,7 @@ export default {
       hintShow: false,
       balance: "",
       freezeMoney: "",
-      checkOrder: 0,
+      phone: "",
       checkPhone: ""
     };
   },
@@ -106,6 +106,7 @@ export default {
       var baseUrl = BaseUrl + "index/getUserBalance";
       var datas = qs.stringify({
         openid: localStorage.getItem("openid")
+        // openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s"
       });
 
       axios({
@@ -119,13 +120,12 @@ export default {
           if ((data.data.status = 1)) {
             $this.checkOrder = datas.checkOrder;
             $this.checkPhone = datas.checkPhone;
+            $this.phone = datas.phone;
             if ($this.checkOrder == 1) {
               $this.$router.push({
                 name: "placeNow",
                 query: {
-                  balances: $this.balance,
-                  checkOrder: $this.checkOrder,
-                  checkPhone: $this.checkPhone
+                  balances: $this.balance
                 }
               });
             } else {

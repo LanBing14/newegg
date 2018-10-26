@@ -13,6 +13,8 @@
       <mt-tab-container-item id="">
        <!--待付款列表信息-->
         <div class="orderBox" v-for="(item,index) in obligationList" >   <!--v-for="(item,index) in obligationList" :key="index"-->
+          <p class="orderNum">订单编号:<span>{{item.orderSn}}</span></p>
+
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
             <div class="name">
@@ -40,6 +42,8 @@
         
        <!--列表信息-->
         <div class="orderBox" v-for="(item,index) in receivingList" >
+          <p  class="orderNum">订单编号:<span>{{item.orderSn}}</span>/p>
+
           <div class="goodsInfo" @click="getOrderDetail(item.id)">
 
             <img src="../../img/swiper.png" alt="">
@@ -95,6 +99,8 @@
       <mt-tab-container-item id="1">
       <!--待付款列表信息-->
         <div class="orderBox" v-for="(item,index) in obligationList" >  <!--obligationList-->
+          <p  class="orderNum">订单编号:<span>{{item.orderSn}}</span></p>
+
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
             <div class="name">
@@ -123,6 +129,7 @@
      <!-- 待收货列表-->
       <mt-tab-container-item id="2">
         <div class="orderBox" v-for="(item,index) in receivingList" >
+          <p  class="orderNum">订单编号:<span>{{item.orderSn}}</span></p>
           <div class="goodsInfo">
             <img src="../../img/swiper.png" alt="">
             <div class="name">
@@ -162,69 +169,65 @@ export default {
   name: "myOrder",
   data() {
     return {
-    	openid:"",
-    	id:'', //订单id
+      openid: "",
+      id: "", //订单id
       selected: "",
       packageInfo: [],
       allList: [],
-      obligationList:[], //tab 待付款列表信息循环
-      receivingList: [],  //tab 待收货的列表信息循环
-      evaluateList: [],    //tab 待评价列表信息循环
-      quanbu:[],           //全部
-      goodsIdAll:'',
-      packageIdAll:'',
-      numberAll:'',
-      totalPriceAll:'',
-      aidAll:'',
-      orderSnAll:''
+      obligationList: [], //tab 待付款列表信息循环
+      receivingList: [], //tab 待收货的列表信息循环
+      evaluateList: [], //tab 待评价列表信息循环
+      quanbu: [], //全部
+      goodsIdAll: "",
+      packageIdAll: "",
+      numberAll: "",
+      totalPriceAll: "",
+      aidAll: "",
+      orderSnAll: ""
     };
   },
-  methods:{
-  	
+  methods: {
     getOrderDetail(id) {
       this.$router.push({
         path: "/order_details",
         query: {
-          orderId: id,
+          orderId: id
         }
       });
     },
     //获得我的订单全部信息
     getMyOrder() {
-    
       var $this = this;
       var baseUrl = BaseUrl + "/api/getOrderList";
       var data = qs.stringify({
-       openid:localStorage.getItem("openid"),  
-          // openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s',
-          type: $this.selected
+        openid: localStorage.getItem("openid"),
+        // openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s",
+        type: $this.selected
       });
       axios({
         method: "post",
         url: baseUrl,
         type: "json",
-        data: data,
+        data: data
       }).then(function(data) {
         console.log(data);
         let datas = data.data.data;
-          $this.id = datas[0].id;  //订单id
-          console.log($this.id);
+        $this.id = datas[0].id; //订单id
         if (data.data.status == 1) {
           $this.allList = datas;
           for (var i in datas) {
-          	$this.quanbu.push(datas[i].status); //全部
+            $this.quanbu.push(datas[i].status); //全部
             if (datas[i].status == "未支付") {
-               datas[i].status = "待付款";
+              datas[i].status = "待付款";
               $this.obligationList.push(datas[i]);
               console.log($this.obligationList);
-            } else if (datas[i].status == "待发货" ) {
+            } else if (datas[i].status == "待发货") {
               datas[i].status = "待收货";
               $this.receivingList.push(datas[i]);
-            }else if (datas[i].status == '部分发货') {
+            } else if (datas[i].status == "部分发货") {
               datas[i].status = "部分发货";
               $this.receivingList.push(datas[i]);
-            }
-            else {
+            } else {
               datas[i].status = "待评价";
               $this.evaluateList.push(datas[i]);
             }
@@ -237,56 +240,55 @@ export default {
         }
       });
     },
-//去支付点击
-    nextPage(item){
-    	var $this = this;
-    	 $this.login(item,1);
-    	 console.log(item);
-    	 this.$router.push({
+    //去支付点击
+    nextPage(item) {
+      var $this = this;
+      $this.login(item, 1);
+      this.$router.push({
         path: "/package_details",
         query: {
-           id:item.status,
-           totalPrice: $this.totalPriceAll,
-           goodsName: item.packageInfo.goodsName,
-           orderSn: item.orderSn,
-           packageId: item.packageId,
-           orderids:item.id,
-           remark: item.remark,
-           amount: item.number,
-           openid: item.openid,
-           goodsId:item.goodsId,
-           orderSn:item.orderSn
-        } 
-      });
-       console.log(item)
-    },
-    nextStay(item){
-    	 this.$router.push({
-    	 	path: "/package_details",
-    	 	query: {
-           id:item.status,
-           openid: item.openid,
-           orderids:item.id,
-           remark: item.remark
-        }
-    	 });
-    	 console.log(item)
-    },
-    details1(){
-    	this.$router.push({
-        path: "/order_details",
-        query: {
-           id:'待收货',
-           orderId:this.id
+          id: item.status,
+          totalPrice: $this.totalPriceAll,
+          goodsName: item.packageInfo.goodsName,
+          orderSn: item.orderSn,
+          packageId: item.packageId,
+          orderids: item.id,
+          remark: item.remark,
+          amount: item.number,
+          openid: item.openid,
+          goodsId: item.goodsId,
+          orderSn: item.orderSn
         }
       });
+      console.log(item);
     },
-    details2(){
-    	this.$router.push({
+    nextStay(item) {
+      this.$router.push({
+        path: "/package_details",
+        query: {
+          id: item.status,
+          openid: item.openid,
+          orderids: item.id,
+          remark: item.remark
+        }
+      });
+      console.log(item);
+    },
+    details1() {
+      this.$router.push({
         path: "/order_details",
         query: {
-           id:'待评价',
-           orderId:this.id
+          id: "待收货",
+          orderId: this.id
+        }
+      });
+    },
+    details2() {
+      this.$router.push({
+        path: "/order_details",
+        query: {
+          id: "待评价",
+          orderId: this.id
         }
       });
     },
@@ -295,7 +297,7 @@ export default {
         path: "/Fullcreate_Address",
         query: {
           openid: localStorage.getItem("openid"),
-          orderId: receivingList[i].id  //待收货
+          orderId: receivingList[i].id //待收货
         }
       });
     },
@@ -303,7 +305,7 @@ export default {
       var $this = this;
       var baseUrl = "/api/api/channelOrder";
       var data = qs.stringify({
-        openid: localStorage.getItem("openid"), 
+        openid: localStorage.getItem("openid"),
         id: receivingList[i].id
       });
       axios({
@@ -380,19 +382,20 @@ export default {
           });
       });
     },
-    
+
     //以下为支付功能
-    login(item,num){     //获取当前订单数据
-    	console.log(num);
-    	var $this = this;
+    login(item, num) {
+      //获取当前订单数据
+      console.log(num);
+      var $this = this;
       var baseUrl = BaseUrl + "api/preOrder";
       var data = qs.stringify({
         goodsId: item.goodsId,
         packageId: item.packageId,
-        number: item.amount,  
+        number: item.amount,
         openid: item.openid
       });
-      
+
       axios({
         method: "post",
         url: baseUrl,
@@ -402,20 +405,20 @@ export default {
         //console.log(data);
         let datas = data.data.data;
         if (data.data.status == 1) {
-           $this.goodsIdAll = datas.goodsId;
-           $this.packageIdAll = datas.packageId;
-           $this.numberAll = datas.number;
-           $this.totalPriceAll = datas.totalPrice/100;
-           $this.aidAll = datas.address;
-           
-           if(num == 0){
-           	   $this.goPay(item);
-           }
+          $this.goodsIdAll = datas.goodsId;
+          $this.packageIdAll = datas.packageId;
+          $this.numberAll = datas.number;
+          $this.totalPriceAll = datas.totalPrice / 100;
+          $this.aidAll = datas.address;
+
+          if (num == 0) {
+            $this.goPay(item);
+          }
         }
       });
     },
-    goPay(item){
-    	var $this = this;
+    goPay(item) {
+      var $this = this;
       axios
         .get(
           "http://wufuapp.com/index.php/api_egg/Weixinpay/index?openid=" +
@@ -427,21 +430,21 @@ export default {
             "&orderSn=" +
             item.orderSn
         )
-        .then(function(data) {  
-           //console.log(item.orderSn);
+        .then(function(data) {
+          //console.log(item.orderSn);
           let datas = data.data.data;
           if (data.data.status == 1) {
-          	$this.orderSnAll = item.orderSn;
+            $this.orderSnAll = item.orderSn;
             $this.onBridgeReady(datas);
-          }else{
-	          Toast({
-	            message: '已支付',
-	            duration: 1500
-	          });
+          } else {
+            Toast({
+              message: "已支付",
+              duration: 1500
+            });
           }
         });
     },
-  onBridgeReady(data) {
+    onBridgeReady(data) {
       var $this = this;
 
       //支付成功，跳转到支付支付成功页面
@@ -505,12 +508,21 @@ export default {
     background: #ffffff;
     padding: 0.5rem;
     padding-right: 0;
-    .goodsInfo{
+
+    .orderNum {
+      font-size: 12px;
+      color: #79797b;
+      margin-bottom: 10px;
+      span {
+        margin-left: 5px;
+      }
+    }
+    .goodsInfo {
       display: flex;
       align-items: center;
       border-bottom: 1px solid #c1c5c8;
       padding-bottom: 0.5rem;
-      img{
+      img {
         width: 20%;
       }
       .name {
@@ -521,8 +533,8 @@ export default {
         .money {
           display: flex;
           align-items: center;
-          .jine{
-          	position: absolute;
+          .jine {
+            position: absolute;
             width: 30%;
             right: 1rem;
             top: 0.5rem;
@@ -530,9 +542,9 @@ export default {
             text-align: right;
           }
           .shul {
-          	position: absolute;
-          	width: 20%;
-          	right:1rem;
+            position: absolute;
+            width: 20%;
+            right: 1rem;
             top: 2.5rem;
             text-align: right;
             z-index: 7;
@@ -561,7 +573,7 @@ export default {
       height: 2.125rem;
       line-height: 3.625rem;
       margin-top: 0.8rem;
-      .cancelBtn{
+      .cancelBtn {
         width: 5rem;
         line-height: 1.6rem;
         text-align: center;
@@ -579,16 +591,16 @@ export default {
         border-radius: 2rem;
         margin-right: 0.8rem;
       }
-      .flag{
-          position: absolute;
-          left: 1rem;
-          text-align: center;
-          font-size: 0.75rem;
-          color:#CC3E36;
-          width:3rem;
-          height: 2rem;
-          line-height: 0.8rem;
-        }
+      .flag {
+        position: absolute;
+        left: 1rem;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #cc3e36;
+        width: 3rem;
+        height: 2rem;
+        line-height: 0.8rem;
+      }
     }
   }
 }

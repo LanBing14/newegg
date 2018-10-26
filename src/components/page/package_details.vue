@@ -24,6 +24,8 @@
       </div>
     </div>
     <!--商品信息-->
+    <p class="orderNum">订单编号:<span>{{packageInfo.orderSn}}</span></p>
+
     <div class="productInfo">
       <img src="../../img/swiper.png" alt="" class="goodPic">
       <div class="line">
@@ -74,7 +76,7 @@
 							    		<!--<p class="order_btn" v-show="item.isTrue!=true" @click='goBuyxiang(item)'>订单详情</p>-->
 						    		
 							    		<div class="information_exhibition" v-show="item.isTrue==true" >
-								    		<p>2018/{{item.age}}/3/13:10</p>
+								    		<p>2018/{{item.date}}/3/13:10</p>
 								    		<span @click='goBuyxiang(item)'>订单详情</span>
 								    		<span @click='goBuyping' style="color: #999999;border:0.0625rem solid #999999;">立即评价</span>
 							    	  </div>
@@ -137,118 +139,115 @@ export default {
   name: "package_details",
   data() {
     return {
-    	id:'', //订单id
+      id: "", //订单id
       goodsName: "",
       dateTime: "",
       selected: "0",
       number: "",
       totalPrice: 0,
-      amount: '',
-      openid: '',
+      amount: "",
+      openid: "",
       sellPrice: "",
       packageDetails: [],
-      receiver:"",  //收货人
-      phone:"",//手机号
-      province:"",//省份
-      city:"", //城市
-      county:"",  //区
-      detail:"",//详细地址
-      zhuangtai:'',
-      show1:'block',
+      receiver: "", //收货人
+      phone: "", //手机号
+      province: "", //省份
+      city: "", //城市
+      county: "", //区
+      detail: "", //详细地址
+      zhuangtai: "",
+      show1: "block",
       number: 0,
-      show2:'none',
-      infoBlock:'none',
-      orderBlock:'block',
-      orderSn: '',
-      butNum:1,
-//    content:'',
-      back1:'#CC3E36',
-      back2:'#f5f5f5',
-      color1:'#f5f5f5',
-      color2:'#CC3E36',
-      packageList:[],
-      packageInfo:[],
-      numberAll:'',
-      sellPriceAll:'',
-      goodsId:'',
+      show2: "none",
+      infoBlock: "none",
+      orderBlock: "block",
+      orderSn: "",
+      butNum: 1,
+      //    content:'',
+      back1: "#CC3E36",
+      back2: "#f5f5f5",
+      color1: "#f5f5f5",
+      color2: "#CC3E36",
+      packageList: [],
+      packageInfo: [],
+      numberAll: "",
+      sellPriceAll: "",
+      goodsId: "",
       isdetails: [],
-      orderId: '',
-      isTrue:false,
-      images:true,
+      orderId: "",
+      isTrue: false,
+      images: true,
       orderids: 335,
-      stayFenList:[
-         {stay:'2'},
-      ],
-      show:false,
-      remark:'',
-      noHairList:[],  //待发货
-      sentList:[] ,
-      kdName: '',
-      goodsName:'',
-      kdNo: '',
-      sendTime: ''
+      stayFenList: [{ stay: "2" }],
+      show: false,
+      remark: "",
+      noHairList: [], //待发货
+      sentList: [],
+      kdName: "",
+      goodsName: "",
+      kdNo: "",
+      sendTime: ""
       //已发货
     };
   },
   methods: {
     //点击跳转上一页面
 
-    goBuyxiang(item){
-        this.$router.push({
+    goBuyxiang(item) {
+      this.$router.push({
         path: "/order_details",
-        query: { 
-        	       name:"待评论",
-	        	     shi:this.sendTime,
-	        	     kdNames:this.kdName,
-	        	     kdNos:this.kdNo,        	    
-	        	     orderId: this.orderids
-            },
+        query: {
+          name: "待评论",
+          shi: this.sendTime,
+          kdNames: this.kdName,
+          kdNos: this.kdNo,
+          orderId: this.orderids
+        }
       });
       console.log(item);
     },
-    
-    goBuyping(){
-        this.$router.push({
+
+    goBuyping() {
+      this.$router.push({
         path: "/evaluate",
         query: { orderId: this.$route.query.orderId }
-
       });
     },
     goBack() {
       this.$router.push({
         path: "/myOrder",
-        query: { orderId: this.$route.query.orderId },
-
+        query: { orderId: this.$route.query.orderId }
       });
     },
-    getMyOrder1(){
-    	this.back1 = '#CC3E36';
-    	this.back2 = '#f5f5f5';
-    	this.color1 = '#ffffff';
-    	this.color2 = '#CC3E36';
+    getMyOrder1() {
+      this.back1 = "#CC3E36";
+      this.back2 = "#f5f5f5";
+      this.color1 = "#ffffff";
+      this.color2 = "#CC3E36";
     },
-    getMyOrder2(){
-    	this.back1 = '#f5f5f5';
-    	this.back2 = '#CC3E36';
-    	this.color1 = '#CC3E36';
-    	this.color2 = '#ffffff';
+    getMyOrder2() {
+      this.back1 = "#f5f5f5";
+      this.back2 = "#CC3E36";
+      this.color1 = "#CC3E36";
+      this.color2 = "#ffffff";
     },
-    infoShow(item){
-    item.isTrue = !item.isTrue;
-    item.images = !item.images;
+    infoShow(item) {
+      item.isTrue = !item.isTrue;
+      item.images = !item.images;
     },
 
-    login(num){     //获取当前订单数据
+    login(num) {
+      //获取当前订单数据
       console.log(num);
-    	var $this = this;
+      var $this = this;
       var baseUrl = BaseUrl + "api/preOrder";
       var data = qs.stringify({
         goodsId: $this.$route.query.goodsId,
         packageId: $this.$route.query.packageId,
-        number: $this.$route.query.amount,  
+        number: $this.$route.query.amount,
         openid: $this.openid
       });
-      
+
       axios({
         method: "post",
         url: baseUrl,
@@ -258,47 +257,45 @@ export default {
         console.log(data);
         let datas = data.data.data;
         if (data.data.status == 1) {
-           $this.goodsIdAll = datas.goodsId;
-           $this.packageIdAll = datas.packageId;
-           $this.numberAll = datas.number;
-           $this.totalPriceAll = datas.totalPrice/100;
-           $this.aidAll = datas.address;
-           
-           if(num == 0){
-           	   $this.goPay();
-           }
+          $this.goodsIdAll = datas.goodsId;
+          $this.packageIdAll = datas.packageId;
+          $this.numberAll = datas.number;
+          $this.totalPriceAll = datas.totalPrice / 100;
+          $this.aidAll = datas.address;
+
+          if (num == 0) {
+            $this.goPay();
+          }
         }
       });
     },
 
-
-
-goPay() {
-    var $this = this;
-    axios
-      .get(
-        "http://wufuapp.com/index.php/api_egg/Weixinpay/index?openid=" +
-          $this.openid +
-          "&price=" +
-          $this.amount +
-          "&remark=" +
-          $this.goodsName +
-          "&orderSn=" +
-          $this.$route.query.orderSn
-      )
-      .then(function(data) {
-      	console.log(data);
-        let datas = data.data.data;
-        if (data.data.status == 1) {
-          	$this.orderSnAll = $this.$route.query.orderSn;
+    goPay() {
+      var $this = this;
+      axios
+        .get(
+          "http://wufuapp.com/index.php/api_egg/Weixinpay/index?openid=" +
+            $this.openid +
+            "&price=" +
+            $this.amount +
+            "&remark=" +
+            $this.goodsName +
+            "&orderSn=" +
+            $this.$route.query.orderSn
+        )
+        .then(function(data) {
+          console.log(data);
+          let datas = data.data.data;
+          if (data.data.status == 1) {
+            $this.orderSnAll = $this.$route.query.orderSn;
             $this.onBridgeReady(datas);
-          }else{
-	          Toast({
-	            message: '已支付',
-	            duration: 1500
-	          });
+          } else {
+            Toast({
+              message: "已支付",
+              duration: 1500
+            });
           }
-      });
+        });
     },
     //获取订单
 
@@ -340,25 +337,25 @@ goPay() {
       );
     },
     //点击“更换发货地址”跳转到 收货地址
-    replaceAddress(){
-    	this.$router.push({
+    replaceAddress() {
+      this.$router.push({
         path: "/create_address",
-        query: { 
+        query: {
           number: this.numberAll,
           statusId: 1,
           id: this.$route.query.id,
-        	sellPrice: this.sellPriceAll,
-        	packageId: this.$route.query.packageId,
+          sellPrice: this.sellPriceAll,
+          packageId: this.$route.query.packageId,
           openid: this.$route.query.openid,
           goodsName: this.$route.query.goodsName,
           remark: this.$route.query.remark,
-          orderids :  this.$route.query.orderids,
-          amount:  this.$route.query.amount,
+          orderids: this.$route.query.orderids,
+          amount: this.$route.query.amount,
           totalPrice: this.$route.query.totalPrice,
           goodsId: this.$route.query.goodsId,
           orderSn: this.$route.query.orderSn
         }
-     });
+      });
     },
     //点击“已发货”跳转到订单详情
     goOrderDetails() {
@@ -368,65 +365,61 @@ goPay() {
       });
     },
     datas() {
-    	this.zhuangtai = this.$route.query.id;
-    	console.log(this.zhuangtai);
-    	if(this.zhuangtai == "部分发货" || this.zhuangtai == '待收货'){
-    		 this.show1 = 'block';
-    		 this.show2 = 'none';
-    	}else if(this.zhuangtai == '待付款'){
-    		 this.show1 = 'none';
-    		 this.show2 = 'block';
-    	}
+      this.zhuangtai = this.$route.query.id;
+      console.log(this.zhuangtai);
+      if (this.zhuangtai == "部分发货" || this.zhuangtai == "待收货") {
+        this.show1 = "block";
+        this.show2 = "none";
+      } else if (this.zhuangtai == "待付款") {
+        this.show1 = "none";
+        this.show2 = "block";
+      }
       var that = this;
       var baseUrl = BaseUrl + "api/getPackageDetail";
       var data = qs.stringify({
-         id: that.orderids,  
-      // openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s'  , 
-				openid:that.openid
-
+        id: that.orderids,
+        // openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s"
+        openid: that.openid
       });
-       
+
       axios({
         method: "post",
         url: baseUrl,
         type: "json",
         data: data
-      })
-        .then(function(info) {
-          let datas = info.data;
-          if (datas.status == 1) {
-             that.packageInfo = datas.data.packageInfo;
-             that.sellPriceAll = datas.data.packageInfo.sellPrice;
-             that.numberAll = datas.data.packageInfo.number;
-             that.goodsName = datas.data.packageInfo.goodsName;
-             
-            var details = datas.data.packageDetails;         //未发货
-            var isdetails = datas.data.isSendPackageDetails  //已发货
-            console.log(isdetails);
-				         for (var i in details) {
-				              details[i].status = "待发货";
-				              that.noHairList.push(details[i]);
-				             };
-				         for (var j in isdetails) {
-				              isdetails[j].status = "已发货";	//加一个判断			       
-				              that.kdName = isdetails[j].kdName;
-				              that.sendTime = isdetails[j].sendTime;
-				              that.kdNo = isdetails[j].kdNo;
-				              that.sentList.push(isdetails[j]);
-				              that.sentList[j].isTrue = false;
-		                  that.sentList[j].images = true;
-				             }
+      }).then(function(info) {
+        let datas = info.data;
+        if (datas.status == 1) {
+          that.packageInfo = datas.data.packageInfo;
+          that.sellPriceAll = datas.data.packageInfo.sellPrice;
+          that.numberAll = datas.data.packageInfo.number;
+          that.goodsName = datas.data.packageInfo.goodsName;
 
-          } else {
-            Toast({
-              message: datas.msg,
-              duration: 1500
-            });
+          var details = datas.data.packageDetails; //未发货
+          var isdetails = datas.data.isSendPackageDetails; //已发货
+          console.log(isdetails);
+          for (var i in details) {
+            details[i].status = "待发货";
+            that.noHairList.push(details[i]);
           }
-        })
-        
+          for (var j in isdetails) {
+            isdetails[j].status = "已发货"; //加一个判断
+            that.kdName = isdetails[j].kdName;
+            that.sendTime = isdetails[j].sendTime;
+            that.kdNo = isdetails[j].kdNo;
+            that.sentList.push(isdetails[j]);
+            that.sentList[j].isTrue = false;
+            that.sentList[j].images = true;
+          }
+        } else {
+          Toast({
+            message: datas.msg,
+            duration: 1500
+          });
+        }
+      });
     },
-Address() {
+    Address() {
       var $this = this;
       var baseUrl = BaseUrl + "/api/getAddressList";
       var data = qs.stringify({
@@ -455,9 +448,8 @@ Address() {
         }
       });
     }
-
   },
-  created(){
+  created() {
     this.totalPrice = this.$route.query.totalPrice;
     this.goodsName = this.$route.query.goodsName;
     this.remark = this.$route.query.remark;
@@ -467,46 +459,41 @@ Address() {
     this.goodsId = this.$route.query.goodsId;
     this.openid = localStorage.getItem("openid");
     this.orderSn = this.$route.query.orderSn;
-//  this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
+    //  this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
 
     this.datas();
     this.Address();
-  	
   },
-  mounted() {
-  	
-  },
+  mounted() {},
   components: {}
 };
 </script>
 
 <style lang="scss" scoped>
 #package_details {
-	 background-color:#F0F0F2;
+  background-color: #f0f0f2;
   .mint-header {
     background: #cc3e36;
   }
-  
+
   /*发货时间*/
-  .time_goods{
-    margin-top:3rem;
+  .time_goods {
+    margin-top: 3rem;
     background: #fff;
     padding: 1.5rem;
     display: flex;
     align-content: center;
     justify-content: center;
-    img{
-
-    	width: 1.625rem;
-    	height: 1.625rem;
-    	margin-right: .5rem;
+    img {
+      width: 1.625rem;
+      height: 1.625rem;
+      margin-right: 0.5rem;
     }
     p {
-
       font-size: 0.9rem;
-      color: #CC3E36;
+      color: #cc3e36;
       /*padding-top: 0.2rem;*/
-    } 
+    }
   }
   /*收货人信息*/
   .collect_information {
@@ -514,7 +501,7 @@ Address() {
     align-items: center;
     margin-top: 2px;
     padding: 0.2rem 0.8rem;
-    height:6rem;
+    height: 6rem;
     background: #fff;
     .messages {
       width: 100%;
@@ -538,24 +525,35 @@ Address() {
           width: 65%;
           color: #c1c5c8;
         }
-        span{
-        	padding-left: 1.45rem;
-        	font-size: 0.6875rem;
-        	color: #CC3E36;
+        span {
+          padding-left: 1.45rem;
+          font-size: 0.6875rem;
+          color: #cc3e36;
         }
       }
     }
   }
   /*商品信息*/
+  .orderNum {
+    font-size: 12px;
+    color: #79797b;
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    background-color: #fff;
+    span {
+      margin-left: 5px;
+    }
+  }
   .productInfo {
-  	background-color: #FFFFFF;
-  	margin-top: 0.5rem;
-    padding-top: 0.5rem;
+    background-color: #ffffff;
+    // padding-top: 0.5rem;
     padding-bottom: 1.75rem;
     display: flex;
     align-items: center;
     padding-left: 1rem;
     position: relative;
+
     .goodPic {
       width: 5.7rem;
       margin: 0.5rem 0;
@@ -563,8 +561,8 @@ Address() {
     .line {
       width: 50%;
       padding-left: 1rem;
-      .name{
-      	padding-top: 1.8rem;
+      .name {
+        padding-top: 1.8rem;
         width: 100%;
         font-size: 0.9rem;
       }
@@ -584,38 +582,38 @@ Address() {
       width: 30%;
       text-align: right;
     }
-    .number{
-    	position: absolute;
-    	z-index: 999;
-    	color: #B4B3B3;
-    	font-size: 0.75rem;
-    	right: 1rem;
-    	top:6rem;
-    	text-align: right;
+    .number {
+      position: absolute;
+      z-index: 999;
+      color: #b4b3b3;
+      font-size: 0.75rem;
+      right: 1rem;
+      top: 6rem;
+      text-align: right;
     }
   }
   /*客户评价*/
- .kuang{
- 	  display: block;
- 	  padding: 0.5rem 1rem;
- 	  margin-top: 0.08rem;
-	 	width:91%;
-	 	border: none;
-	 	min-height:2rem ;
-	 	font-size:1rem ;
-	 	color:#2A1011;
-	 	background: #FFFFFF;
- }
- .word{
- 	  padding: 0 1rem;
- 	  /*text-align: center;*/
- 	  /*min-height: 2rem;*/
- 	  line-height: 1.5rem;
- 	  margin-top: 0.08rem;
-	 	font-size:0.9rem;
-	 	color:#CC3E36;
-	 	background: #FFFFFF;
- }
+  .kuang {
+    display: block;
+    padding: 0.5rem 1rem;
+    margin-top: 0.08rem;
+    width: 91%;
+    border: none;
+    min-height: 2rem;
+    font-size: 1rem;
+    color: #2a1011;
+    background: #ffffff;
+  }
+  .word {
+    padding: 0 1rem;
+    /*text-align: center;*/
+    /*min-height: 2rem;*/
+    line-height: 1.5rem;
+    margin-top: 0.08rem;
+    font-size: 0.9rem;
+    color: #cc3e36;
+    background: #ffffff;
+  }
   .shipping_information {
     .title {
       background: #f0f0f2;
@@ -641,7 +639,6 @@ Address() {
     }
     /*待发货信息*/
     .waitInfomation {
-    	
       display: flex;
       align-items: center;
       color: #cc3e36;
@@ -660,131 +657,129 @@ Address() {
       }
     }
   }
-  .already_huo{
-  	  background: #FFFFFF;
-  	  width: 100%;
-  	  position: relative;
-  	  margin-bottom:0.625rem;
-  	 .box_one{
-  	 	padding: 0.875rem 1rem 0.56rem 1rem;
-  	 	color: #666666;
-  	 	width: 92%;
-  	 
-  	 	/*position: relative;*/
-  	 	p{
-  	 		display: inline-block;
-  	 		font-weight:500;
-  	 	  font-size: 0.875rem;
-  	 	}
-  	 	span{
-  	 		 font-size: 0.875rem;
-  	 		 text-align: right;
-  	 		 float: right;
-  	 		 margin-right: 2rem;
-  	 	}
-  	 	img{
-  	 		position: absolute;
-  	 		right: 1.1rem;
-  	 		top: 1.2rem;
-  	 		width: 0.875rem;
-  	 		height: 0.5rem;
-  	 	}
-  	 }
-  	 .order_btn{
-  	 	  font-size: 0.8125rem;
-  	 	  color: #252424;
-  	 	  font-weight:500;
-  	 	  padding: 0.75rem 1rem 0.4375rem 1rem;
-  	 } 
+  .already_huo {
+    background: #ffffff;
+    width: 100%;
+    position: relative;
+    margin-bottom: 0.625rem;
+    .box_one {
+      padding: 0.875rem 1rem 0.56rem 1rem;
+      color: #666666;
+      width: 92%;
+
+      /*position: relative;*/
+      p {
+        display: inline-block;
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+      span {
+        font-size: 0.875rem;
+        text-align: right;
+        float: right;
+        margin-right: 2rem;
+      }
+      img {
+        position: absolute;
+        right: 1.1rem;
+        top: 1.2rem;
+        width: 0.875rem;
+        height: 0.5rem;
+      }
+    }
+    .order_btn {
+      font-size: 0.8125rem;
+      color: #252424;
+      font-weight: 500;
+      padding: 0.75rem 1rem 0.4375rem 1rem;
+    }
   }
-  .stay_huo{
-  	  background: #FFFFFF;
-  	  width: 100%;
-  	  
-  	 .boxs_one{
-  	 	padding: 0.875rem 1rem 0.56rem 1rem;
-  	 	color: #666666;
-  	 	width: 92%;
-  	 	border-bottom:0.0625rem solid #C1C5C8;
-  	 	p{
-  	 		display: inline-block;
-  	 		font-weight:500;
-  	 	  font-size: 0.875rem;
-  	 	}
-  	 	span{
-  	 		 font-size: 0.875rem;
-  	 		 text-align: right;
-  	 		 float: right;
-  	 		 margin-right: 2rem;
-  	 	} 	
-  	 } 
+  .stay_huo {
+    background: #ffffff;
+    width: 100%;
+
+    .boxs_one {
+      padding: 0.875rem 1rem 0.56rem 1rem;
+      color: #666666;
+      width: 92%;
+      border-bottom: 0.0625rem solid #c1c5c8;
+      p {
+        display: inline-block;
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+      span {
+        font-size: 0.875rem;
+        text-align: right;
+        float: right;
+        margin-right: 2rem;
+      }
+    }
   }
-  .information_exhibition{
-				  	   width:92%;
-				  	   background: #FFFFFF;
-				  	   z-index: 9;
-				  	   border-top:0.0625rem solid #C1C5C8;
-				  	   top:2.25rem;
-				  	   padding: 0 1rem;
-  	   p {
-  	   	 display: inline-block;
-  	   	 font-size: 0.75rem;
-  	   	 color: #999999;
-  	   	 line-height:3.125rem ;
-  	   }
-  	   span{
-  	   	text-align: center;
-  	   	line-height: 1.5625rem;
-  	   	width: 4.0625rem;
-  	   	height: 1.5625rem;
-  	   	color: #CC3E36;
-  	   	float: right;
-  	   	font-size: 0.75rem;
-  			border: 0.0625rem solid #CC3E36;
-  			border-radius: 0.8125rem;
-  			margin-left: 0.375rem;
-  			margin-top: 0.725rem;
-  	   }
+  .information_exhibition {
+    width: 92%;
+    background: #ffffff;
+    z-index: 9;
+    border-top: 0.0625rem solid #c1c5c8;
+    top: 2.25rem;
+    padding: 0 1rem;
+    p {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: #999999;
+      line-height: 3.125rem;
+    }
+    span {
+      text-align: center;
+      line-height: 1.5625rem;
+      width: 4.0625rem;
+      height: 1.5625rem;
+      color: #cc3e36;
+      float: right;
+      font-size: 0.75rem;
+      border: 0.0625rem solid #cc3e36;
+      border-radius: 0.8125rem;
+      margin-left: 0.375rem;
+      margin-top: 0.725rem;
+    }
   }
-  .order_information{
-  	
-  	padding: 0 1rem;
-  	background: #FFFFFF;
-  	font-size: 0.8125rem;
-  	color: #999999;
-  	p{
-  		margin-top: 0.4375rem;
-  		span {
-  			float: right;
-  			
-  		}
-  	}
+  .order_information {
+    padding: 0 1rem;
+    background: #ffffff;
+    font-size: 0.8125rem;
+    color: #999999;
+    p {
+      margin-top: 0.4375rem;
+      span {
+        float: right;
+      }
+    }
   }
   /*去支付*/
- .go_paybtn{
-			 	width: 9.375rem;
-			 	height: 2.937rem;
-			 	background-color: #CC3E36;
-			 	border-radius: 1.5rem;
-			 	color: #FFFFFF;
-			 	font-size: 1.25rem;
-			 	text-align: center;
-			 	line-height: 2.937rem;
-			 	margin: 1rem auto;
- }
- .pay_information{
- 	     	padding:0 1rem 3rem  1rem;
-		  	background: #FFFFFF;
-		  	font-size: 0.8125rem;
-		  	color: #999999; 
-		    
-		  	p {
-		  		margin-top: 0.4375rem;
-		  		span{
-		  			float: right;
-  		     }
-  	    }
+  .go_paybtn {
+    width: 9.375rem;
+    height: 2.937rem;
+    background-color: #cc3e36;
+    border-radius: 1.5rem;
+    color: #ffffff;
+    font-size: 1.25rem;
+    text-align: center;
+    line-height: 2.937rem;
+    margin: 1rem auto;
+  }
+  .pay_information {
+    padding: 0 1rem 3rem 1rem;
+    background: #ffffff;
+    font-size: 0.8125rem;
+    color: #999999;
+
+    p {
+      margin-top: 0.4375rem;
+      span {
+        float: right;
       }
+    }
+  }
   /*客服*/
   .kefu {
     width: 100%;
@@ -798,14 +793,15 @@ Address() {
 </style>
 
 <style type="text/css">
-	.yi{
-		padding-top: 0.5rem !important;
-		border-radius: 0.9rem 0 0 0.9rem ;
-		border-bottom: none !important;
-	}
-	.wei{
-		padding-top: 0.5rem !important;
-		border: none;border-radius: 0 0.9rem 0.9rem 0;
-	  border-bottom: none !important;
-	}
+.yi {
+  padding-top: 0.5rem !important;
+  border-radius: 0.9rem 0 0 0.9rem;
+  border-bottom: none !important;
+}
+.wei {
+  padding-top: 0.5rem !important;
+  border: none;
+  border-radius: 0 0.9rem 0.9rem 0;
+  border-bottom: none !important;
+}
 </style>
