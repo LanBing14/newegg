@@ -17,22 +17,22 @@
       <div class="attention">
 
         <!--       <input type="text" placeholder="选择入账方式" class="atten">-->
-        <select class="attens" v-model="slects" @change="switcher(slects)">
-          <option value="" style="display: none">选择入账方式</option>
-          <!--<option value="1">微信</option>
+        <!-- <select class="attens" v-model="slects" @change="switcher(slects)"> -->
+          <!-- <option value="" style="display: none">选择入账方式</option>
+          <option value="1">微信</option>
             <option value="0">支付宝</option>-->
-          <option value="2">银行</option>
-        </select>
+          <!-- <option value="2">银行</option> --> 
+        <!-- </select> -->
 
-        <div v-show="wxShow">
+        <!-- <div v-show="wxShow">
           <input type="text" v-model="accounts" placeholder="输入微信号" class="atten">
           <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
-        </div>
+        </div> -->
 
-        <div v-show="AlipayShow">
+        <!-- <div v-show="AlipayShow">
           <input type="text" v-model="accounts" placeholder="输入支付号" class="atten">
           <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
-        </div>
+        </div> -->
 
         <div v-show="bankShow">
           <select class="attens">
@@ -46,12 +46,13 @@
           <!--<input type="text" v-model="phone" placeholder="输入您的手机号" class="atten">-->
         </div>
 
-        <!--<p class="remind">为确保您的账户安全，请获取您的账户000***00验证码</p>-->
-        <!--<div class="phoneCode">
-          <input type="text" v-model="codes" placeholder="输入验证码" class="codeInput">
-          <button class="getCode" @click="getCode" :disabled="dis">获取验证码({{prompt}}s)</button>
-          <div class="getCode">重新获取(60s)</div>-->
-        <!--</div>-->
+        <p class="remind" v-if="isTrue">为确保您账户安全，请获取您的账户{{phone}}验证码</p>
+          <input type="text" v-model="phone" placeholder="请输入手机号"  class="atten" v-if="!isTrue">
+
+        <div class="phoneCode">
+          <input type="text" v-model="codeMy" placeholder="输入验证码" class="codeInput">
+          <button class="getCode" @click="getCodeTo" :disabled="dis">获取验证码({{promptTo}}s)</button>
+        </div>
       </div>
       <div class="btns">
         <div class="cancel" @click="cancel">取消</div>
@@ -91,7 +92,9 @@ export default {
   data() {
     return {
       isShow: false,
+      isTrue: false,
       hintShow: false,
+      codeMy: "",
       phoneMsg: false,
       wxShow: false, //微信填写
       AlipayShow: false, //zhifubao
@@ -107,17 +110,25 @@ export default {
       codes: "",
       phone: "",
       prompt: 60,
+      promptTo: 60,
       dis: false //为true禁用
     };
   },
   methods: {
     changeNumber() {
-      let str = "" + this.withdraw;
-      if (str.indexOf(".") != -1) {
-        let arr = str.split("");
-        arr.splice(arr.length - 1);
-        let str2 = arr.join("");
-        this.withdraw = +str2;
+      // let str = "" + this.withdraw;
+      // if (str.indexOf(".") != -1) {
+      //   let arr = str.split("");
+      //   arr.splice(arr.length - 1);
+      //   let str2 = arr.join("");
+      //   this.withdraw = +str2;
+      var re = /^(0|\+?[1-9][0-9]*)$/;
+      if (!re.test(this.withdraw)) {
+        this.withdraw = " ";
+        Toast({
+          message: "请输入整数",
+          duration: 1000
+        });
       }
     },
     goBack() {
@@ -142,6 +153,8 @@ export default {
         this.phoneMsg = false;
         this.hintShow = true;
         this.isShow = true;
+        this.bankShow = true;
+        this.isTrue = true;
       }
     },
     cancel() {
@@ -180,6 +193,7 @@ export default {
           } else {
             $this.isShow = true;
             $this.hintShow = true;
+            $this.bankShow = true;
           }
         }
       }
@@ -233,18 +247,55 @@ export default {
         }
       });
     },
+    getCodeTo() {
+      this.dis = true;
+      //倒计时
+      let sec = 60;
+      this.promptTo = sec;
+      var timer = setInterval(() => {
+        sec--;
+        this.promptTo = sec;
+        if (sec <= 0) {
+          this.promptTo = "0";
+          clearInterval(timer);
+          this.dis = false;
+        }
+      }, 1000);
+      //倒计时
+      var baseUrl = BaseUrl + "index/getSms";
+      var datas = qs.stringify({
+        phone: this.phone.toString(),
+        openid: localStorage.getItem("openid"),
+        type: "1"
+      });
+
+      axios({
+        method: "post",
+        url: baseUrl,
+        type: "json",
+        data: datas
+      }).then(function(data) {
+        console.log(data);
+        let datas = data.data.data;
+        if ((data.data.status = 1)) {
+          console.log(data.data);
+          Toast({
+            message: "发送成功",
+            duration: 1500
+          });
+        }
+      });
+    },
 
     goPlace() {
       var $this = this;
 
-      if ($this.id == "2") {
-        if ($this.bankName == "") {
-          Toast({
-            message: "开户行名称不能为空",
-            duration: 1500
-          });
-          return false;
-        }
+      if ($this.bankName == "") {
+        Toast({
+          message: "开户行名称不能为空",
+          duration: 1500
+        });
+        return false;
       }
       if ($this.accounts == "") {
         Toast({
@@ -266,7 +317,7 @@ export default {
               duration: 1500
             });
             return false;
-          } else if ($this.codes == "") {
+          } else if ($this.codeMy == "") {
             Toast({
               message: "验证码不能为空",
               duration: 1500
@@ -276,14 +327,13 @@ export default {
             var baseUrl = BaseUrl + "api/applyWithdrawal";
             var datas = qs.stringify({
               openid: localStorage.getItem("openid"),
-              // openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s",
               money: $this.withdraw, //string  提现金额
               account: $this.accounts, //string  （微信/支付宝/银行卡）账号
               realnamg: $this.names, //string 真实姓名
-              type: $this.id, //string 0=支付宝 1=微信 2=银行转账
+              type: 2, //string 0=支付宝 1=微信 2=银行转账
               bankofdeposit: $this.bankName,
               phone: $this.phone,
-              smscode: $this.codes
+              smscode: $this.codeMy
             });
             axios({
               method: "post",
@@ -309,27 +359,25 @@ export default {
           }
         }
       }
-
-      //this.$router.push({path:'/place_success'});
-    },
-
-    switcher(slects) {
-      console.log(slects);
-      this.id = slects;
-      if (slects == "0") {
-        this.wxShow = false;
-        this.AlipayShow = true;
-        this.bankShow = false;
-      } else if (slects == "1") {
-        this.wxShow = true;
-        this.AlipayShow = false;
-        this.bankShow = false;
-      } else {
-        this.wxShow = false;
-        this.AlipayShow = false;
-        this.bankShow = true;
-      }
     }
+
+    // switcher(slects) {
+    //   // console.log(slects);
+    //   this.id = slects;
+    //   if (slects == "0") {
+    //     this.wxShow = false;
+    //     this.AlipayShow = true;
+    //     this.bankShow = false;
+    //   } else if (slects == "1") {
+    //     this.wxShow = true;
+    //     this.AlipayShow = false;
+    //     this.bankShow = false;
+    //   } else {
+    //     this.wxShow = false;
+    //     this.AlipayShow = false;
+    //     this.bankShow = true;
+    //   }
+    // }
   },
   created() {
     this.openid = localStorage.getItem("openid");
@@ -362,7 +410,7 @@ export default {
     color: #666666;
     line-height: 3rem;
     font-size: 1.4rem;
-    width: 85%;
+    width: 80%;
     margin: 0 7.5%;
     margin-top: 6rem;
     padding-left: 1rem;
@@ -465,7 +513,6 @@ export default {
         }
         .getCode {
           width: 30%;
-          line-height: 2rem;
           border-radius: 2rem;
           background: #c9161d;
           color: #ffffff;
