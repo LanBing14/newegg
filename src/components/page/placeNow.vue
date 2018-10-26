@@ -234,9 +234,10 @@ export default {
       var timer = setInterval(() => {
         sec--;
         this.prompt = sec;
-        if (sec <= 0) {
+        if (sec < 0) {
           this.prompt = "0";
           clearInterval(timer);
+          this.isTrue = false;
           this.dis = false;
         }
       }, 1000);
@@ -275,9 +276,10 @@ export default {
       var timer = setInterval(() => {
         sec--;
         this.promptTo = sec;
-        if (sec <= 0) {
+        if (sec < 0) {
           this.promptTo = "0";
           clearInterval(timer);
+          this.isTrue = false;
           this.dis = false;
         }
       }, 1000);
