@@ -47,11 +47,9 @@
         </div>
 
         <p class="remind">为确保您账户安全，请获取您的账户{{myPhone}}验证码</p>
-          <!-- <input type="text" v-model="phone" placeholder="请输入手机号"  class="atten" v-if="!isTrue"> -->
-
         <div class="phoneCode">
           <input type="text" v-model="codeMy" placeholder="输入验证码" class="codeInput">
-          <button class="getCode" @click="getCodeTo" :disabled="dis">获取验证码({{promptTo}}s)</button>
+          <button class="getCode" @click="getCodeTo" :disabled="dis">获取验证码 <span v-if="isTrue">({{promptTo}}s)</span></button>
         </div>
       </div>
       <div class="btns">
@@ -68,7 +66,7 @@
           <input type="text" v-model="phone" placeholder="请输入手机号"/>
           <div class="phoneCode">
               <input type="text" v-model="codes" placeholder="输入验证码" class="codeInput">
-            <button class="getCode" @click="getCode" :disabled="dis">获取验证码({{prompt}}s)</button>
+            <button class="getCode" @click="getCode" :disabled="dis">获取验证码 <span v-if="isTrue">({{prompt}}s)</span></button>
           </div>
           <span class="cancleBtn" @click="cancel">取消</span>
           <span class="confirmBtn" @click="nexteps">立即绑定</span>
@@ -206,11 +204,10 @@ export default {
             duration: 1500
           });
         } else {
-          if ($this.phone == "") {
+          if ($this.myPhone == "") {
             //未绑定手机
             $this.phoneMsg = true;
           } else {
-            $this.myPhone = $this.phone;
             $this.isShow = true;
             $this.hintShow = true;
             $this.bankShow = true;
@@ -229,6 +226,8 @@ export default {
         return false;
       }
       this.dis = true;
+      this.isTrue = true;
+
       //倒计时
       let sec = 60;
       this.prompt = sec;
@@ -269,6 +268,7 @@ export default {
     //工商银行获取验证码
     getCodeTo() {
       this.dis = true;
+      this.isTrue = true;
       //倒计时
       let sec = 60;
       this.promptTo = sec;
@@ -388,7 +388,7 @@ export default {
         data: datas
       }).then(function(data) {
         console.log(data);
-        $this.phone = data.data.data.phone;
+        $this.myPhone = data.data.data.phone;
         console.log($this.phone);
       });
       //如果满足这两个条件Toast‘申请成功’
@@ -547,6 +547,7 @@ export default {
         .getCode {
           width: 30%;
           border-radius: 2rem;
+          height: 2.3rem;
           background: #c9161d;
           color: #ffffff;
           outline: none;
@@ -642,6 +643,7 @@ export default {
         .getCode {
           width: 30%;
           height: 3.2rem;
+          // height: 2rem;
           background: #c9161d;
           border: 1px solid #c9161d;
           color: #ffffff;
