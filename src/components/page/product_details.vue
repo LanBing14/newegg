@@ -36,8 +36,11 @@
         <div class="evaluateBox">
           <img :src=item.img class="touxiang">
           <!-- {{username.length >5?username.splice(0,5):username}} -->
-          <div class="userName">{{item.userName}}</div>
-          <div class="userPhone">{{item.phone}}</div>
+          <div class="cenmte" >
+            <span class="userName">{{item.userName}}</span>
+            <!-- <span class="userName">13234r2qrqwt</span> -->
+            <span class="userPhone">{{item.phone}}</span>
+          </div>
           <div class="zan">
             <img src="../../img/zan-weixuanzhong.png" alt="" class="xin" @click="goZan" v-show="isZan">
             <img src="../../img/zan-xuanzhong.png" alt="" class="xin" @click="goCancelZan" v-show="isCancel">
@@ -219,9 +222,9 @@ export default {
       localStorage.setItem("openid", "");
       alert("已清除openid" + localStorage.getItem("openid"));
     },
-    goModel(){
-      this.isShow = true
-      this.showShare = true
+    goModel() {
+      this.isShow = true;
+      this.showShare = true;
     },
     //获取微信字段
     WxZd() {
@@ -280,19 +283,19 @@ export default {
                 // 用户确认分享后执行的回调函数
                 // logUtil.printLog("分享到朋友圈成功返回的信息为:", res);
                 // _this.showMsg("分享成功!");
-                  var paramInfo = qs.stringify({
-                    url: window.location.href,
-                    openid:localStorage.getItem("openid")
-                  });
-                  var baseUrl = BaseUrl + "index/shareStatistics"
-                  axios({
-                    method: "post",
-                    url: baseUrl,
-                    type: "json",
-                    data: paramInfo
-                  }).then(function (res) {
-                    console.log(res)
-                  })
+                var paramInfo = qs.stringify({
+                  url: window.location.href,
+                  openid: localStorage.getItem("openid")
+                });
+                var baseUrl = BaseUrl + "index/shareStatistics";
+                axios({
+                  method: "post",
+                  url: baseUrl,
+                  type: "json",
+                  data: paramInfo
+                }).then(function(res) {
+                  console.log(res);
+                });
               },
               cancel: function(res) {
                 // 用户取消分享后执行的回调函数
@@ -318,19 +321,19 @@ export default {
                 // 用户确认分享后执行的回调函数
                 // logUtil.printLog("分享给朋友成功返回的信息为:", res);
                 // console.log(res);
-                  var paramInfo = qs.stringify({
-                    url: window.location.href,
-                    openid:localStorage.getItem("openid")
-                  });
-                  var baseUrl = BaseUrl + "index/shareStatistics"
-                  axios({
-                    method: "post",
-                    url: baseUrl,
-                    type: "json",
-                    data: paramInfo
-                  }).then(function (res) {
-                    console.log(res)
-                  })
+                var paramInfo = qs.stringify({
+                  url: window.location.href,
+                  openid: localStorage.getItem("openid")
+                });
+                var baseUrl = BaseUrl + "index/shareStatistics";
+                axios({
+                  method: "post",
+                  url: baseUrl,
+                  type: "json",
+                  data: paramInfo
+                }).then(function(res) {
+                  console.log(res);
+                });
               },
               cancel: function(res) {
                 // 用户取消分享后执行的回调函数
@@ -572,16 +575,16 @@ export default {
         $this.choice(0);
         //eggNum表示还可以抢到的蛋
         if ($this.eggNum == 30) {
-           $this.isMaNum = 1;
-        } else if($this.eggNum> 0 && $this.eggNum < 30) {
-            $this.isMaNum = 1;
-        }else if ($this.eggNum == 0){
+          $this.isMaNum = 1;
+        } else if ($this.eggNum > 0 && $this.eggNum < 30) {
+          $this.isMaNum = 1;
+        } else if ($this.eggNum == 0) {
           if ($this.isApply == 0) {
-              $this.isFalse = true;
-              $this.isShow = true;
-              $this.isMaNum = 2;
-          } else if ($this.isApply == 1){
-              $this.isMaNum = 3;
+            $this.isFalse = true;
+            $this.isShow = true;
+            $this.isMaNum = 2;
+          } else if ($this.isApply == 1) {
+            $this.isMaNum = 3;
           }
         }
         // if ($this.eggNum == 0 && $this.isApply == 0) {
@@ -758,23 +761,28 @@ export default {
           border-radius: 50%;
           margin-right: 0.3rem;
         }
-        .userName {
-          width: 4rem;
-          height: 2.5rem;
-          line-height: 2.5rem;
-          overflow: hidden;
-        }
-        .userPhone {
-          color: #c1c5c8;
-          font-size: 1rem;
+        .cenmte {
+          height: 3rem;
           margin-left: 0.5rem;
-          width: 5rem;
-          margin-right: 5%;
+          width: 50%;
+          .userName {
+            height: 50%;
+            display: block;
+            font-size: 14px;
+            overflow: hidden;
+          }
+          .userPhone {
+            color: #c1c5c8;
+            font-size: 12px;
+            width: 5rem;
+            // margin-right: 5%;
+          }
         }
         .zan {
           width: 30%;
           margin: 0 auto;
           margin-left: 10%;
+
           display: flex;
           text-align: left;
           align-items: center;
@@ -787,6 +795,7 @@ export default {
           }
           .praise {
             color: #c1c5c8;
+            font-size: 14px;
           }
         }
       }

@@ -138,15 +138,16 @@ export default {
     //返回上页面‘订单确认order_confirmation’
     goBack() {
       if (this.statusId == 0) {
-        this.$router.push({
-          path: "/order_confirmation",
-          query: {
-            packageId: this.packageId,
-            number: this.amount,
-            openid: this.openid,
-            sellPrice: this.sellPrice
-          }
-        });
+        this.$router.back();
+        // this.$router.push({
+        //   path: "/order_confirmation",
+        //   query: {
+        //     packageId: this.packageId,
+        //     number: this.amount,
+        //     openid: this.openid,
+        //     sellPrice: this.sellPrice
+        //   }
+        // });
       } else if (this.statusId == 1) {
         this.$router.back();
       }
@@ -406,7 +407,6 @@ export default {
     this.orderids = this.$route.query.orderids;
     this.amount = this.$route.query.amount;
     this.goodsId = this.$route.query.goodsId;
-    console.log(this.zhuangtai);
   },
   components: {
     "mt-picker": Picker,

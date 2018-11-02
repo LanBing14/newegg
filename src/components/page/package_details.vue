@@ -795,13 +795,13 @@ export default {
 <style type="text/css">
 .yi {
   padding-top: 0.5rem !important;
-  border-radius: 0.9rem 0 0 0.9rem;
+  border-radius: 0.5rem 0 0 0.5rem;
   border-bottom: none !important;
 }
 .wei {
   padding-top: 0.5rem !important;
   border: none;
-  border-radius: 0 0.9rem 0.9rem 0;
+  border-radius: 0 0.5rem 0.5rem 0;
   border-bottom: none !important;
 }
 </style>

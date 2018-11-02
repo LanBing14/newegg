@@ -33,7 +33,11 @@
       </div>
     </div>
     <!--分享按钮-->
-    <div class="share">分享好友赚赏金</div>
+    <div class="share" @click="shareFr">分享好友赚赏金</div>
+
+     <!-- 蒙版 -->
+    <div class="Meng" id="box" v-if="isShow" @click="hideToggle"></div>
+    <img src="../../img/shareHint.png" alt="" class="shareHint" v-if="isShow" @click="hideToggle">
   </div>
 </template>
 
@@ -53,13 +57,20 @@ export default {
       phone: "",
       invitedNumber: "",
       img: require("../../img/bg1-1.png"),
-      sendOpenid: ""
+      sendOpenid: "",
+      isShow: false
     };
   },
   methods: {
     //返回上一界面“邀请明细”
     goBack() {
       this.$router.push({ path: "/" });
+    },
+    shareFr() {
+      this.isShow = true;
+    },
+    hideToggle() {
+      this.isShow = false;
     },
     getInviteDetails() {
       var $this = this;
@@ -270,6 +281,24 @@ export default {
     margin: 0 auto;
     margin-top: 6rem;
     text-align: center;
+  }
+  .Meng {
+    opacity: 0.56;
+    background: #000;
+    z-index: 9;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+  }
+  .shareHint {
+    width: 80%;
+    margin: 0 auto;
+    display: block;
+    z-index: 999;
+    position: fixed;
+    top: 3rem;
+    left: 3.3rem;
   }
 }
 </style>
