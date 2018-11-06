@@ -135,7 +135,7 @@ export default {
             //分享到朋友圈
             wx.onMenuShareTimeline({
               title:
-                "仅30枚！绿壳无抗乌鸡蛋免费抢啦，数量有限，先抢先得、好吃好玩好赚钱", // 分享标题
+                "每人30枚！无抗翡翠蛋免费抢，购买更便宜！我只能帮你到这里了", // 分享标题
               link:
                 "http://egg.wufuapp.com?openid=" +
                 $this.openid +
@@ -158,7 +158,8 @@ export default {
             });
             //分享给朋友
             wx.onMenuShareAppMessage({
-              title: "仅仅30枚! 鸡蛋免费抢啦~我只能帮你到这了", // 分享标题
+              title:
+                "每人30枚！无抗翡翠蛋免费抢，购买更便宜！我只能帮你到这里了", // 分享标题
               desc:
                 "绿壳无抗乌鸡蛋，30枚免费抢，数量有限，先抢先得、好吃好玩好赚钱", // 分享描述
               link:
