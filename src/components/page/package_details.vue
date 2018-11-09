@@ -408,6 +408,8 @@ export default {
             that.sendTime = isdetails[j].sendTime;
             that.kdNo = isdetails[j].kdNo;
             that.sentList.push(isdetails[j]);
+            that.sentList[0].isTrue = true;
+            that.sentList[0].images = false;
             that.sentList[j].isTrue = false;
             that.sentList[j].images = true;
           }
@@ -459,7 +461,7 @@ export default {
     this.goodsId = this.$route.query.goodsId;
     this.openid = localStorage.getItem("openid");
     this.orderSn = this.$route.query.orderSn;
-    //  this.openid = 'oX6js0S0Pqsh6ijuNs48kDFN3w6s';
+    // this.openid = "oX6js0S0Pqsh6ijuNs48kDFN3w6s";
 
     this.datas();
     this.Address();

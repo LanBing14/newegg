@@ -140,144 +140,150 @@ export default {
   name: "order_details",
   data() {
     return {
-      packageInfo:'',
-      goodsName:'',
-      dateTime:'',
-      number:'',
-      sellPrice:'',
-      freight:'',
-      amount:'',
-      addTime:'',
-      discount:'',
-      payTime:'',
-      addTime:'',
-      remark:'',
-      receiver:"",  //收货人
-      phone:"",//手机号
-      address:"",
-      show1:false,
-      show2:true,
-      zhuangtai:'',
-      kdNo:'',
-      sendTime:'',
-      KdName:''
+      packageInfo: "",
+      goodsName: "",
+      dateTime: "",
+      number: "",
+      sellPrice: "",
+      freight: "",
+      amount: "",
+      addTime: "",
+      discount: "",
+      payTime: "",
+      addTime: "",
+      remark: "",
+      receiver: "", //收货人
+      phone: "", //手机号
+      address: "",
+      show1: false,
+      show2: true,
+      zhuangtai: "",
+      kdNo: "",
+      sendTime: "",
+      KdName: ""
     };
   },
   methods: {
     //返回上一级
     goBack() {
-      this.$router.push({ path: "/package_details",query:{orderId:this.$route.query.orderId}});
+      this.$router.back();
     },
     //点击地址信息一块👉'create_address'
     goAddress() {
-      this.$router.push({ path: "/create_address",query:{orderId:this.$router.query.orderId} });
+      this.$router.push({
+        path: "/create_address",
+        query: { orderId: this.$router.query.orderId }
+      });
     },
     // 点击确认收货
     goEvaluate() {
       //  先弹出是否确认收货的弹框，再跳转到评价
-      MessageBox.confirm('', {
-        message: '是否确认收货',
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
+      MessageBox.confirm("", {
+        message: "是否确认收货",
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
         showCancelButton: true
-      }).then(action => {
-        if (action == 'confirm') {     //确认的回调
-          this.$router.push({ path: "/evaluate" });
-        }
-      }).catch(err => {
-        if (err == 'cancel') {     //取消的回调
-          console.log(2);
-        }
-      });
+      })
+        .then(action => {
+          if (action == "confirm") {
+            //确认的回调
+            this.$router.push({ path: "/evaluate" });
+          }
+        })
+        .catch(err => {
+          if (err == "cancel") {
+            //取消的回调
+            console.log(2);
+          }
+        });
     },
     datas: function() {
-			    	this.zhuangtai = this.$route.query.name;
-			    	this.KdName = this.$route.query.kdNames;
-			    	this.kdNo = this.$route.query.kdNos;
-			    	this.sendTime = this.$route.query.shi;
-    	if(this.zhuangtai == '已发货'){
-//  		 this.show1 = false;
-    		 this.show2 = true;
-    	}else if(this.zhuangtai == '待评价'){
-//  		 this.show1 = false;
-    		 this.show2 = true;
-    	}
+      this.zhuangtai = this.$route.query.name;
+      this.KdName = this.$route.query.kdNames;
+      this.kdNo = this.$route.query.kdNos;
+      this.sendTime = this.$route.query.shi;
+      if (this.zhuangtai == "已发货") {
+        //  		 this.show1 = false;
+        this.show2 = true;
+      } else if (this.zhuangtai == "待评价") {
+        //  		 this.show1 = false;
+        this.show2 = true;
+      }
       var $this = this;
-      var baseUrl =BaseUrl+"api/getOrderDetail";
+      var baseUrl = BaseUrl + "api/getOrderDetail";
       var data = qs.stringify({
-          id:$this.$route.query.orderId,    //335
+        id: $this.$route.query.orderId, //335
 
-          openid:localStorage.getItem('openid')     
-
+        openid: localStorage.getItem("openid")
       });
-      console.log(data)
+      console.log(data);
       axios({
         method: "post",
         url: baseUrl,
         type: "json",
         data: data
-      }).then(function(data) {
-         console.log(data);
+      })
+        .then(function(data) {
+          console.log(data);
           let datas = data.data.data;
           if (data.data.status == 1) {
-          	$this.receiver = datas.name;
-          	$this.phone = datas.phone;
-          	$this.remark = datas.remark;
-          	$this.address = datas.address;
-            $this.packageInfo=datas.packageInfo;
-            $this.amount=datas.amount;
-            $this.addTime=datas.addTime;
-            $this.payTime=datas.payTime;
-            $this.discount=datas.discount;
-            $this.freight=datas.freight;
+            $this.receiver = datas.name;
+            $this.phone = datas.phone;
+            $this.remark = datas.remark;
+            $this.address = datas.address;
+            $this.packageInfo = datas.packageInfo;
+            $this.amount = datas.amount;
+            $this.addTime = datas.addTime;
+            $this.payTime = datas.payTime;
+            $this.discount = datas.discount;
+            $this.freight = datas.freight;
+          } else {
+            alert(datas.msg);
+          }
+        })
+        .catch(function() {});
+    },
+    Address() {
+      var $this = this;
+      var baseUrl = BaseUrl + "api/getAddressList";
+      var data = qs.stringify({
+        //            openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s',
+        openid: localStorage.getItem("openid")
+      });
+      axios({
+        method: "post",
+        url: baseUrl,
+        type: "json",
+        data: data
+      })
+        .then(function(data) {
+          console.log(data);
+          let datas = data.data.data;
+          if (data.data.status == 1) {
+            for (var i in datas) {
+              if ((datas[i].isDefault = 1)) {
+                ($this.receiver = datas[i].receiver), //收货人
+                  ($this.phone = datas[i].phone); //手机号
+                $this.address = datas.address;
+              }
+            }
           } else {
             alert(datas.msg);
           }
         })
         .catch(function() {
-
+          //alert("程序异常，联系技术人员")
         });
     },
-    Address(){
-      var $this = this;
-      var baseUrl=BaseUrl+"api/getAddressList";
-      var data=qs.stringify({
-//            openid:'oX6js0S0Pqsh6ijuNs48kDFN3w6s',
-              openid:localStorage.getItem('openid')
-      });
-      axios({
-        method: "post",
-        url: baseUrl,
-        type: 'json',
-        data:data
-      }).then(function (data) {
-      	console.log(data);
-        let datas=data.data.data;
-        if(data.data.status==1){
-          for (var i in datas){
-            if(datas[i].isDefault=1){
-	               $this.receiver=datas[i].receiver,  //收货人
-	               $this.phone=datas[i].phone //手机号
-	               $this.address = datas.address;
-                }
-              }
-        }else{
-          alert(datas.msg);
-        }
-      }).catch(function () {
-        //alert("程序异常，联系技术人员")
-      });
-    },
     copyNum() {
-    	var url = document.querySelector('#copyObj');
-    	url.select(); // 选择对象
+      var url = document.querySelector("#copyObj");
+      url.select(); // 选择对象
       document.execCommand("Copy");
     }
   },
   mounted() {
     this.Address();
     this.datas();
-
   },
   components: {}
 };
@@ -295,18 +301,18 @@ export default {
     margin-top: 3rem;
     background: #fff;
     padding: 1.5rem;
-    img{
-    	margin-left: 38%;
-    	width: 1.625rem;
-    	height: 1.625rem;
+    img {
+      margin-left: 38%;
+      width: 1.625rem;
+      height: 1.625rem;
     }
     p {
-    	margin-right: 38%;
-    	float:right;
-    	display: inline-block;
+      margin-right: 38%;
+      float: right;
+      display: inline-block;
       text-align: center;
       font-size: 0.9rem;
-      color: #CC3E36;
+      color: #cc3e36;
       padding-top: 0.2rem;
     }
     .btns {
@@ -334,29 +340,26 @@ export default {
     }
   }
   /*物流信息*/
-  .logistics_information{
-  	        height:4.125rem;
-  	        background-color: #FFFFFF;
-  	        margin-top: 0.4375rem;
-  	       
-  	        img {
-  	        	display: block;
-  	        	width: 1.6875rem;
-  	        	height: 1.3125rem;
-  	        	float: left;
-  	        	margin: 1.4375rem 1.3125rem 1.4375rem 1.8125rem;
-  	        }
-  	        p{
-  	        
-  	        	font-size:0.75rem;
-  	        	color: #999999;
-             .single_number{ 	        	
-						  	        	color:#CC3E36;
-						  	        	font-size:0.75rem;
-						  	        	padding-left: 0.1rem;
-						  	        }
-  	        }
-  	       
+  .logistics_information {
+    height: 4.125rem;
+    background-color: #ffffff;
+    margin-top: 0.4375rem;
+
+    img {
+      display: block;
+      width: 1.6875rem;
+      height: 1.3125rem;
+      float: left;
+      margin: 1.4375rem 1.3125rem 1.4375rem 1.8125rem;
+    }
+    p {
+      font-size: 0.75rem;
+      color: #999999;
+      .single_number {
+        color: #cc3e36;
+        font-size: 0.75rem;
+      }
+    }
   }
   /*收货人信息*/
   .Consignee {
@@ -364,7 +367,7 @@ export default {
     align-items: center;
     margin-top: 0.4375rem;
     padding: 0.2rem 0.8rem;
-    height:6rem;
+    height: 6rem;
     background: #fff;
     .messages {
       width: 100%;
@@ -389,15 +392,15 @@ export default {
         }
       }
     }
-    img{
-    	width: 24px;
-    	height: 28px;
+    img {
+      width: 24px;
+      height: 28px;
     }
   }
   /*商品信息*/
   .productInfo {
     width: 100%;
-    margin-top:0.5rem;
+    margin-top: 0.5rem;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -447,13 +450,13 @@ export default {
     }
   }
   /*备注信息*/
- .remarks_information{
- 	       padding:0.375rem 0 0 1.1875rem ;
- 	       height: 3.4375rem;
- 	       background-color: #FFFFFF;
- 	       color: #8B8989;
- 	       font-size: 0.75rem;
-        }
+  .remarks_information {
+    padding: 0.375rem 0 0 1.1875rem;
+    height: 3.4375rem;
+    background-color: #ffffff;
+    color: #8b8989;
+    font-size: 0.75rem;
+  }
   /*其他*/
   .other {
     background: #ffffff;
@@ -476,20 +479,20 @@ export default {
     p {
       font-size: 1rem;
       span {
-        color: #CC3E36;
+        color: #cc3e36;
       }
     }
   }
   /*订单详情*/
   .orderDetails {
-  	height: 10rem;
-  	background:#fff ;
+    height: 10rem;
+    background: #fff;
     margin-top: 0.25rem;
     /*padding: 0 1rem;*/
     font-size: 0.8125rem;
     .title {
-    	background-color:#FFFFFF ;
-    	padding: 0 1rem;
+      background-color: #ffffff;
+      padding: 0 1rem;
       line-height: 2.5rem;
       border-bottom: 2px solid #f2f2f2;
     }
@@ -499,7 +502,7 @@ export default {
       align-items: center;
       font-size: 0.8125rem;
       line-height: 1.2rem;
-      padding: 0 1rem; 
+      padding: 0 1rem;
     }
   }
 }

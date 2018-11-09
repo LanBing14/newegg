@@ -137,20 +137,7 @@ export default {
   methods: {
     //返回上页面‘订单确认order_confirmation’
     goBack() {
-      if (this.statusId == 0) {
-        this.$router.back();
-        // this.$router.push({
-        //   path: "/order_confirmation",
-        //   query: {
-        //     packageId: this.packageId,
-        //     number: this.amount,
-        //     openid: this.openid,
-        //     sellPrice: this.sellPrice
-        //   }
-        // });
-      } else if (this.statusId == 1) {
-        this.$router.back();
-      }
+   this.$router.back();
     },
     //点击蒙版：蒙版+弹出框隐藏
     hideToggle() {
