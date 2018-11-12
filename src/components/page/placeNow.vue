@@ -3,7 +3,7 @@
     <mt-header fixed title="提现" style="font-size:1.2rem;height: 3rem;"></mt-header>
     <!-- <input type='number' pattern="[1-9]*" v-model="withdraw" placeholder="输入提现金额" class="money"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" > -->
     <input type='number' pattern="[0-9]*" v-model="withdraw" placeholder="输入提现金额" class="money"  @keyup="changeNumber" >
-    <p class="tiMony">提现金额必须大于或等于100的整数</p>
+    <p class="tiMony">提现金额必须大于等于100</p>
     <p class="withdrawNum">可提现余额
       <span> ￥{{balance}}</span>
     </p>
@@ -34,18 +34,23 @@
           <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
         </div> -->
 
-        <div v-show="bankShow">
+        <!-- <div v-show="bankShow">
           <select class="attens">
             <option value="" style="display: none" readonly>工商银行</option>
-            <!--<option value="1">农业银行</option>-->
-            <!--<option value="0">建设银行</option>-->
-          </select>
+            <option value="1">农业银行</option>
+            <option value="0">建设银行</option>-->
+          <!-- </select>
           <input type="text" v-model="bankName" placeholder="输入您的开户名称" class="atten">
           <input type="text" v-model="accounts" placeholder="输入银行开户卡号" class="atten">
-          <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
+          <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten"> -->
           <!--<input type="text" v-model="phone" placeholder="输入您的手机号" class="atten">-->
-        </div>
+        <!-- </div> --> 
 
+         <div v-show="bankShow">
+          <select class="attens">
+            <option value="" style="display: none" readonly>微信红包</option>
+          </select>
+        </div>
         <p class="remind">为确保您账户安全，请获取您的账户{{myPhone}}验证码</p>
         <div class="phoneCode">
           <input type="text" v-model="codeMy" placeholder="输入验证码" class="codeInput">
@@ -115,12 +120,6 @@ export default {
   },
   methods: {
     changeNumber() {
-      // let str = "" + this.withdraw;
-      // if (str.indexOf(".") != -1) {
-      //   let arr = str.split("");
-      //   arr.splice(arr.length - 1);
-      //   let str2 = arr.join("");
-      //   this.withdraw = +str2;
       var re = /^(0|\+?[1-9][0-9]*)$/;
       if (!re.test(this.withdraw)) {
         this.withdraw = " ";
@@ -194,6 +193,12 @@ export default {
       if ($this.withdraw < 100) {
         Toast({
           message: "可提现金额必须大于或等于100",
+          duration: 1500
+        });
+        return false;
+      } else if ($this.withdraw > 2000) {
+        Toast({
+          message: "每日提现金额不能大于2000",
           duration: 1500
         });
         return false;
@@ -306,94 +311,63 @@ export default {
         }
       });
     },
-
     goPlace() {
       var $this = this;
-
-      if ($this.bankName == "") {
+      if ($this.codeMy == "") {
         Toast({
-          message: "开户行名称不能为空",
-          duration: 1500
-        });
-        return false;
-      }
-      if ($this.accounts == "") {
-        Toast({
-          message: "提现账号不能为空",
+          message: "验证码不能为空",
           duration: 1500
         });
         return false;
       } else {
-        if ($this.names == "") {
-          Toast({
-            message: "真实姓名不能为空",
-            duration: 1500
-          });
-          return false;
-        } else {
-          if ($this.codeMy == "") {
-            Toast({
-              message: "验证码不能为空",
-              duration: 1500
-            });
-            return false;
-          } else {
-            var baseUrl = BaseUrl + "api/applyWithdrawal";
-            var datas = qs.stringify({
-              openid: localStorage.getItem("openid"),
-              money: $this.withdraw, //string  提现金额
-              account: $this.accounts, //string  （微信/支付宝/银行卡）账号
-              realnamg: $this.names, //string 真实姓名
-              type: 2, //string 0=支付宝 1=微信 2=银行转账
-              bankofdeposit: $this.bankName,
-              phone: $this.myPhone,
-              smscode: $this.codeMy
-            });
-            axios({
-              method: "post",
-              url: baseUrl,
-              type: "json",
-              data: datas
-            }).then(function(data) {
-              let datas = data.data.data;
-              if (data.data.status == 1) {
-                $this.$router.push({
-                  path: "/place_success",
-                  query: {
-                    balances: $this.withdraw
-                  }
-                });
-              } else {
-                Toast({
-                  message: data.data.msg,
-                  duration: 1500
-                });
+        var baseUrl = BaseUrl + "api/applyWithdrawal";
+        var datas = qs.stringify({
+          openid: localStorage.getItem("openid"),
+          money: $this.withdraw, //string  提现金额
+          account: "", //string  （微信/支付宝/银行卡）账号
+          realnamg: "", //string 真实姓名
+          type: 1, //string 0=支付宝 1=微信 2=银行转账
+          bankofdeposit: "",
+          phone: $this.myPhone,
+          smscode: $this.codeMy
+        });
+        axios({
+          method: "post",
+          url: baseUrl,
+          type: "json",
+          data: datas
+        }).then(function(data) {
+          let datas = data.data.data;
+          if (data.data.status == 1) {
+            $this.$router.push({
+              path: "/place_success",
+              query: {
+                balances: $this.withdraw
               }
             });
+          } else {
+            Toast({
+              message: data.data.msg,
+              duration: 1500
+            });
           }
-        }
+        });
       }
     },
     goApply() {
-      //        	this.goPlace();
       var $this = this;
       var baseUrl = BaseUrl + "api/getUserPhone";
       var datas = qs.stringify({
         openid: localStorage.getItem("openid")
-        // openid: "oX6js0S0Pqsh6ijuNs48kDFN3w6s"
       });
-
       axios({
         method: "post",
         url: baseUrl,
         type: "json",
         data: datas
       }).then(function(data) {
-        console.log(data);
         $this.myPhone = data.data.data.phone;
-        console.log($this.phone);
       });
-      //如果满足这两个条件Toast‘申请成功’
     }
 
     // switcher(slects) {
@@ -418,7 +392,6 @@ export default {
     this.openid = localStorage.getItem("openid");
     this.goApply();
     // this.openid = "oX6js0S0Pqsh6ijuNs48kDFN3w6s";
-    // this.checkPhone = this.$route.query.checkPhone;
     this.balance = this.$route.query.balances;
   },
   mounted() {},
@@ -436,9 +409,7 @@ export default {
   .tiMony {
     color: #cc3e36;
     font-size: 0.9rem;
-    width: 85%;
     line-height: 2rem;
-
     margin: 0 7.5%;
   }
   .money {
@@ -485,14 +456,16 @@ export default {
   }
   .hintBox {
     position: fixed;
-    top: 4rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 999;
     overflow-y: auto;
     overflow-x: hidden;
     text-align: center;
     background: #ffffff;
     width: 90%;
-    margin: 0 5%;
+    // margin: 0 5%;
     padding-bottom: 1rem;
     color: #0b0b0b;
     font-size: 0.8rem;
@@ -514,7 +487,7 @@ export default {
         border-radius: 5px;
       }
       .attens {
-        background: #fff;
+        background: #eee;
         color: #0b0b0b;
         width: 80%;
         opacity: 0.5;
@@ -538,7 +511,7 @@ export default {
         align-items: center;
         justify-content: center;
         .codeInput {
-          width: 49%;
+          width: 47%;
           margin-right: 0.3rem;
           font-size: 0.9rem;
           border: 1px solid #c1c5c8;
@@ -547,7 +520,7 @@ export default {
           outline: none;
         }
         .getCode {
-          width: 30%;
+          width: 32%;
           border-radius: 2rem;
           height: 2.3rem;
           background: #c9161d;
