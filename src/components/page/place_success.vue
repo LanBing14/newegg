@@ -51,11 +51,11 @@ export default {
       font-size: 1.1rem;
     }
     .cont {
+      padding: 0.6rem;
       font-size: 0.9rem;
-      line-height: 1.1rem;
-      color: #ffffff;
-      background-color: #dfdfdf;
-      width: 94%;
+      line-height: 1.5rem;
+      color: #6b6a6a;
+      background-color: #eee;
       margin: 0.5rem auto;
     }
     .money {

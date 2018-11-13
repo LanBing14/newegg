@@ -214,12 +214,12 @@ export default {
     }
   }
   .apply_for {
-    width: 40%;
+    width: 38%;
     line-height: 2.5rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-align: center;
     margin: 2rem auto;
-    border-radius: 0.3rem;
+    border-radius: 1.5rem;
     border: 1px solid #0b0b0b;
   }
 

@@ -51,8 +51,9 @@
             <option value="" style="display: none" readonly>微信红包</option>
           </select>
         </div>
-        <p class="remind">为确保您账户安全，请获取您的账户{{myPhone}}验证码</p>
-        <div class="phoneCode">
+        <p class="remind" v-if="weiBang">为确保您账户安全<br/>
+          请获取您的账户{{myPhone}}验证码</p>
+        <div class="phoneCode" v-if="weiBang">
           <input type="text" v-model="codeMy" placeholder="输入验证码" class="codeInput">
           <button class="getCode" @click="getCodeTo" :disabled="dis">获取验证码 <span v-if="isTrue">({{promptTo}}s)</span></button>
         </div>
@@ -97,6 +98,7 @@ export default {
       isShow: false,
       isTrue: false,
       hintShow: false,
+      weiBang: true,
       codeMy: "",
       phoneMsg: false,
       wxShow: false, //微信填写
@@ -167,6 +169,7 @@ export default {
       }).then(info => {
         //修改成功
         this.myPhone = this.phone;
+        this.weiBang = false;
         this.phoneMsg = false;
         this.hintShow = true;
         this.isShow = true;
@@ -213,6 +216,7 @@ export default {
             //未绑定手机
             $this.phoneMsg = true;
           } else {
+            $this.weiBang = true;
             $this.isShow = true;
             $this.hintShow = true;
             $this.bankShow = true;
@@ -313,14 +317,8 @@ export default {
     },
     goPlace() {
       var $this = this;
-      if ($this.codeMy == "") {
-        Toast({
-          message: "验证码不能为空",
-          duration: 1500
-        });
-        return false;
-      } else {
-        var baseUrl = BaseUrl + "api/applyWithdrawal";
+      var baseUrl = BaseUrl + "api/applyWithdrawal";
+      if ($this.codes != "" || $this.codeMy != "") {
         var datas = qs.stringify({
           openid: localStorage.getItem("openid"),
           money: $this.withdraw, //string  提现金额
@@ -329,7 +327,7 @@ export default {
           type: 1, //string 0=支付宝 1=微信 2=银行转账
           bankofdeposit: "",
           phone: $this.myPhone,
-          smscode: $this.codeMy
+          smscode: $this.codes || $this.codeMy
         });
         axios({
           method: "post",
@@ -351,6 +349,11 @@ export default {
               duration: 1500
             });
           }
+        });
+      } else {
+        Toast({
+          message: "验证码不能为空",
+          duration: 1500
         });
       }
     },
@@ -421,8 +424,8 @@ export default {
     margin-top: 6rem;
     padding-left: 1rem;
     display: inline-block;
-    border: 1px solid #030000;
-    border-radius: 12px;
+    border-bottom: 2px solid #c9161d;
+    // border-radius: 12px;
   }
   .withdrawNum {
     color: #060606;
@@ -435,12 +438,12 @@ export default {
     }
   }
   .apply_for {
-    width: 40%;
+    width: 38%;
     line-height: 2.5rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-align: center;
     margin: 2rem auto;
-    border-radius: 0.3rem;
+    border-radius: 1.5rem;
     border: 1px solid #0b0b0b;
   }
   /*蒙版*/
@@ -473,7 +476,7 @@ export default {
     .attention {
       width: 100%;
       line-height: 2rem;
-      padding: 1rem 0 1.5rem 0;
+      padding: 1rem 0 0rem 0;
       text-align: center;
       justify-content: center;
       .atten {
@@ -502,9 +505,11 @@ export default {
         outline: none;
       }
       .remind {
+        width: 80%;
+        margin: 0 10% 0.5rem 10%;
         font-size: 0.8rem;
-        width: 100%;
-        text-align: center;
+        line-height: 1.2rem;
+        text-align: left;
       }
       .phoneCode {
         display: flex;
@@ -547,6 +552,7 @@ export default {
     .btns {
       width: 100%;
       font-size: 0.9rem;
+      margin-top: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
