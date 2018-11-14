@@ -48,11 +48,12 @@
 
          <div v-show="bankShow">
           <select class="attens">
-            <option value="" style="display: none" readonly>微信红包</option>
+            <option value="" style="display: none" readonly >微信红包</option>
           </select>
+           <input type="text" v-model="names" placeholder="输入您的真实姓名" class="atten">
         </div>
         <p class="remind" v-if="weiBang">为确保您账户安全<br/>
-          请获取您的账户{{myPhone}}验证码</p>
+          请获取您的账户{{tel1}}验证码</p>
         <div class="phoneCode" v-if="weiBang">
           <input type="text" v-model="codeMy" placeholder="输入验证码" class="codeInput">
           <button class="getCode" @click="getCodeTo" :disabled="dis">获取验证码 <span v-if="isTrue">({{promptTo}}s)</span></button>
@@ -101,6 +102,7 @@ export default {
       weiBang: true,
       codeMy: "",
       phoneMsg: false,
+      tel1: "",
       wxShow: false, //微信填写
       AlipayShow: false, //zhifubao
       bankShow: false, //银行
@@ -323,7 +325,7 @@ export default {
           openid: localStorage.getItem("openid"),
           money: $this.withdraw, //string  提现金额
           account: "", //string  （微信/支付宝/银行卡）账号
-          realnamg: "", //string 真实姓名
+          realnamg: $this.names, //string 真实姓名
           type: 1, //string 0=支付宝 1=微信 2=银行转账
           bankofdeposit: "",
           phone: $this.myPhone,
@@ -370,6 +372,11 @@ export default {
         data: datas
       }).then(function(data) {
         $this.myPhone = data.data.data.phone;
+
+        var tel = $this.myPhone;
+        tel = "" + tel;
+        var reg = /(\d{3})\d{4}(\d{4})/;
+        $this.tel1 = tel.replace(reg, "$1****$2");
       });
     }
 
@@ -523,6 +530,7 @@ export default {
           line-height: 2rem;
           overflow: hidden;
           outline: none;
+          border-radius: 5px;
         }
         .getCode {
           width: 32%;
