@@ -193,7 +193,7 @@ export default {
               title: "大家请看我今天赚了多少钱", // 分享标题
               desc: "我就分享了一下伍福世嘉的绿色无抗鸡蛋就狠赚了一笔", // 分享描述
               link:
-                "http://egg.wufuapp.com?openid=" +
+                "http://egg.wufuapp.com/make_money?openid=" +
                 $this.sendOpenid +
                 "&makeMoney=100&onlyMine=100",
               imgUrl:
@@ -215,7 +215,7 @@ export default {
             wx.onMenuShareTimeline({
               title: "厉不厉害？大家看我今天赚了多少钱", // 分享标题
               link:
-                "http://egg.wufuapp.com?openid=" +
+                "http://egg.wufuapp.com/make_money?openid=" +
                 $this.sendOpenid +
                 "&makeMoney=100&onlyMine=100",
               imgUrl:

@@ -273,7 +273,7 @@ export default {
                 "每人30枚！无抗翡翠蛋免费抢，购买更便宜！我只能帮你到这里了", // 分享标题
               //            link: "http://egg.wufuapp.com/#/Free_egg_robbing", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               link:
-                "http://egg.wufuapp.com?openid=" +
+                "http://egg.wufuapp.com/Free_egg_robbing?openid=" +
                 openid +
                 "&activityId=" +
                 $this.activityId,
@@ -309,7 +309,7 @@ export default {
               desc:
                 "绿壳乌鸡蛋、高科技生态养殖、无抗生素，无兽药残留，无重金属，先抢先得，好吃好玩好赚钱！", // 分享描述
               link:
-                "http://egg.wufuapp.com?openid=" +
+                "http://egg.wufuapp.com/Free_egg_robbing?openid=" +
                 openid +
                 "&activityId=" +
                 $this.activityId,
